@@ -29,7 +29,7 @@
                 t.appendChild(tr = document.createElement('tr'));
                 tr.appendChild(td = document.createElement('td'));
                 td.appendChild(document.createTextNode(tests[i]));
-                var u = new juribuilder.URL(tests[i]);
+                var u = new juribuilder(tests[i]);
                 tr.appendChild(td = document.createElement('td'));
                 td.appendChild(document.createTextNode(u.toString()));
                 tr.appendChild(td = document.createElement('td'));
