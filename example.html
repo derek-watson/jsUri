@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">
+<head>
+    <title>test</title>
+    <script language="Javascript1.2" type="text/javascript" src="juribuilder.js"></script>
+    <script language="Javascript1.2" type="text/javascript">
+
+        function load() {
+            var tests = [
+                '/index.php',
+                'http://www.test.com/index.php',
+                'https://www.test.com/index.php',
+                'http://www.test.com:80/index.php',
+                'https://www.test.com.au:443/index.php',
+                '/index.php#myachor',
+                'http://www.test.com/index.php#myanchor',
+                '/index.php?a=1&b=2',
+                'http://www.test.com/index.php?a=1&b=2',
+                'http://www.test.com/index.php?a=1&b=2#myanchor',
+                'http://www.test.com/index.php?a[1]=1&a[2]=2&b=3',
+                'http://www.test.com/index.php?a[]=1&a[]=2&b=3',
+                'http://www.test.com/index.php?a[1][1]=1&a[1][2]=2&b=3'
+            ];
+
+            var t = document.createElement('table');
+            for (var i=0; i < tests.length; i++) {
+                t.appendChild(tr = document.createElement('tr'));
+                tr.appendChild(td = document.createElement('td'));
+                td.appendChild(document.createTextNode(tests[i]));
+                var u = new juribuilder.URL(tests[i]);
+                tr.appendChild(td = document.createElement('td'));
+                td.appendChild(document.createTextNode(u.toString()));
+                tr.appendChild(td = document.createElement('td'));
+                var passed = u.toString() == tests[i];
+                td.appendChild(document.createTextNode(passed ? 'PASSED' : 'FAILED'));
+            }
+            document.body.appendChild(t);
+        }
+
+    </script>
+</head>
+<body onload="load()">
+
+</body>
+</html>
