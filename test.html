@@ -8,14 +8,22 @@
     <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
     <script type="text/javascript">
 
-
         // simple Uri formatting tests
         function _testSimpleUri(s) {
             var uri = new juribuilder(s);
             assertEquals('Testing that the stringified object matches the original URI', s, uri.toString());
         }
 
-        function testSimpleRelativeUri() { _testSimpleUri('/index.html'); }
+        function testSimpleRelativeUri() { _testSimpleUri('/'); }
+        function testSimpleRelativeDirectoryUri() { _testSimpleUri('tutorial1/'); }
+        function testSimpleRelativeDirectory2Uri() { _testSimpleUri('/experts/'); }
+        function testSimpleRelativeWithFilenameUri() { _testSimpleUri('/index.html'); }
+        function testSimpleRelativeWithDirectoryAndFilenameUri() { _testSimpleUri('tutorial1/2.html'); }
+        function testSimpleRelativeParentDirectoryUri() { _testSimpleUri('../'); }
+        function testSimpleRelativeSiblingDirectoryUri() { _testSimpleUri('../experts/'); }
+        function testSimpleRelativeGreatGrandparentDirectoryUri() { _testSimpleUri('../../../'); }
+        function testSimpleRelativeCurrentDirectoryUri() { _testSimpleUri('./'); }
+        function testSimpleRelativeCurrentDirectorySiblingDocUri() { _testSimpleUri('./test.html'); }
         function testSimpleAbsoluteUri() { _testSimpleUri('http://www.test.com/index.html'); }
         function testSimpleHttpsUri() { _testSimpleUri('http://www.test.com/index.html'); }
         function testSimpleCustomPortUri() { _testSimpleUri('http://www.test.com:8080/index.html'); }
@@ -27,6 +35,7 @@
         function testSimpleAbsoluteWithParamsAndAnchorUri() { _testSimpleUri('http://www.test.com/index.html?a=1&b=2#content'); }
         function testSimpleWithMultipleParamValuesUri() { _testSimpleUri('http://www.test.com/index.html?arr=1&arr=2&arr=3&arr=3&b=2'); }
         function testSimpleWithBlankParamValuesUri() { _testSimpleUri('http://www.test.com/index.html?arr=1&arr=&arr=2'); }
+        function testSimpleWithoutSchemeUri() { _testSimpleUri('//www.test.com/'); }
 
         // Uri manipulation tests
 
