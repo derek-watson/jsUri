@@ -15,14 +15,14 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-if (typeof juribuilder == 'undefined') var juribuilder = function() { }
+if (typeof juribuilder == 'undefined') var juribuilder = function () { }
 
 /**
 * juribuilder
 *
 * Version: 0.0.1
 */
-juribuilder = function(url) {
+juribuilder = function (url) {
     this.scheme = null;
     this.host = null;
     this.port = null;
@@ -36,7 +36,7 @@ juribuilder = function(url) {
 /**
 * thisURL() parses the current window.location and returns a juribuilder object
 */
-juribuilder.thisURL = function() {
+juribuilder.thisURL = function () {
     return new juribuilder(window.location.href);
 }
 
@@ -45,7 +45,7 @@ juribuilder.prototype = new Object();
 /**
 * set() parses a url and sets the properties of the juribuilder object
 */
-juribuilder.prototype.set = function(url) {
+juribuilder.prototype.set = function (url) {
     var p;
     if (p = this.parseURL(url)) {
         this.scheme = p['scheme'];
@@ -60,7 +60,7 @@ juribuilder.prototype.set = function(url) {
 /**
 * removeArg() is used remove a specified argument from the juribuilder object arguments
 */
-juribuilder.prototype.removeArg = function(k) {
+juribuilder.prototype.removeArg = function (k) {
     if (k && String(k.constructor) == String(Array)) { // TODO: Change to use is_array
         var t = this.args;
         for (var i = 0; i < k.length - 1; i++) {
@@ -83,7 +83,7 @@ juribuilder.prototype.removeArg = function(k) {
 /**
 * addArg() is used to add an argument with specified value to the juribuilder object arguments
 */
-juribuilder.prototype.addArg = function(k, v, o) {
+juribuilder.prototype.addArg = function (k, v, o) {
     if (k && String(k.constructor) == String(Array)) { // TODO: Change to use is_array
         var t = this.args;
         for (var i = 0; i < k.length - 1; i++) {
@@ -102,7 +102,7 @@ juribuilder.prototype.addArg = function(k, v, o) {
 /**
 * parseURL() parses the specified url and returns an object containing the various components
 */
-juribuilder.prototype.parseURL = function(url) {
+juribuilder.prototype.parseURL = function (url) {
     // TODO: Add support for ftp username
     var p = {}, m;
     if (m = url.match(/((s?ftp|https?):\/\/)?([^\/:]+)?(:([0-9]+))?([^\?#]+)?(\?([^#]+))?(#(.+))?/)) {
@@ -122,7 +122,7 @@ juribuilder.prototype.parseURL = function(url) {
 /**
 * parseArgs() parses a query string and returns an object containing the parsed data
 */
-juribuilder.prototype.parseArgs = function(s) {
+juribuilder.prototype.parseArgs = function (s) {
     var a = {};
     if (s && s.length) {
         var kp, kv;
@@ -156,7 +156,7 @@ juribuilder.prototype.parseArgs = function(s) {
 /**
 * toArgs() takes an object and returns a query string
 */
-juribuilder.prototype.toArgs = function(a, p) {
+juribuilder.prototype.toArgs = function (a, p) {
     if (arguments.length < 2) p = '';
     if (a && typeof a == 'object') { // TODO: Change this to use is_object
         var s = '';
@@ -180,7 +180,7 @@ juribuilder.prototype.toArgs = function(a, p) {
 /**
 * toAbsolute() returns a string containing the absolute URL for the current juribuilder object
 */
-juribuilder.prototype.toAbsolute = function() {
+juribuilder.prototype.toAbsolute = function () {
     var s = '';
     if (this.scheme != null) s += this.scheme + '://';
     if (this.host != null) s += this.host;
@@ -193,7 +193,7 @@ juribuilder.prototype.toAbsolute = function() {
 /**
 * toRelative() returns a string containing the relative URL for the current juribuilder object
 */
-juribuilder.prototype.toRelative = function() {
+juribuilder.prototype.toRelative = function () {
     var s = '';
     if (this.path != null) s += this.path;
     var a = this.toArgs(this.args);
@@ -206,7 +206,7 @@ juribuilder.prototype.toRelative = function() {
 /**
 * isHost() is used to determine whether the host in the juribuilder object matches the current host
 */
-juribuilder.prototype.isHost = function() {
+juribuilder.prototype.isHost = function () {
     var u = juribuilder.thisURL();
     return (this.host == null || this.host == u.host ? true : false);
 }
@@ -214,6 +214,6 @@ juribuilder.prototype.isHost = function() {
 /**
 * toString() returns a string containing the current juribuilder object as a URL
 */
-juribuilder.prototype.toString = function() {
+juribuilder.prototype.toString = function () {
     return (this.isHost() ? this.toRelative() : this.toAbsolute());
 }

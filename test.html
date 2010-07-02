@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+    <title>juribuilder tests</title>
+    <script type="text/javascript" src="juribuilder.js"></script>
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    <script type="text/javascript">
+
+
+        // simple Uri formatting tests
+        function _testSimpleUri(s) {
+            var uri = new juribuilder(s);
+            assertEquals('Testing that the stringified object matches the original URI', s, uri.toString());
+        }
+
+        function testSimpleRelativeUri() { _testSimpleUri('/index.html'); }
+        function testSimpleAbsoluteUri() { _testSimpleUri('http://www.test.com/index.html'); }
+        function testSimpleHttpsUri() { _testSimpleUri('http://www.test.com/index.html'); }
+        function testSimpleCustomPortUri() { _testSimpleUri('http://www.test.com:8080/index.html'); }
+        function testSimpleHttpsCustomPortUri() { _testSimpleUri('https://www.test.com:43443'); }
+        function testSimpleRelativeWithAnchorUri() { _testSimpleUri('/index.html#content'); }
+        function testSimpleAbsoluteWithAnchorUri() { _testSimpleUri('http://www.test.com/index.html#content'); }
+        function testSimpleRelativeWithParamsUri() { _testSimpleUri('/index.html?a=1&b=2'); }
+        function testSimpleAbsoluteWithParamsUri() { _testSimpleUri('http://www.test.com/index.html?a=1&b=2'); }
+        function testSimpleAbsoluteWithParamsAndAnchorUri() { _testSimpleUri('http://www.test.com/index.html?a=1&b=2#content'); }
+        function testSimpleWithMultipleParamValuesUri() { _testSimpleUri('http://www.test.com/index.html?arr=1&arr=2&arr=3&arr=3&b=2'); }
+        function testSimpleWithBlankParamValuesUri() { _testSimpleUri('http://www.test.com/index.html?arr=1&arr=&arr=2'); }
+
+        // Uri manipulation tests
+
+        // query string manipulation tests
+
+
+    </script>
+</head>
+<body>
+    <p>
+        <a href="jsunit/testRunner.html?testPage=" id="testLink">Click here</a> to launch the JsUnit Test Runner.
+    </p>
+    <script type="text/javascript">
+        var testLink = document.getElementById('testLink');
+        testLink.href = testLink.href + window.location;
+    </script>
+</body>
+</html>
