@@ -38,9 +38,63 @@
         function testSimpleWithoutSchemeUri() { _testSimpleUri('//www.test.com/'); }
 
         // Uri manipulation tests
+        function testReplacingProtocol() {
+            var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
+            u.protocol = 'https';
+            assertEquals('There should be a single colon', u.toString(), 'https://www.test.com/index.html?arr=1&arr=&arr=2');
+        }
+
+        function testReplacingProtocolWithColon() {
+            var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
+            u.protocol = 'https:';
+            assertEquals('There should not be a double colon', u.toString(), 'https://www.test.com/index.html?arr=1&arr=&arr=2');
+        }
+
+        function testReplacingProtocolWithColon() {
+            var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
+            u.protocol = 'https:';
+            assertEquals('There should not be a double colon', u.toString(), 'https://www.test.com/index.html?arr=1&arr=&arr=2');
+        }
+
+        function testDisablingHasAuthorityPrefix() {
+            var u = new juribuilder('//test.com/index.html');
+            u.hasAuthorityPrefix = false;
+            assertEquals('There should be no leading slashes', u.toString(), 'test.com/index.html');
+        }
+
+        function testDisablingProtocolAndHasAuthorityPrefix() {
+            var u = new juribuilder('https://test.com/index.html');
+            u.protocol = null;
+            u.hasAuthorityPrefix = false;
+            assertEquals('There should be no leading slashes', u.toString(), 'test.com/index.html');
+        }
+
+        function testDisablingHasAuthorityPrefixWithProtocolError() {
+            var u = new juribuilder('http://www.test.com/');
+            try {
+                u.hasAuthorityPrefix = false;
+            } 
+            catch (e) {
+                return;
+            }
+            fail('Disabling authority prefix when there is still a protocol value should have throw an exception.');   
+        }
+
+        function testAddingUserInfo() {
+            var u = new juribuilder('https://test.com/index.html');
+            u.userInfo = 'username:password';
+            assertEquals('The dummy login information should be included in the url', u.toString(), 'https://username:password@test.com/index.html');
+        }
+
+        function testAddingUserInfoWithTrailing() {
+            var u = new juribuilder('https://test.com/index.html');
+            u.userInfo = 'username:password@';
+            assertEquals('The superfluous trailing symbol should be stripped', u.toString(), 'https://username:password@test.com/index.html');
+        }
 
         // query string manipulation tests
 
+        // path manipulation tests
 
     </script>
 </head>
