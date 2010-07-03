@@ -62,7 +62,6 @@ juribuilder.prototype.parseUri = function(str) {
 }
 
 
-
 // toString() returns a string containing the current juribuilder object as a URL
 juribuilder.prototype.toString = function () {
 
@@ -71,12 +70,15 @@ juribuilder.prototype.toString = function () {
 
     if (is(this.uri.protocol)) {
         s += this.uri.protocol;
-        if (this.uri.protocol.indexOf(':') == -1) {
+        if (this.uri.protocol.indexOf(':') != this.uri.protocol.length - 1) {
             s += ':';
         }
+        s += '//';
     }
-
-    if (this.hasAuthorityPrefix) s += '//';
+    else {
+        if (this.hasAuthorityPrefix)
+            s += '//';
+    }
 
     if (is(this.uri.userInfo)) {
         s += this.uri.userInfo;
@@ -84,11 +86,28 @@ juribuilder.prototype.toString = function () {
             s += '@';
     }
 
-    if (is(this.uri.host)) s += this.uri.host;
-    if (is(this.uri.port)) s += ':' + this.uri.port;
-    if (is(this.uri.path)) s += this.uri.path;
-    if (is(this.uri.query)) s += '?' + this.uri.query;
-    if (is(this.uri.anchor)) s += '#' + this.uri.anchor;
+    if (is(this.uri.host)) {
+        s += this.uri.host;
+        if (is(this.uri.port)) s += ':' + this.uri.port;
+    }
+
+    if (is(this.uri.path))
+        s += this.uri.path;
+    else
+        if (is(this.uri.host) && (is(this.uri.query) || is(this.uri.anchor)))
+            s += '/';
+
+    if (is(this.uri.query)) {
+        if (this.uri.query.indexOf('?') != 0)
+            s += '?';
+        s += this.uri.query;
+    }
+
+    if (is(this.uri.anchor)) {
+        if (this.uri.anchor.indexOf('#') != 0)
+            s += '#';
+        s += this.uri.anchor;
+    }
 
     return s;
 }
@@ -99,21 +118,12 @@ juribuilder.prototype.__defineSetter__('protocol', function (val) { this.uri.pro
 
 // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
 juribuilder.prototype.__defineGetter__('hasAuthorityPrefix', function () {
-    if (this.protocol != null && this.protocol != '')
-        return true;
-
-    if (this._hasAuthorityPrefix == null || typeof (this._hasAuthorityPrefix) == 'undefined')
+    if (this._hasAuthorityPrefix == null)
         return (this.uri.source.indexOf('//') != -1);
 
     return this._hasAuthorityPrefix;
 });
-juribuilder.prototype.__defineSetter__('hasAuthorityPrefix', function (val) { 
-    if (this.protocol != null && this.protocol != '' && val == false)
-        throw("ProtocolIsPresent");
-
-    this._hasAuthorityPrefix = val;
-    
-});
+juribuilder.prototype.__defineSetter__('hasAuthorityPrefix', function (val) {  this._hasAuthorityPrefix = val; });
 
 juribuilder.prototype.__defineGetter__('userInfo', function () { return this.uri.userInfo; });
 juribuilder.prototype.__defineSetter__('userInfo', function (val) { this.uri.userInfo = val; });
