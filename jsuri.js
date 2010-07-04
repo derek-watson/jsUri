@@ -137,9 +137,6 @@ jsUri.prototype.__defineSetter__('hasAuthorityPrefix', function (val) {  this._h
 jsUri.prototype.__defineGetter__('userInfo', function () { return this._uri.userInfo; });
 jsUri.prototype.__defineSetter__('userInfo', function (val) { this._uri.userInfo = val; });
 
-jsUri.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
-jsUri.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
-
 jsUri.prototype.__defineGetter__('host', function () { return this._uri.host; });
 jsUri.prototype.__defineSetter__('host', function (val) { this._uri.host = val; });
 
@@ -312,5 +309,6 @@ jsUri.query.prototype.replaceParam = function (key, newVal, oldVal) {
 /*
     jsUri.path
     path parsing, element manipulation and stringification
+    TODO
 */
 
