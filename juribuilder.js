@@ -46,7 +46,7 @@ juribuilder.options = {
 
 juribuilder.prototype = {};
 
-// parseUri() parses the supplied uri and returns an object containing its components
+// parseUri(str) parses the supplied uri and returns an object containing its components
 juribuilder.prototype.parseUri = function(str) {
     var o = juribuilder.options,
 		m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
@@ -77,11 +77,11 @@ juribuilder.prototype.toString = function () {
         s += '//';
     }
     else {
-        if (this.hasAuthorityPrefix)
+        if (this.hasAuthorityPrefix && is(this.host))
             s += '//';
     }
 
-    if (is(this.userInfo)) {
+    if (is(this.userInfo) && is(this.host)) {
         s += this.userInfo;
         if (this.userInfo.indexOf('@') != this.userInfo.length - 1)
             s += '@';
@@ -114,14 +114,17 @@ juribuilder.prototype.toString = function () {
     return s;
 }
 
-// getters and setters for 
+/*
+    Property accessor methods for juribuilder
+*/
+
 juribuilder.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
 juribuilder.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
 
 // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
-juribuilder.prototype.__defineGetter__('hasAuthorityPrefix', function () {
+juribuilder.prototype.__defineGetter__('hasAuthorityPrefix', function () { 
     if (this._hasAuthorityPrefix == null)
-        return (this._uri.source.indexOf('//') != -1);
+    return (this._uri.source.indexOf('//') != -1);
 
     return this._hasAuthorityPrefix;
 });
@@ -150,59 +153,16 @@ juribuilder.prototype.__defineSetter__('anchor', function (val) { this._uri.anch
 
 
 /*
-    jUriBuilder.query
-    query string parsing, parameter manipulation and stringification
+    Fluent setters for juribuilder uri properties
 */
 
-juribuilder.query = function (q) {
-    this.params = this.parseQuery(q);
-}
-
-juribuilder.query.prototype = {};
-
-// toString() returns a string containing the current query object
-juribuilder.query.prototype.toString = function () {
-
-    var s = '';
-    for (var p in this.params) {
-        var param = this.params[p];
-        var joined = param.join('=');
-        if (s.length > 0)
-            s += '&';
-        s += param.join('=');
-    }
-    return s;
-}
-
-// parseQuery() parses the uri query string and returns a multi-dimensional array of the components
-juribuilder.query.prototype.parseQuery = function (q) {
-
-    var arr = [];
-
-    if (q == null || q == '') 
-        return arr;
-
-    var params = q.split('&');
-    for (var p in params) {
-        var param = params[p];
-        var keyval = param.split('=');
-        arr.push([keyval[0], keyval[1]]);
-    }
-
-    return arr;
-}
-
-
-/*
-    A fluent interface for setting properties and stringifying the results
-*/
 juribuilder.prototype.setProtocol = function (val) {
     this.protocol = val;
     return this;
 }
 
 juribuilder.prototype.setHasAuthorityPrefix = function (val) {
-    this._hasAuthorityPrefix = val;
+    this.hasAuthorityPrefix = val;
     return this;
 }
 
@@ -235,3 +195,80 @@ juribuilder.prototype.setAnchor = function (val) {
     this.anchor = val;
     return this;
 }
+
+
+/*
+    jUriBuilder.query
+    query string parsing, parameter manipulation and stringification
+*/
+
+juribuilder.query = function (q) {
+    this.params = this.parseQuery(q);
+}
+
+juribuilder.query.prototype = {};
+
+// toString() returns a string containing the current query object
+juribuilder.query.prototype.toString = function () {
+
+    var s = '';
+    for (var p in this.params) {
+        var param = this.params[p];
+        var joined = param.join('=');
+        if (s.length > 0)
+            s += '&';
+        s += param.join('=');
+    }
+    return s;
+}
+
+// parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
+juribuilder.query.prototype.parseQuery = function (q) {
+
+    var arr = [];
+
+    if (q == null || q == '') 
+        return arr;
+
+    var params = q.split('&');
+
+    for (var p in params) {
+        var param = params[p];
+        var keyval = param.split('=');
+        arr.push([keyval[0], keyval[1]]);
+    }
+
+    return arr;
+}
+
+
+// deleteParam(key) removes all query string parameters named (key) 
+// deleteParam(key, val) removes all instances where the value matches (val)
+juribuilder.query.prototype.deleteParam = function (key, val) {
+
+    var arr = [];
+
+    for (var p in this.params) {
+        var param = this.params[p];
+        if (arguments.length == 2 && param[0] == key && param[1] == val)
+            continue;
+        else if (arguments.length == 1 && param[0] == key)
+            continue;
+
+        arr.push(param);
+    }
+
+    this.params = arr;
+    return this;
+}
+
+juribuilder.query.prototype.addParam = function (key, val) {
+    this.params.push([key, val]);
+    return this;
+}
+
+/*
+    jUriBuilder.path
+    path parsing, element manipulation and stringification
+*/
+

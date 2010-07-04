@@ -8,7 +8,7 @@
     <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
     <script type="text/javascript">
 
-        // simple Uri formatting tests
+        // any quasi-valid uri should survive parsing and re-stringification
         function _testSimpleUri(s) {
             var uri = new juribuilder(s);
             assertEquals('Explicitly calling toString() should match the original uri', s, uri.toString());
@@ -211,7 +211,6 @@
             assertEquals('The anchor and path placeholder should be added but no double hash', 'www.test.com/#content', u.toString());
         }
 
-
         function testAddingAnchorToPath() {
             var u = new juribuilder('a/b/c/123.html');
             u.anchor = 'content';
@@ -256,7 +255,43 @@
             assertEquals('The uri should now contain all elements', 'https://username:password@www.test.com:8080/index.html?this=that&some=thing#content', u.toString());
         }
 
+        function testFluentDestruction() {
+            var u = new juribuilder('https://username:password@www.test.com:8080/index.html?this=that&some=thing#content')
+                .setPath(null)
+                .setAnchor(null)
+                .setHost(null)
+                .setPort(null)
+                .setUserInfo(null)
+                .setProtocol(null)
+                .setQuery(null);
+
+            assertEquals('The uri should now be empty', '', u.toString());
+        }
+
+        function testHostQuerySeparator() {
+            var u = new juribuilder('www.test.com?q=search');
+            assertEquals('Uri should contain a separator slash', 'www.test.com/?q=search', u.toString());
+        }
+
+        
         // query string manipulation tests
+        function testDeleteParamName() {
+            var u = new juribuilder('test.com?a=1&b=2&c=3&a=eh');
+            u.query.deleteParam('b');
+            assertEquals('The query string should not contain the b=2 param', 'test.com/?a=1&c=3&a=eh', u.toString());
+        }
+
+        function testDeleteParamNameValue() {
+            var u = new juribuilder('test.com?a=1&b=2&c=3&a=eh');
+            u.query.deleteParam('a', 'eh');
+            assertEquals('The query string should not contain the a=eh param', 'test.com/?a=1&b=2&c=3', u.toString());
+        }
+
+        function testAddParam() {
+            var u = new juribuilder('?a=1&b=2&c=3');
+            u.query.addParam('d', '4');
+            assertEquals('The query string should not contain the d=4 param', '?a=1&b=2&c=3&d=4', u.toString());
+        }
 
         // path manipulation tests
 
