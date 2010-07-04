@@ -3,9 +3,6 @@
 * 
 * juribuilder is based on the work of two other GPL-licenced javascript libraries:
 *
-*   parseUri http://blog.stevenlevithan.com/archives/parseuri
-*   FLQ.URL - Fliquid URL building/handling class http://www.fliquidstudios.com/projects/javascript-url-library/javascript-url-library-code/
-*
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
@@ -21,12 +18,17 @@
 */
 
 /*
-    juribuilder
-    Version: 0.0.1
+    version 1.0.0
+
+    jUriBuilder
+    uri parsing, manipulation and stringification
+
+    This software incorporates GPL code from parseUri (http://blog.stevenlevithan.com/archives/parseuri).
 */
 
-juribuilder = function (url) {
-    this.uri = this.parseUri(url);
+juribuilder = function (s) {
+    this._uri = this.parseUri(s);
+    this._query = new juribuilder.query(this._uri.query);
 }
 
 juribuilder.options = {
@@ -44,7 +46,7 @@ juribuilder.options = {
 
 juribuilder.prototype = {};
 
-// parseURL() parses the specified url and returns an object containing the various components
+// parseUri() parses the supplied uri and returns an object containing its components
 juribuilder.prototype.parseUri = function(str) {
     var o = juribuilder.options,
 		m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
@@ -61,16 +63,15 @@ juribuilder.prototype.parseUri = function(str) {
     return uri;
 }
 
-
-// toString() returns a string containing the current juribuilder object as a URL
+// toString() stringifies the current state of the uri
 juribuilder.prototype.toString = function () {
 
     var s = '';
     var is = function (s) { return (s != null && s != ''); }
 
-    if (is(this.uri.protocol)) {
-        s += this.uri.protocol;
-        if (this.uri.protocol.indexOf(':') != this.uri.protocol.length - 1) {
+    if (is(this.protocol)) {
+        s += this.protocol;
+        if (this.protocol.indexOf(':') != this.protocol.length - 1) {
             s += ':';
         }
         s += '//';
@@ -80,74 +81,121 @@ juribuilder.prototype.toString = function () {
             s += '//';
     }
 
-    if (is(this.uri.userInfo)) {
-        s += this.uri.userInfo;
-        if (this.uri.userInfo.indexOf('@') != this.uri.userInfo.length - 1)
+    if (is(this.userInfo)) {
+        s += this.userInfo;
+        if (this.userInfo.indexOf('@') != this.userInfo.length - 1)
             s += '@';
     }
 
-    if (is(this.uri.host)) {
-        s += this.uri.host;
-        if (is(this.uri.port)) s += ':' + this.uri.port;
+    if (is(this.host)) {
+        s += this.host;
+        if (is(this.port)) 
+            s += ':' + this.port;
     }
 
-    if (is(this.uri.path))
-        s += this.uri.path;
+    if (is(this.path))
+        s += this.path;
     else
-        if (is(this.uri.host) && (is(this.uri.query) || is(this.uri.anchor)))
+        if (is(this.host) && (is(this.query.toString()) || is(this.anchor)))
             s += '/';
 
-    if (is(this.uri.query)) {
-        if (this.uri.query.indexOf('?') != 0)
+    if (is(this.query.toString())) {
+        if (this.query.toString().indexOf('?') != 0)
             s += '?';
-        s += this.uri.query;
+        s += this.query.toString();
     }
 
-    if (is(this.uri.anchor)) {
-        if (this.uri.anchor.indexOf('#') != 0)
+    if (is(this.anchor)) {
+        if (this.anchor.indexOf('#') != 0)
             s += '#';
-        s += this.uri.anchor;
+        s += this.anchor;
     }
 
     return s;
 }
 
-// protocol: get/set the uri protocol (http, https, ftp, etc)
-juribuilder.prototype.__defineGetter__('protocol', function () { return this.uri.protocol; });
-juribuilder.prototype.__defineSetter__('protocol', function (val) { this.uri.protocol = val; });
+// getters and setters for 
+juribuilder.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
+juribuilder.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
 
 // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
 juribuilder.prototype.__defineGetter__('hasAuthorityPrefix', function () {
     if (this._hasAuthorityPrefix == null)
-        return (this.uri.source.indexOf('//') != -1);
+        return (this._uri.source.indexOf('//') != -1);
 
     return this._hasAuthorityPrefix;
 });
 juribuilder.prototype.__defineSetter__('hasAuthorityPrefix', function (val) {  this._hasAuthorityPrefix = val; });
 
-juribuilder.prototype.__defineGetter__('userInfo', function () { return this.uri.userInfo; });
-juribuilder.prototype.__defineSetter__('userInfo', function (val) { this.uri.userInfo = val; });
+juribuilder.prototype.__defineGetter__('userInfo', function () { return this._uri.userInfo; });
+juribuilder.prototype.__defineSetter__('userInfo', function (val) { this._uri.userInfo = val; });
 
-juribuilder.prototype.__defineGetter__('protocol', function () { return this.uri.protocol; });
-juribuilder.prototype.__defineSetter__('protocol', function (val) { this.uri.protocol = val; });
+juribuilder.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
+juribuilder.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
 
-juribuilder.prototype.__defineGetter__('host', function () { return this.uri.host; });
-juribuilder.prototype.__defineSetter__('host', function (val) { this.uri.host = val; });
+juribuilder.prototype.__defineGetter__('host', function () { return this._uri.host; });
+juribuilder.prototype.__defineSetter__('host', function (val) { this._uri.host = val; });
 
-juribuilder.prototype.__defineGetter__('port', function () { return this.uri.port; });
-juribuilder.prototype.__defineSetter__('port', function (val) { this.uri.port = val; });
+juribuilder.prototype.__defineGetter__('port', function () { return this._uri.port; });
+juribuilder.prototype.__defineSetter__('port', function (val) { this._uri.port = val; });
 
-juribuilder.prototype.__defineGetter__('path', function () { return this.uri.path; });
-juribuilder.prototype.__defineSetter__('path', function (val) { this.uri.path = val; });
+juribuilder.prototype.__defineGetter__('path', function () { return this._uri.path; });
+juribuilder.prototype.__defineSetter__('path', function (val) { this._uri.path = val; });
 
-juribuilder.prototype.__defineGetter__('query', function () { return this.uri.query; });
-juribuilder.prototype.__defineSetter__('query', function (val) { this.uri.query = val; });
+juribuilder.prototype.__defineGetter__('query', function () { return this._query; });
+juribuilder.prototype.__defineSetter__('query', function (val) { this._query = new juribuilder.query(val); });
 
-juribuilder.prototype.__defineGetter__('anchor', function () { return this.uri.anchor; });
-juribuilder.prototype.__defineSetter__('anchor', function (val) { this.uri.anchor = val; });
+juribuilder.prototype.__defineGetter__('anchor', function () { return this._uri.anchor; });
+juribuilder.prototype.__defineSetter__('anchor', function (val) { this._uri.anchor = val; });
 
 
-// fluent setters
+/*
+    jUriBuilder.query
+    query string parsing, parameter manipulation and stringification
+*/
+
+juribuilder.query = function (q) {
+    this.params = this.parseQuery(q);
+}
+
+juribuilder.query.prototype = {};
+
+// toString() returns a string containing the current query object
+juribuilder.query.prototype.toString = function () {
+
+    var s = '';
+    for (var p in this.params) {
+        var param = this.params[p];
+        var joined = param.join('=');
+        if (s.length > 0)
+            s += '&';
+        s += param.join('=');
+    }
+    return s;
+}
+
+// parseQuery() parses the uri query string and returns a multi-dimensional array of the components
+juribuilder.query.prototype.parseQuery = function (q) {
+
+    var arr = [];
+
+    if (q == null || q == '') 
+        return arr;
+
+    var params = q.split('&');
+    for (var p in params) {
+        var param = params[p];
+        var keyval = param.split('=');
+        arr.push([keyval[0], keyval[1]]);
+    }
+
+    return arr;
+}
+
+
+/*
+    A fluent interface for setting properties and stringifying the results
+*/
 juribuilder.prototype.setProtocol = function (val) {
     this.protocol = val;
     return this;
@@ -187,102 +235,3 @@ juribuilder.prototype.setAnchor = function (val) {
     this.anchor = val;
     return this;
 }
-
-// juribuilder.querystring
-/*
-
-// parseArgs() parses a query string and returns an object containing the parsed data
-juribuilder.prototype.parseArgs = function (s) {
-    var a = {};
-    if (s && s.length) {
-        var kp, kv;
-        var p;
-        if ((kp = s.split('&')) && kp.length) {
-            for (var i = 0; i < kp.length; i++) {
-                if ((kv = kp[i].split('=')) && kv.length == 2) {
-                    if (p = kv[0].split(/(\[|\]\[|\])/)) {
-                        for (var z = 0; z < p.length; z++) {
-                            if (p[z] == ']' || p[z] == '[' || p[z] == '][') {
-                                p.splice(z, 1);
-                            }
-                        }
-                        var t = a;
-                        for (var o = 0; o < p.length - 1; o++) {
-                            if (typeof t[p[o]] == 'undefined') t[p[o]] = {}; // TODO: Change this to isset
-                            t = t[p[o]];
-                        }
-                        t[p[p.length - 1]] = kv[1];
-                    } else {
-                        a[kv[0]] = kv[1];
-                    }
-                }
-            }
-        }
-    }
-
-    return a;
-}
-
-// removeArg() is used remove a specified argument from the juribuilder object arguments
-juribuilder.prototype.removeArg = function (k) {
-    if (k && String(k.constructor) == String(Array)) { // TODO: Change to use is_array
-        var t = this.args;
-        for (var i = 0; i < k.length - 1; i++) {
-            if (typeof t[k[i]] != 'undefined') { // TODO: Change to use isset
-                t = t[k[i]];
-            } else {
-                return false;
-            }
-        }
-        delete t[k[k.length - 1]];
-        return true;
-    } else if (typeof this.args[k] != 'undefined') { // TODO: Change to use isset
-        delete this.args[k];
-        return true;
-    }
-
-    return false;
-}
-
-// addArg() is used to add an argument with specified value to the juribuilder object arguments
-juribuilder.prototype.addArg = function (k, v, o) {
-    if (k && String(k.constructor) == String(Array)) { // TODO: Change to use is_array
-        var t = this.args;
-        for (var i = 0; i < k.length - 1; i++) {
-            if (typeof t[k[i]] == 'undefined') t[k[i]] = {};
-            t = t[k[i]];
-        }
-        if (o || typeof t[k[k.length - 1]] == 'undefined') t[k[k.length - 1]] = v; // TODO: Change to use isset
-    } else if (o || typeof this.args[k] == 'undefined') { // TODO: Change to use isset
-        this.args[k] = v;
-        return true;
-    }
-
-    return false;
-}
-
-
-
-// toArgs() takes an object and returns a query string
-juribuilder.prototype.toArgs = function (a, p) {
-    if (arguments.length < 2) p = '';
-    if (a && typeof a == 'object') { // TODO: Change this to use is_object
-        var s = '';
-        for (i in a) {
-            if (typeof a[i] != 'function') {
-                if (s.length) s += '&';
-                if (typeof a[i] == 'object') { // TODO: Change this to use is_object
-                    var k = (p.length ? p + '[' + i + ']' : i);
-                    s += this.toArgs(a[i], k);
-                } else { // TODO: Change this to use is_function
-                    s += p + (p.length && i != '' ? '[' : '') + i + (p.length && i != '' ? ']' : '') + '=' + a[i];
-                }
-            }
-        }
-        return s;
-    }
-
-    return '';
-}
-
-*/
