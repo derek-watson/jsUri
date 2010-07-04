@@ -17,21 +17,20 @@
 */
 
 /*
+    jsUri
     version 1.0.0
-    2010 Derek Watson
 
-    jUriBuilder
     uri parsing, manipulation and stringification
 
     This software incorporates MIT-licence dcode from parseUri (http://blog.stevenlevithan.com/archives/parseuri).
 */
 
-juribuilder = function (s) {
+jsUri = function (s) {
     this._uri = this.parseUri(s);
-    this._query = new juribuilder.query(this._uri.query);
+    this._query = new jsUri.query(this._uri.query);
 }
 
-juribuilder.options = {
+jsUri.options = {
     strictMode: false,
     key: ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
     q: {
@@ -44,11 +43,11 @@ juribuilder.options = {
     }
 };
 
-juribuilder.prototype = {};
+jsUri.prototype = {};
 
 // parseUri(str) parses the supplied uri and returns an object containing its components
-juribuilder.prototype.parseUri = function(str) {
-    var o = juribuilder.options,
+jsUri.prototype.parseUri = function(str) {
+    var o = jsUri.options,
 		m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
 		uri = {},
 		i = 14;
@@ -64,7 +63,7 @@ juribuilder.prototype.parseUri = function(str) {
 }
 
 // toString() stringifies the current state of the uri
-juribuilder.prototype.toString = function () {
+jsUri.prototype.toString = function () {
 
     var s = '';
     var is = function (s) { return (s != null && s != ''); }
@@ -115,101 +114,101 @@ juribuilder.prototype.toString = function () {
 }
 
 /*
-    Property accessor methods for juribuilder
+    Property accessor methods for jsUri
 */
 
-juribuilder.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
-juribuilder.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
+jsUri.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
+jsUri.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
 
 // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
-juribuilder.prototype.__defineGetter__('hasAuthorityPrefix', function () { 
+jsUri.prototype.__defineGetter__('hasAuthorityPrefix', function () { 
     if (this._hasAuthorityPrefix == null)
     return (this._uri.source.indexOf('//') != -1);
 
     return this._hasAuthorityPrefix;
 });
-juribuilder.prototype.__defineSetter__('hasAuthorityPrefix', function (val) {  this._hasAuthorityPrefix = val; });
+jsUri.prototype.__defineSetter__('hasAuthorityPrefix', function (val) {  this._hasAuthorityPrefix = val; });
 
-juribuilder.prototype.__defineGetter__('userInfo', function () { return this._uri.userInfo; });
-juribuilder.prototype.__defineSetter__('userInfo', function (val) { this._uri.userInfo = val; });
+jsUri.prototype.__defineGetter__('userInfo', function () { return this._uri.userInfo; });
+jsUri.prototype.__defineSetter__('userInfo', function (val) { this._uri.userInfo = val; });
 
-juribuilder.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
-juribuilder.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
+jsUri.prototype.__defineGetter__('protocol', function () { return this._uri.protocol; });
+jsUri.prototype.__defineSetter__('protocol', function (val) { this._uri.protocol = val; });
 
-juribuilder.prototype.__defineGetter__('host', function () { return this._uri.host; });
-juribuilder.prototype.__defineSetter__('host', function (val) { this._uri.host = val; });
+jsUri.prototype.__defineGetter__('host', function () { return this._uri.host; });
+jsUri.prototype.__defineSetter__('host', function (val) { this._uri.host = val; });
 
-juribuilder.prototype.__defineGetter__('port', function () { return this._uri.port; });
-juribuilder.prototype.__defineSetter__('port', function (val) { this._uri.port = val; });
+jsUri.prototype.__defineGetter__('port', function () { return this._uri.port; });
+jsUri.prototype.__defineSetter__('port', function (val) { this._uri.port = val; });
 
-juribuilder.prototype.__defineGetter__('path', function () { return this._uri.path; });
-juribuilder.prototype.__defineSetter__('path', function (val) { this._uri.path = val; });
+jsUri.prototype.__defineGetter__('path', function () { return this._uri.path; });
+jsUri.prototype.__defineSetter__('path', function (val) { this._uri.path = val; });
 
-juribuilder.prototype.__defineGetter__('query', function () { return this._query; });
-juribuilder.prototype.__defineSetter__('query', function (val) { this._query = new juribuilder.query(val); });
+jsUri.prototype.__defineGetter__('query', function () { return this._query; });
+jsUri.prototype.__defineSetter__('query', function (val) { this._query = new jsUri.query(val); });
 
-juribuilder.prototype.__defineGetter__('anchor', function () { return this._uri.anchor; });
-juribuilder.prototype.__defineSetter__('anchor', function (val) { this._uri.anchor = val; });
+jsUri.prototype.__defineGetter__('anchor', function () { return this._uri.anchor; });
+jsUri.prototype.__defineSetter__('anchor', function (val) { this._uri.anchor = val; });
 
 
 /*
-    Fluent setters for juribuilder uri properties
+    Fluent setters for jsUri uri properties
 */
 
-juribuilder.prototype.setProtocol = function (val) {
+jsUri.prototype.setProtocol = function (val) {
     this.protocol = val;
     return this;
 }
 
-juribuilder.prototype.setHasAuthorityPrefix = function (val) {
+jsUri.prototype.setHasAuthorityPrefix = function (val) {
     this.hasAuthorityPrefix = val;
     return this;
 }
 
-juribuilder.prototype.setUserInfo = function (val) {
+jsUri.prototype.setUserInfo = function (val) {
     this.userInfo = val;
     return this;
 }
 
-juribuilder.prototype.setHost = function (val) {
+jsUri.prototype.setHost = function (val) {
     this.host = val;
     return this;
 }
 
-juribuilder.prototype.setPort = function (val) {
+jsUri.prototype.setPort = function (val) {
     this.port = val;
     return this;
 }
 
-juribuilder.prototype.setPath = function (val) {
+jsUri.prototype.setPath = function (val) {
     this.path = val;
     return this;
 }
 
-juribuilder.prototype.setQuery = function (val) {
+jsUri.prototype.setQuery = function (val) {
     this.query = val;
     return this;
 }
 
-juribuilder.prototype.setAnchor = function (val) {
+jsUri.prototype.setAnchor = function (val) {
     this.anchor = val;
     return this;
 }
 
 
 /*
-    jUriBuilder.query
+    jsUri.query
     query string parsing, parameter manipulation and stringification
 */
 
-juribuilder.query = function (q) {
+jsUri.query = function (q) {
     this.params = this.parseQuery(q);
 }
 
-juribuilder.query.prototype = {};
+jsUri.query.prototype = {};
 
 // toString() returns a string containing the current query object
-juribuilder.query.prototype.toString = function () {
+jsUri.query.prototype.toString = function () {
 
     var s = '';
     for (var p in this.params) {
@@ -223,7 +222,7 @@ juribuilder.query.prototype.toString = function () {
 }
 
 // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
-juribuilder.query.prototype.parseQuery = function (q) {
+jsUri.query.prototype.parseQuery = function (q) {
 
     var arr = [];
 
@@ -244,7 +243,7 @@ juribuilder.query.prototype.parseQuery = function (q) {
 
 // deleteParam(key) removes all instances of parameters named (key) 
 // deleteParam(key, val) removes all instances where the value matches (val)
-juribuilder.query.prototype.deleteParam = function (key, val) {
+jsUri.query.prototype.deleteParam = function (key, val) {
 
     var arr = [];
 
@@ -264,7 +263,7 @@ juribuilder.query.prototype.deleteParam = function (key, val) {
 
 // addParam(key, val) adds a name/value pair to the end of the query string
 // addParam(key, val, index) adds the param at the specified position (index)
-juribuilder.query.prototype.addParam = function (key, val, index) {
+jsUri.query.prototype.addParam = function (key, val, index) {
 
     if (arguments.length == 3 && index != -1) {
         index = Math.min(index, this.params.length);
@@ -279,7 +278,7 @@ juribuilder.query.prototype.addParam = function (key, val, index) {
 // replaceParam(key, newVal) deletes all instances of params named (key) and replaces them with the new single value
 // replaceParam(key, newVal, oldVal) deletes only instances of params named (key) with the value (val) and replaces them with the new single value
 // this function attempts to preserve query param ordering
-juribuilder.query.prototype.replaceParam = function (key, newVal, oldVal) {
+jsUri.query.prototype.replaceParam = function (key, newVal, oldVal) {
 
     if (arguments.length == 3) {
         var index = -1;
@@ -306,7 +305,7 @@ juribuilder.query.prototype.replaceParam = function (key, newVal, oldVal) {
 }
 
 /*
-    jUriBuilder.path
+    jsUri.path
     path parsing, element manipulation and stringification
 */
 
