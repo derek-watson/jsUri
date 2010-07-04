@@ -1,29 +1,29 @@
 /*
-* Copyright 2010 Derek Watson
-* 
-* juribuilder is based on the work of two other GPL-licenced javascript libraries:
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
+    Copyright (c) 2010 Derek Watson
+    Copyright (c) 2007 Steven Levithan
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*
     version 1.0.0
+    2010 Derek Watson
 
     jUriBuilder
     uri parsing, manipulation and stringification
 
-    This software incorporates GPL code from parseUri (http://blog.stevenlevithan.com/archives/parseuri).
+    This software incorporates MIT-licence dcode from parseUri (http://blog.stevenlevithan.com/archives/parseuri).
 */
 
 juribuilder = function (s) {
@@ -242,7 +242,7 @@ juribuilder.query.prototype.parseQuery = function (q) {
 }
 
 
-// deleteParam(key) removes all query string parameters named (key) 
+// deleteParam(key) removes all instances of parameters named (key) 
 // deleteParam(key, val) removes all instances where the value matches (val)
 juribuilder.query.prototype.deleteParam = function (key, val) {
 
@@ -262,7 +262,6 @@ juribuilder.query.prototype.deleteParam = function (key, val) {
     return this;
 }
 
-// addParam(key) adds an empty-valued param to the end of the query string
 // addParam(key, val) adds a name/value pair to the end of the query string
 // addParam(key, val, index) adds the param at the specified position (index)
 juribuilder.query.prototype.addParam = function (key, val, index) {
@@ -271,17 +270,11 @@ juribuilder.query.prototype.addParam = function (key, val, index) {
         index = Math.min(index, this.params.length);
         this.params.splice(index, 0, [key, val]);
     }
-    
-    else if (arguments.length == 2)
+    else if (arguments.length > 0)
         this.params.push([key, val]);
     
-    else if (arguments.length == 1)
-        this.params.push([key, null]);
-
     return this;
 }
-
-
 
 
 /*
