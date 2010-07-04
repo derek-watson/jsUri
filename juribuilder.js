@@ -147,6 +147,48 @@ juribuilder.prototype.__defineGetter__('anchor', function () { return this.uri.a
 juribuilder.prototype.__defineSetter__('anchor', function (val) { this.uri.anchor = val; });
 
 
+// fluent setters
+juribuilder.prototype.setProtocol = function (val) {
+    this.protocol = val;
+    return this;
+}
+
+juribuilder.prototype.setHasAuthorityPrefix = function (val) {
+    this._hasAuthorityPrefix = val;
+    return this;
+}
+
+juribuilder.prototype.setUserInfo = function (val) {
+    this.userInfo = val;
+    return this;
+}
+
+juribuilder.prototype.setHost = function (val) {
+    this.host = val;
+    return this;
+}
+
+juribuilder.prototype.setPort = function (val) {
+    this.port = val;
+    return this;
+}
+
+juribuilder.prototype.setPath = function (val) {
+    this.path = val;
+    return this;
+}
+
+juribuilder.prototype.setQuery = function (val) {
+    this.query = val;
+    return this;
+}
+
+juribuilder.prototype.setAnchor = function (val) {
+    this.anchor = val;
+    return this;
+}
+
+// juribuilder.querystring
 /*
 
 // parseArgs() parses a query string and returns an object containing the parsed data

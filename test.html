@@ -11,7 +11,7 @@
         // simple Uri formatting tests
         function _testSimpleUri(s) {
             var uri = new juribuilder(s);
-            assertEquals('Testing that the stringified object matches the original URI', s, uri.toString());
+            assertEquals('Explicitly calling toString() should match the original uri', s, uri.toString());
         }
 
         function testSimpleRelativeUri() { _testSimpleUri(''); }
@@ -43,191 +43,217 @@
         function testReplacingProtocol() {
             var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
             u.protocol = 'https';
-            assertEquals('There should be a single colon', u.toString(), 'https://www.test.com/index.html?arr=1&arr=&arr=2');
+            assertEquals('There should be a single colon', 'https://www.test.com/index.html?arr=1&arr=&arr=2', u.toString());
         }
 
         function testReplacingProtocolWithColon() {
             var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
             u.protocol = 'https:';
-            assertEquals('There should not be a double colon', u.toString(), 'https://www.test.com/index.html?arr=1&arr=&arr=2');
+            assertEquals('There should not be a double colon', 'https://www.test.com/index.html?arr=1&arr=&arr=2', u.toString());
         }
 
         function testReplacingProtocolWithColon() {
             var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
             u.protocol = 'https:';
-            assertEquals('There should not be a double colon', u.toString(), 'https://www.test.com/index.html?arr=1&arr=&arr=2');
+            assertEquals('There should not be a double colon', 'https://www.test.com/index.html?arr=1&arr=&arr=2', u.toString());
         }
 
         function testDisablingHasAuthorityPrefix() {
             var u = new juribuilder('//test.com/index.html');
             u.hasAuthorityPrefix = false;
-            assertEquals('There should be no leading slashes', u.toString(), 'test.com/index.html');
+            assertEquals('There should be no leading slashes', 'test.com/index.html', u.toString());
         }
 
         function testDisablingProtocolAndHasAuthorityPrefix() {
             var u = new juribuilder('https://test.com/index.html');
             u.protocol = null;
             u.hasAuthorityPrefix = false;
-            assertEquals('There should be no leading slashes', u.toString(), 'test.com/index.html');
+            assertEquals('There should be no leading slashes', 'test.com/index.html', u.toString());
         }
 
         function testDisablingHasAuthorityPrefixWithProtocolError() {
             var u = new juribuilder('http://www.test.com/');
             u.hasAuthorityPrefix = false;
-            assertEquals('Authority prefix should remain intact', u.toString(), 'http://www.test.com/');
+            assertEquals('Authority prefix should remain intact', 'http://www.test.com/', u.toString());
         }
 
         function testDisablingProtocolAndHasAuthorityPrefix() {
             var u = new juribuilder('http://www.test.com/');
             u.protocol = null;
             u.hasAuthorityPrefix = false;
-            assertEquals('Authority prefix should remain intact', u.toString(), 'www.test.com/');
+            assertEquals('Authority prefix should remain intact', 'www.test.com/', u.toString());
         }
 
         function testAddingUserInfo() {
             var u = new juribuilder('https://test.com/index.html');
             u.userInfo = 'username:password';
-            assertEquals('The dummy login information should be included in the uri', u.toString(), 'https://username:password@test.com/index.html');
+            assertEquals('The dummy login information should be included in the uri', 'https://username:password@test.com/index.html', u.toString());
         }
 
         function testAddingUserInfoWithTrailing() {
             var u = new juribuilder('https://test.com/index.html');
             u.userInfo = 'username:password@';
-            assertEquals('The superfluous trailing symbol should be stripped', u.toString(), 'https://username:password@test.com/index.html');
+            assertEquals('The superfluous trailing symbol should be stripped', 'https://username:password@test.com/index.html', u.toString());
         }
 
         function testAddingHostnameRelative() {
             var u = new juribuilder('/index.html');
             u.host = 'wherever.com';
-            assertEquals('The hostname should be added to the uri', u.toString(), 'wherever.com/index.html');
+            assertEquals('The hostname should be added to the uri', 'wherever.com/index.html', u.toString());
         }
 
         function testChangingHostnameRelative() {
             var u = new juribuilder('test.com/index.html');
             u.host = 'wherever.com';
-            assertEquals('The hostname should be added to the uri', u.toString(), 'wherever.com/index.html');
+            assertEquals('The hostname should be added to the uri', 'wherever.com/index.html', u.toString());
         }
 
         function testChangingHostnameAbsolute() {
             var u = new juribuilder('http://test.com/index.html');
             u.host = 'wherever.com';
-            assertEquals('The hostname should be changed to whatever.com', u.toString(), 'http://wherever.com/index.html');
+            assertEquals('The hostname should be changed to whatever.com', 'http://wherever.com/index.html', u.toString());
         }
 
         function testAddingPortRelativeWithoutHost() {
             var u = new juribuilder('/index.html');
             u.port = 8080;
-            assertEquals('The port will not show without a host', u.toString(), '/index.html');
+            assertEquals('The port will not show without a host', '/index.html', u.toString());
         }
 
         function testAddingPortAndHostRelative() {
             var u = new juribuilder('/index.html');
             u.port = 8080;
             u.host = 'test.com';
-            assertEquals('The port will not show without a host', u.toString(), 'test.com:8080/index.html');
+            assertEquals('The port will not show without a host', 'test.com:8080/index.html', u.toString());
         }
 
         function testChangingPortRelative() {
             var u = new juribuilder('test.com:80/index.html');
             u.port = 8080;
-            assertEquals('The port should be changed to 8080', u.toString(), 'test.com:8080/index.html');
+            assertEquals('The port should be changed to 8080', 'test.com:8080/index.html', u.toString());
         }
 
         function testChangingPortAbsolute() {
             var u = new juribuilder('http://test.com/index.html');
             u.port = 8080;
-            assertEquals('The hostname should be changed to whatever.com', u.toString(), 'http://test.com:8080/index.html');
+            assertEquals('The hostname should be changed to whatever.com', 'http://test.com:8080/index.html', u.toString());
         }
 
         function testAddingAPath() {
             var u = new juribuilder('www.test.com');
             u.path = '/some/article.html';
-            assertEquals('The path should be appended to the uri', u.toString(), 'www.test.com/some/article.html');
+            assertEquals('The path should be appended to the uri', 'www.test.com/some/article.html', u.toString());
         }
         
         function testChangingPath() {
             var u = new juribuilder('http://www.test.com/news/latest.html');
             u.path = '/contact-us.html';
-            assertEquals('The path be changed', u.toString(), 'http://www.test.com/contact-us.html');
+            assertEquals('The path be changed', 'http://www.test.com/contact-us.html', u.toString());
         }
 
         function testNullifyingPath() {
             var u = new juribuilder('http://www.test.com/news/latest.html');
             u.path = null;
-            assertEquals('The path be removed', u.toString(), 'http://www.test.com');
+            assertEquals('The path be removed', 'http://www.test.com', u.toString());
         }
 
         function testEmptyPath() {
             var u = new juribuilder('http://www.test.com/news/latest.html');
             u.path = '';
-            assertEquals('The path be removed', u.toString(), 'http://www.test.com');
+            assertEquals('The path be removed', 'http://www.test.com', u.toString());
         }
 
         function testAddingAQueryToNothing() {
             var u = new juribuilder('');
             u.query = 'this=that&something=else';
-            assertEquals('The query string, question mark and slash should all be added to the url', u.toString(), '?this=that&something=else');
+            assertEquals('The query string, question mark and slash should all be added to the url', '?this=that&something=else', u.toString());
         }
 
         function testAddingAQueryToARelativePath() {
             var u = new juribuilder('/some/file.html');
             u.query = 'this=that&something=else';
-            assertEquals('The query string, question mark and slash should all be added to the url', u.toString(), '/some/file.html?this=that&something=else');
+            assertEquals('The query string, question mark and slash should all be added to the url', '/some/file.html?this=that&something=else', u.toString());
         }
 
         function testAddingAQueryToADomain() {
             var u = new juribuilder('www.test.com');
             u.query = 'this=that&something=else';
-            assertEquals('The query string, question mark and slash should all be added to the url', u.toString(), 'www.test.com/?this=that&something=else');
+            assertEquals('The query string, question mark and slash should all be added to the url', 'www.test.com/?this=that&something=else', u.toString());
         }
 
         function testSwappingQuery() {
             var u = new juribuilder('www.test.com?this=that&a=1&b=2;c=3');
             u.query = 'one=1&two=2';
-            assertEquals('The query string should be replaced', u.toString(), 'www.test.com/?one=1&two=2');
+            assertEquals('The query string should be replaced', 'www.test.com/?one=1&two=2', u.toString());
         }
 
         function testNullifyingQuery() {
             var u = new juribuilder('www.test.com?this=that&a=1&b=2;c=3');
             u.query = null;
-            assertEquals('The query string and path placeholder should be removed', u.toString(), 'www.test.com');
+            assertEquals('The query string and path placeholder should be removed', 'www.test.com', u.toString());
         }
 
         function testEmptyingQuery() {
             var u = new juribuilder('www.test.com?this=that&a=1&b=2;c=3');
             u.query = '';
-            assertEquals('The query string and path placeholder should be removed', u.toString(), 'www.test.com');
+            assertEquals('The query string and path placeholder should be removed', 'www.test.com', u.toString());
         }
 
         function testAddingAnchorToDomain() {
             var u = new juribuilder('www.test.com');
             u.anchor = 'content';
-            assertEquals('The anchor and path placeholder should be added', u.toString(), 'www.test.com/#content');
+            assertEquals('The anchor and path placeholder should be added', 'www.test.com/#content', u.toString());
         }
 
         function testAddingAnchorWithHash() {
             var u = new juribuilder('www.test.com');
             u.anchor = '#content';
-            assertEquals('The anchor and path placeholder should be added but no double hash', u.toString(), 'www.test.com/#content');
+            assertEquals('The anchor and path placeholder should be added but no double hash', 'www.test.com/#content', u.toString());
         }
 
 
         function testAddingAnchorToPath() {
             var u = new juribuilder('a/b/c/123.html');
             u.anchor = 'content';
-            assertEquals('The anchor should be added', u.toString(), 'a/b/c/123.html#content');
+            assertEquals('The anchor should be added', 'a/b/c/123.html#content', u.toString());
         }
 
         function testChangingAnchor() {
             var u = new juribuilder('a/b/c/123.html#content');
             u.anchor = 'footer';
-            assertEquals('The anchor should be changed', u.toString(), 'a/b/c/123.html#footer');
+            assertEquals('The anchor should be changed', 'a/b/c/123.html#footer', u.toString());
         }
 
         function testEmptyingAnchor() {
             var u = new juribuilder('a/b/c/123.html#content');
             u.anchor = '';
-            assertEquals('The anchor should be removed', u.toString(), 'a/b/c/123.html');
+            assertEquals('The anchor should be removed', 'a/b/c/123.html', u.toString());
+        }
+
+        // fluent setters test
+        function testFluentAddition() {
+            var u = new juribuilder('www.yahoo.com');
+            u.setPath('/index.html').setAnchor('content');
+            assertEquals('The uri should now contain path and anchor elements', 'www.yahoo.com/index.html#content', u.toString());
+        }
+
+        function testFluentReplacement() {
+            var u = new juribuilder('http://www.test.com');
+            u.setHost('www.yahoo.com').setProtocol('https');
+            assertEquals('The uri should have been properly updated', 'https://www.yahoo.com', u.toString());
+        }
+
+        function testFluentConstruction() {
+            var u = new juribuilder('')
+                .setPath('/index.html')
+                .setAnchor('content')
+                .setHost('www.test.com')
+                .setPort(8080)
+                .setUserInfo('username:password')
+                .setProtocol('https')
+                .setQuery('this=that&some=thing');
+
+            assertEquals('The uri should now contain all elements', 'https://username:password@www.test.com:8080/index.html?this=that&some=thing#content', u.toString());
         }
 
         // query string manipulation tests
