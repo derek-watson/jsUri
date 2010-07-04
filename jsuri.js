@@ -31,6 +31,8 @@
 */
 
 jsUri = function (s) {
+    if (s == undefined)
+        s = '';
     this._uri = this.parseUri(s);
     this._query = new jsUri.query(this._uri.query);
 }
@@ -93,7 +95,7 @@ jsUri.prototype.toString = function () {
 
     if (is(this.host)) {
         s += this.host;
-        if (is(this.port)) 
+        if (is(this.port))
             s += ':' + this.port;
     }
 
@@ -243,14 +245,14 @@ jsUri.query.prototype.parseQuery = function (q) {
 }
 
 
-// deleteParam(key) removes all instances of parameters named (key) 
-// deleteParam(key, val) removes all instances where the value matches (val)
-jsUri.query.prototype.deleteParam = function (key, val) {
+// deleteQueryParam(key) removes all instances of parameters named (key) 
+// deleteQueryParam(key, val) removes all instances where the value matches (val)
+jsUri.prototype.deleteQueryParam = function (key, val) {
 
     var arr = [];
 
-    for (var p in this.params) {
-        var param = this.params[p];
+    for (var p in this.query.params) {
+        var param = this.query.params[p];
         if (arguments.length == 2 && param[0] == key && param[1] == val)
             continue;
         else if (arguments.length == 1 && param[0] == key)
@@ -259,52 +261,53 @@ jsUri.query.prototype.deleteParam = function (key, val) {
         arr.push(param);
     }
 
-    this.params = arr;
+    this.query.params = arr;
     return this;
 }
 
-// addParam(key, val) adds a name/value pair to the end of the query string
-// addParam(key, val, index) adds the param at the specified position (index)
-jsUri.query.prototype.addParam = function (key, val, index) {
+// addQueryParam(key, val) adds a name/value pair to the end of the query string
+// addQueryParam(key, val, index) adds the param at the specified position (index)
+jsUri.prototype.addQueryParam = function (key, val, index) {
 
     if (arguments.length == 3 && index != -1) {
-        index = Math.min(index, this.params.length);
-        this.params.splice(index, 0, [key, val]);
+        index = Math.min(index, this.query.params.length);
+        this.query.params.splice(index, 0, [key, val]);
     }
     else if (arguments.length > 0)
-        this.params.push([key, val]);
+        this.query.params.push([key, val]);
     
     return this;
 }
 
-// replaceParam(key, newVal) deletes all instances of params named (key) and replaces them with the new single value
-// replaceParam(key, newVal, oldVal) deletes only instances of params named (key) with the value (val) and replaces them with the new single value
+// replaceQueryParam(key, newVal) deletes all instances of params named (key) and replaces them with the new single value
+// replaceQueryParam(key, newVal, oldVal) deletes only instances of params named (key) with the value (val) and replaces them with the new single value
 // this function attempts to preserve query param ordering
-jsUri.query.prototype.replaceParam = function (key, newVal, oldVal) {
+jsUri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
 
     if (arguments.length == 3) {
         var index = -1;
-        for (var p in this.params) {
-            var param = this.params[p];
+        for (var p in this.query.params) {
+            var param = this.query.params[p];
             if (param[0] == key && param[1] == oldVal) {
                 index = p;
                 break;
             }
         }
-        return this.deleteParam(key, oldVal).addParam(key, newVal, index);
+        return this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
     }
     else {
         var index = -1;
-        for (var p in this.params) {
-            var param = this.params[p];
+        for (var p in this.query.params) {
+            var param = this.query.params[p];
             if (param[0] == key) {
                 index = p;
                 break;
             }
         }
-        return this.deleteParam(key).addParam(key, newVal, index);
+        return this.deleteQueryParam(key).addQueryParam(key, newVal, index);
     }
 }
+
 
 /*
     jsUri.path

@@ -11,10 +11,12 @@
         // any quasi-valid uri should survive parsing and re-stringification
         function _testSimpleUri(s) {
             var uri = new jsUri(s);
-            assertEquals('Explicitly calling toString() should match the original uri', s, uri.toString());
+            var expectedResponse = (arguments.length == 0) ? '' : s;
+            assertEquals('Explicitly calling toString() should match the expected response', expectedResponse, uri.toString());
         }
 
-        function testSimpleRelativeUri() { _testSimpleUri(''); }
+        function testSimpleEmptyConstructor() { _testSimpleUri(); }
+        function testSimpleEmptyUri() { _testSimpleUri(''); }
         function testSimpleRelativeUri() { _testSimpleUri('/'); }
         function testSimpleRelativeDirectoryUri() { _testSimpleUri('tutorial1/'); }
         function testSimpleRelativeDirectory2Uri() { _testSimpleUri('/experts/'); }
@@ -282,72 +284,61 @@
 
         
         /*
-            query string manipulation tests
+            jsUri query manipulation tests
         */
 
         function testAddingParamToBlank() {
-            var u = new jsUri('');
-            u.query.addParam('testing', '123');
+            var u = new jsUri('').addQueryParam('testing', '123');
             assertEquals('The url should be just a query string', '?testing=123', u.toString());
         }
 
         function testAddingParamToAbsolute() {
-            var u = new jsUri('http://www.microsoft.com');
-            u.query.addParam('testing', '123').addParam('one', 1);
+            var u = new jsUri('http://www.microsoft.com').addQueryParam('testing', '123').addQueryParam('one', 1);
             assertEquals('The url should be just a query string', 'http://www.microsoft.com/?testing=123&one=1', u.toString());
         }
 
-        function testDeleteParamName() {
-            var u = new jsUri('test.com?a=1&b=2&c=3&a=eh');
-            u.query.deleteParam('b');
+        function testdeleteQueryParamName() {
+            var u = new jsUri('test.com?a=1&b=2&c=3&a=eh').deleteQueryParam('b');
             assertEquals('The query string should not contain the b=2 param', 'test.com/?a=1&c=3&a=eh', u.toString());
         }
 
-        function testDeleteParamNameValue() {
-            var u = new jsUri('test.com?a=1&b=2&c=3&a=eh');
-            u.query.deleteParam('a', 'eh');
+        function testdeleteQueryParamNameValue() {
+            var u = new jsUri('test.com?a=1&b=2&c=3&a=eh').deleteQueryParam('a', 'eh');
             assertEquals('The query string should not contain the a=eh param', 'test.com/?a=1&b=2&c=3', u.toString());
         }
 
         function testAddNullParam() {
-            var u = new jsUri('?a=1&b=2&c=3');
-            u.query.addParam('d');
+            var u = new jsUri('?a=1&b=2&c=3').addQueryParam('d');
             assertEquals('The query string should not contain the null d= param', '?a=1&b=2&c=3&d=', u.toString());
         }
 
         function testAddKVPParam() {
-            var u = new jsUri('?a=1&b=2&c=3');
-            u.query.addParam('d', '4');
+            var u = new jsUri('?a=1&b=2&c=3').addQueryParam('d', '4');
             assertEquals('The query string should not contain the d=4 param', '?a=1&b=2&c=3&d=4', u.toString());
         }
 
         function testPrependKVPParam() {
-            var u = new jsUri('?a=1&b=2&c=3');
-            u.query.addParam('d', '4', 0);
+            var u = new jsUri('?a=1&b=2&c=3').addQueryParam('d', '4', 0);
             assertEquals('The query string should not contain the d=4 param at the beginning', '?d=4&a=1&b=2&c=3', u.toString());
         }
 
-        function testReplaceParamLongform() {
-            var u = new jsUri('?a=1&b=2&c=3');
-            u.query.deleteParam('a').addParam('a', 'eh');
+        function testreplaceQueryParamLongform() {
+            var u = new jsUri('?a=1&b=2&c=3').deleteQueryParam('a').addQueryParam('a', 'eh');
             assertEquals('The query string should contain a=eh at the end', '?b=2&c=3&a=eh', u.toString());
         }
 
-        function testReplaceParamShortform() {
-            var u = new jsUri('?a=1&b=2&c=3');
-            u.query.replaceParam('a', 'eh');
+        function testreplaceQueryParamShortform() {
+            var u = new jsUri('?a=1&b=2&c=3').replaceQueryParam('a', 'eh');
             assertEquals('The query param named a should be modified in place', '?a=eh&b=2&c=3', u.toString());
         }
 
-        function testReplaceParamValueShortform() {
-            var u = new jsUri('?a=1&b=2&c=3&c=4&c=5&c=6');
-            u.query.replaceParam('c', 'five', '5');
+        function testreplaceQueryParamValueShortform() {
+            var u = new jsUri('?a=1&b=2&c=3&c=4&c=5&c=6').replaceQueryParam('c', 'five', '5');
             assertEquals('The query param pair c=5 should be replaced by c=five', '?a=1&b=2&c=3&c=4&c=five&c=6', u.toString());
         }
 
-
         /*
-            path manipulation tests
+        path manipulation tests
         */
 
     </script>
