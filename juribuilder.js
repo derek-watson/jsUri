@@ -262,10 +262,27 @@ juribuilder.query.prototype.deleteParam = function (key, val) {
     return this;
 }
 
-juribuilder.query.prototype.addParam = function (key, val) {
-    this.params.push([key, val]);
+// addParam(key) adds an empty-valued param to the end of the query string
+// addParam(key, val) adds a name/value pair to the end of the query string
+// addParam(key, val, index) adds the param at the specified position (index)
+juribuilder.query.prototype.addParam = function (key, val, index) {
+
+    if (arguments.length == 3) {
+        index = Math.min(index, this.params.length);
+        this.params.splice(index, 0, [key, val]);
+    }
+    
+    else if (arguments.length == 2)
+        this.params.push([key, val]);
+    
+    else if (arguments.length == 1)
+        this.params.push([key, null]);
+
     return this;
 }
+
+
+
 
 /*
     jUriBuilder.path

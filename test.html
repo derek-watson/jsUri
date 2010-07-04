@@ -39,17 +39,14 @@
         function testSimpleWithBlankParamValuesUri() { _testSimpleUri('http://www.test.com/index.html?arr=1&arr=&arr=2'); }
         function testSimpleWithoutSchemeUri() { _testSimpleUri('//www.test.com/'); }
 
-        // Uri manipulation tests
+        /*
+            uri manipulation tests
+        */
+
         function testReplacingProtocol() {
             var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
             u.protocol = 'https';
-            assertEquals('There should be a single colon', 'https://www.test.com/index.html?arr=1&arr=&arr=2', u.toString());
-        }
-
-        function testReplacingProtocolWithColon() {
-            var u = new juribuilder('http://www.test.com/index.html?arr=1&arr=&arr=2');
-            u.protocol = 'https:';
-            assertEquals('There should not be a double colon', 'https://www.test.com/index.html?arr=1&arr=&arr=2', u.toString());
+            assertEquals('Protocol should switch to https', 'https://www.test.com/index.html?arr=1&arr=&arr=2', u.toString());
         }
 
         function testReplacingProtocolWithColon() {
@@ -61,20 +58,26 @@
         function testDisablingHasAuthorityPrefix() {
             var u = new juribuilder('//test.com/index.html');
             u.hasAuthorityPrefix = false;
-            assertEquals('There should be no leading slashes', 'test.com/index.html', u.toString());
+            assertEquals('The authority prefix slashes (//) should be removed', 'test.com/index.html', u.toString());
         }
 
-        function testDisablingProtocolAndHasAuthorityPrefix() {
+        function testDeletingProtocolKeepsAuthorityPrefix() {
+            var u = new juribuilder('https://test.com/index.html');
+            u.protocol = null;
+            assertEquals('Authority prefix (//) slashes should remain intact', '//test.com/index.html', u.toString());
+        }
+
+        function testDeletingProtocolAndHasAuthorityPrefix() {
             var u = new juribuilder('https://test.com/index.html');
             u.protocol = null;
             u.hasAuthorityPrefix = false;
-            assertEquals('There should be no leading slashes', 'test.com/index.html', u.toString());
+            assertEquals('Authority prefix (//) slashes should be suppressed', 'test.com/index.html', u.toString());
         }
 
-        function testDisablingHasAuthorityPrefixWithProtocolError() {
+        function testDisablingHasAuthorityPrefixWithProtocolConflict() {
             var u = new juribuilder('http://www.test.com/');
             u.hasAuthorityPrefix = false;
-            assertEquals('Authority prefix should remain intact', 'http://www.test.com/', u.toString());
+            assertEquals('Authority prefix (//) slashes should remain intact', 'http://www.test.com/', u.toString());
         }
 
         function testDisablingProtocolAndHasAuthorityPrefix() {
@@ -229,7 +232,11 @@
             assertEquals('The anchor should be removed', 'a/b/c/123.html', u.toString());
         }
 
-        // fluent setters test
+        
+        /*
+            fluent setters test
+        */
+
         function testFluentAddition() {
             var u = new juribuilder('www.yahoo.com');
             u.setPath('/index.html').setAnchor('content');
@@ -287,11 +294,24 @@
             assertEquals('The query string should not contain the a=eh param', 'test.com/?a=1&b=2&c=3', u.toString());
         }
 
-        function testAddParam() {
+        function testAddNullParam() {
+            var u = new juribuilder('?a=1&b=2&c=3');
+            u.query.addParam('d');
+            assertEquals('The query string should not contain the null d= param', '?a=1&b=2&c=3&d=', u.toString());
+        }
+
+        function testAddKVPParam() {
             var u = new juribuilder('?a=1&b=2&c=3');
             u.query.addParam('d', '4');
             assertEquals('The query string should not contain the d=4 param', '?a=1&b=2&c=3&d=4', u.toString());
         }
+
+        function testPrependKVPParam() {
+            var u = new juribuilder('?a=1&b=2&c=3');
+            u.query.addParam('d', '4', 0);
+            assertEquals('The query string should not contain the d=4 param at the beginning', '?d=4&a=1&b=2&c=3', u.toString());
+        }
+
 
         // path manipulation tests
 
