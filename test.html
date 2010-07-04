@@ -281,7 +281,10 @@
         }
 
         
-        // query string manipulation tests
+        /*
+            query string manipulation tests
+        */
+
         function testDeleteParamName() {
             var u = new juribuilder('test.com?a=1&b=2&c=3&a=eh');
             u.query.deleteParam('b');
@@ -312,8 +315,28 @@
             assertEquals('The query string should not contain the d=4 param at the beginning', '?d=4&a=1&b=2&c=3', u.toString());
         }
 
+        function testReplaceParamLongform() {
+            var u = new juribuilder('?a=1&b=2&c=3');
+            u.query.deleteParam('a').addParam('a', 'eh');
+            assertEquals('The query string should contain a=eh at the end', '?b=2&c=3&a=eh', u.toString());
+        }
 
-        // path manipulation tests
+        function testReplaceParamShortform() {
+            var u = new juribuilder('?a=1&b=2&c=3');
+            u.query.replaceParam('a', 'eh');
+            assertEquals('The query param named a should be modified in place', '?a=eh&b=2&c=3', u.toString());
+        }
+
+        function testReplaceParamValueShortform() {
+            var u = new juribuilder('?a=1&b=2&c=3&c=4&c=5&c=6');
+            u.query.replaceParam('c', 'five', '5');
+            assertEquals('The query param pair c=5 should be replaced by c=five', '?a=1&b=2&c=3&c=4&c=five&c=6', u.toString());
+        }
+
+
+        /*
+            path manipulation tests
+        */
 
     </script>
 </head>

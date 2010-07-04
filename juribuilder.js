@@ -266,7 +266,7 @@ juribuilder.query.prototype.deleteParam = function (key, val) {
 // addParam(key, val, index) adds the param at the specified position (index)
 juribuilder.query.prototype.addParam = function (key, val, index) {
 
-    if (arguments.length == 3) {
+    if (arguments.length == 3 && index != -1) {
         index = Math.min(index, this.params.length);
         this.params.splice(index, 0, [key, val]);
     }
@@ -276,6 +276,34 @@ juribuilder.query.prototype.addParam = function (key, val, index) {
     return this;
 }
 
+// replaceParam(key, newVal) deletes all instances of params named (key) and replaces them with the new single value
+// replaceParam(key, newVal, oldVal) deletes only instances of params named (key) with the value (val) and replaces them with the new single value
+// this function attempts to preserve query param ordering
+juribuilder.query.prototype.replaceParam = function (key, newVal, oldVal) {
+
+    if (arguments.length == 3) {
+        var index = -1;
+        for (var p in this.params) {
+            var param = this.params[p];
+            if (param[0] == key && param[1] == oldVal) {
+                index = p;
+                break;
+            }
+        }
+        return this.deleteParam(key, oldVal).addParam(key, newVal, index);
+    }
+    else {
+        var index = -1;
+        for (var p in this.params) {
+            var param = this.params[p];
+            if (param[0] == key) {
+                index = p;
+                break;
+            }
+        }
+        return this.deleteParam(key).addParam(key, newVal, index);
+    }
+}
 
 /*
     jUriBuilder.path
