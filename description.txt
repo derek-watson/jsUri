@@ -2,10 +2,7 @@
 
 Uri parsing, fluent modification, query string extensions and high-fidelity object stringification in javascript.
 
-Have a look at our [http://jsuri.googlecode.com/hg/jsunit/testRunner.html?testPage=http://jsuri.googlecode.com/hg/test.html JsUnit Test Runner]
-
-==Uri Parsing==
-
+==Basic Usage==
 This project incorporates the excellent [http://blog.stevenlevithan.com/archives/parseuri parseUri] regular expression library by Steven Levithan. You can safely parse URLs of all shapes and sizes by passing them to the object constructor:
 
 {{{
@@ -13,8 +10,6 @@ This project incorporates the excellent [http://blog.stevenlevithan.com/archives
 var uri = new jsUri('http://user:pass@www.test.com:81/index.html?q=books#fragment');
 
 }}}
-
-==Getting, Setting Properties==
 
 The following read/write properties are public members of each uri instance.
 
