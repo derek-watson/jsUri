@@ -265,7 +265,7 @@ jsUri.prototype.deleteQueryParam = function (key, val) {
     return this;
 }
 
-// addQueryParam(key, val) adds a name/value pair to the end of the query string
+// addQueryParam(key, val) Adds an element to the end of the list of query parameters
 // addQueryParam(key, val, index) adds the param at the specified position (index)
 jsUri.prototype.addQueryParam = function (key, val, index) {
 
@@ -308,10 +308,7 @@ jsUri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
     }
 }
 
-
-/*
-    jsUri.path
-    path parsing, element manipulation and stringification
-    TODO
-*/
-
+// clone() returns a new, identical jsUri instance
+jsUri.prototype.clone = function () {
+    return new jsUri(this.toString());
+}
