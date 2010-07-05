@@ -8,11 +8,12 @@
     <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
     <script type="text/javascript">
 
-        // any quasi-valid uri should survive parsing and re-stringification
+        // any quasi-valid uri should survive parsing and re-stringification, cloning and re-stringification of the clone
         function _testSimpleUri(s) {
             var uri = new jsUri(s);
             var expectedResponse = (arguments.length == 0) ? '' : s;
-            assertEquals('Explicitly calling toString() should match the expected response', expectedResponse, uri.toString());
+            assertEquals('Uri stringification should match the original', expectedResponse, uri.toString());
+            assertEquals('Uri clone stringification should match the original', expectedResponse, uri.clone().toString());
         }
 
         function testSimpleEmptyConstructor() { _testSimpleUri(); }

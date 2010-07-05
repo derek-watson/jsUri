@@ -1,6 +1,8 @@
 =jsUri=
 
-Uri parsing, fluent modification, query string extensions and high-fidelity stringification in javascript.
+Uri parsing, fluent modification, query string extensions and high-fidelity object stringification in javascript.
+
+Have a look at our [http://jsuri.googlecode.com/hg/jsunit/testRunner.html?testPage=http://jsuri.googlecode.com/hg/test.html JsUnit Test Runner]
 
 ==Uri Parsing==
 
@@ -9,27 +11,38 @@ This project incorporates the excellent [http://blog.stevenlevithan.com/archives
 {{{
 
 var uri = new jsUri('http://user:pass@www.test.com:81/index.html?q=books#fragment');
-    uri.protocol;                          // http
-    uri.userInfo;                          // user:pass
-    uri.host;                              // www.test.com
-    uri.port;                              // 81
-    uri.path;                              // /index.html
-    uri.query;                             // q=books
-    uri.anchor;                            // fragment
-
-var uri = new jsUri('/index.html');
-    uri.path;                              // /index.html
-
-
-var uri = new jsUri('www.yahoo.com?lang=en-us');
-    uri.host;                              // www.yahoo.com
-    uri.query;                             // lang=en-us
 
 }}}
 
-==Fluent Uri Manipulation==
+==Getting, Setting Properties==
 
-Fluent functions provide a simple way to modify uri objects and stringify the resulting url.
+The following read/write properties are public members of each uri instance.
+
+{{{
+uri.protocol;                              // http
+uri.userInfo;                              // user:pass
+uri.host;                                  // www.test.com
+uri.port;                                  // 81
+uri.path;                                  // /index.html
+uri.query;                                 // q=books
+uri.anchor;                                // fragment
+}}}
+
+Assigning a new value to a property will be reflected in the string representation of the object. `toString()` is called automatically when the uri object is in a string context, here it is also called explicitly.
+
+{{{
+
+uri.userInfo = null;
+uri.host = 'mydomain.com';
+
+uri;                                       // http://mydomain.com:81/index.html?q=books#fragment (Object)
+uri.toString();                            // http://mydomain.com:81/index.html?q=books#fragment (String)
+
+}}}
+
+==Fluent Manipulation==
+
+The fluent interface provides a simple way to modify uri properties and use the resulting url.
 
 {{{
 
