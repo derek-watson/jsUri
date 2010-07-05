@@ -25,7 +25,9 @@
     jsUri
     version 1.0.0
 
-    uri parsing, manipulation and stringification
+    Uri parsing, manipulation and stringification.
+
+    For library updates or issues, visit http://code.google.com/p/jsuri/
 
     This software incorporates MIT-licence dcode from parseUri (http://blog.stevenlevithan.com/archives/parseuri).
 */
@@ -149,7 +151,7 @@ jsUri.prototype.__defineGetter__('path', function () { return this._uri.path; })
 jsUri.prototype.__defineSetter__('path', function (val) { this._uri.path = val; });
 
 jsUri.prototype.__defineGetter__('query', function () { return this._query; });
-jsUri.prototype.__defineSetter__('query', function (val) { this._query = new jsUri.query(val); });
+jsUri.prototype.__defineSetter__('query', function(val) { this._query = new jsUri.query(val); });
 
 jsUri.prototype.__defineGetter__('anchor', function () { return this._uri.anchor; });
 jsUri.prototype.__defineSetter__('anchor', function (val) { this._uri.anchor = val; });
@@ -226,14 +228,14 @@ jsUri.query.prototype.toString = function () {
 }
 
 // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
-jsUri.query.prototype.parseQuery = function (q) {
+jsUri.query.prototype.parseQuery = function(q) {
 
     var arr = [];
 
-    if (q == null || q == '') 
+    if (q == null || q == '')
         return arr;
 
-    var params = q.split('&');
+    var params = q.toString().split('&');
 
     for (var p in params) {
         var param = params[p];
