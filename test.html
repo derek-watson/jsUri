@@ -235,7 +235,7 @@
             assertEquals('The anchor should be removed', 'a/b/c/123.html', uri.toString());
         }
 
-        
+
         /*
             fluent setters test
         */
@@ -346,6 +346,23 @@
             assertEquals('The clone should have an extended query string', '?a=1&b=2', uri.clone().addQueryParam('b', '2').toString());
             assertEquals('The original should have the original uri', '?a=1', uri.toString());
         }
+
+
+        /*
+            Defects
+        */
+        function testColonQueryParamSeparatorRewriting() {
+            var uri = new jsUri('www.test.com/?one=1;two=2;three=3&four=4');
+            assertEquals('The colons should be replaced by ampersands', 'www.test.com/?one=1&two=2&three=3&four=4', uri.toString());
+        }
+
+        function testColonQueryParamSeparatorManipulation() {
+            var uri = new jsUri('www.test.com/?one=1;two=2;three=3&four=4')
+                .deleteQueryParam('one')
+                .addQueryParam('test', 'val', 1);
+            assertEquals('The colons should be replaced, the first param should be gone and a new one should be indexed at position 2', 'www.test.com/?two=2&test=val&three=3&four=4', uri.toString());
+        }
+
 
 
     </script>

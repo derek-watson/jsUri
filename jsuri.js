@@ -23,7 +23,7 @@
 
 /*
     jsUri
-    version 1.0.1
+    version 1.0.2
 
     Uri parsing, manipulation and stringification.
 
@@ -235,7 +235,7 @@ jsUri.query.prototype.parseQuery = function(q) {
     if (q == null || q == '')
         return arr;
 
-    var params = q.toString().split('&');
+    var params = q.toString().split(/[&;]/);
 
     for (var p in params) {
         var param = params[p];
