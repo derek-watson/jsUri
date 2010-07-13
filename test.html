@@ -288,6 +288,22 @@
             query manipulation tests
         */
 
+        function testGettingParamValue() {
+            var uri = new jsUri('?a=1&a=2&b=3&b=4&c=567');
+            assertEquals('a should match', '1', uri.getQueryParamValue('a'));
+            assertEquals('b should match', '3', uri.getQueryParamValue('b'));
+            assertEquals('c should match', '567', uri.getQueryParamValue('c'));
+        }
+
+        function testGettingParamValues() {
+            var uri = new jsUri('?a=1&a=2&b=3&b=4&c=567');
+            assertEquals('a:0 should match', '1', uri.getQueryParamValues('a')[0]);
+            assertEquals('a:1 should match', '2', uri.getQueryParamValues('a')[1]);
+            assertEquals('b:0 should match', '3', uri.getQueryParamValues('b')[0]);
+            assertEquals('b:1 should match', '4', uri.getQueryParamValues('b')[1]);
+            assertEquals('c:0 should match', '567', uri.getQueryParamValues('c')[0]);
+        }
+
         function testAddingParamToBlank() {
             var uri = new jsUri('').addQueryParam('q', 'books');
             assertEquals('The url should be just a query string', '?q=books', uri.toString());
@@ -339,7 +355,7 @@
         }
 
         /*
-            cloning tests
+            object cloning
         */
         function testClone() {
             var uri = new jsUri('?a=1');
@@ -349,7 +365,7 @@
 
 
         /*
-            Defects
+            colon as query param separator
         */
         function testColonQueryParamSeparatorRewriting() {
             var uri = new jsUri('www.test.com/?one=1;two=2;three=3&four=4');
@@ -364,6 +380,49 @@
         }
 
 
+        /*
+            comparing encoded vs. non or partially encoded query param keys and values
+        */
+
+        function testUriEncodedComparisonA() {
+            var uri = new jsUri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
+            assertEquals('Should be able to find the value of the key', 'value', uri.getQueryParamValue('this is a multiword key'));
+        }
+
+        function testUriEncodedComparisonB() {
+            var uri = new jsUri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
+            assertEquals('Should be able to find the value of the key', 'value', uri.getQueryParamValues('this is a multiword key')[0]);
+        }
+
+        function testUriEncodedComparisonC() {
+            var uri = new jsUri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
+                .deleteQueryParam('this is a multiword key');
+            assertEquals('The decoded values should match and the param gets deleted', '?a=1&c=3', uri.toString());
+        }
+
+        function testUriEncodedComparisonD() {
+            var uri = new jsUri('?a=1&b=this is a multiword value&c=3')
+                .deleteQueryParam('b', 'this%20is%20a%20multiword%20value');
+            assertEquals('The decoded values should match and the param gets deleted', '?a=1&c=3', uri.toString());
+        }
+
+        function testUriEncodedComparisonE() {
+            var uri = new jsUri('?this is a multiword key=1')
+                .replaceQueryParam('this%20is%20a%20multiword%20key', 2);
+            assertEquals('The decoded values should match and the param value gets changed', '?this%20is%20a%20multiword%20key=2', uri.toString());
+        }
+
+        function testUriEncodedComparisonF() {
+            var uri = new jsUri('?this%20is%20a%20multiword%20key=1')
+                .replaceQueryParam('this is a multiword key', 2);
+            assertEquals('The decoded values should match and the param value gets changed', '?this is a multiword key=2', uri.toString());
+        }
+
+        function testUriEncodedComparisonG() {
+            var uri = new jsUri('?multi+word=true')
+                .replaceQueryParam('multi word', 2);
+            assertEquals('The decoded values should match and the param value gets changed', '?multi word=2', uri.toString());
+        }
 
     </script>
 </head>

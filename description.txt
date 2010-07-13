@@ -3,17 +3,16 @@
 Uri parsing, fluent modification, query string extensions and high-fidelity object stringification in javascript.
 
 ==Basic Usage==
+
 This project incorporates the excellent [http://blog.stevenlevithan.com/archives/parseuri parseUri] regular expression library by Steven Levithan. You can safely parse URLs of all shapes and sizes by passing them to the object constructor:
 
 {{{
 
 var uri = new jsUri('http://user:pass@www.test.com:81/index.html?q=books#fragment');
 
-}}}
 
-The following read/write properties are public members of each uri instance.
+/* The following read/write properties are public members of each uri instance. */
 
-{{{
 uri.protocol;                              // http
 uri.userInfo;                              // user:pass
 uri.host;                                  // www.test.com
@@ -21,11 +20,10 @@ uri.port;                                  // 81
 uri.path;                                  // /index.html
 uri.query;                                 // q=books
 uri.anchor;                                // fragment
-}}}
 
-Assigning a new value to a property will be reflected in the string representation of the object. `toString()` is called automatically when the uri object is in a string context, here it is also called explicitly.
 
-{{{
+/* Assigning a new value to a property will be reflected in the string representation of the object. 
+   `toString()` is called automatically when the uri object is in a string context, here it is also called explicitly. */
 
 uri.userInfo = null;
 uri.host = 'mydomain.com';
@@ -61,9 +59,32 @@ new jsUri()
 
 }}}
 
-==Query Parameter Manipulation==
+==Query Parameter Access and Manipulation==
 
-Special methods are available for building and modifying query strings. Priority is on query string integrity; duplicate parameter names and values are preserved. Parameter ordering is preserved when possible.
+Special methods are available for fetching, building and modifying query string parameters. Priority is on query string integrity; duplicate parameter names and values are preserved. Parameter ordering is preserved when possible. URI Components are decoded for comparision, but are otherwise left in their original state.
+
+*`getQueryParamValue(key)`*
+
+Returns the first query param value found for the key matching `key`
+
+{{{
+
+new jsUri('?cat=1&cat=2&cat=3')
+    .getQueryParamValue('cat')             // 1
+
+}}}
+
+*`getQueryParamValues(key)`*
+
+Returns an array of query param values found for the key matching `key`
+
+{{{
+
+new jsUri('?cat=1&cat=2&cat=3')
+    .getQueryParamValue('cat')             // [1, 2, 3]
+
+}}}
+
 
 *`addQueryParam(key, value[, index])`*
 

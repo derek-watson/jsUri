@@ -213,7 +213,7 @@ jsUri.query = function (q) {
 
 jsUri.query.prototype = {};
 
-// toString() returns a string containing the current query object
+// toString() returns a string representation of the internal state of the object
 jsUri.query.prototype.toString = function () {
 
     var s = '';
@@ -240,12 +240,37 @@ jsUri.query.prototype.parseQuery = function(q) {
     for (var p in params) {
         var param = params[p];
         var keyval = param.split('=');
-        arr.push([keyval[0], keyval[1]]);
+        arr.push([ keyval[0], keyval[1] ]);
     }
 
     return arr;
 }
 
+jsUri.query.prototype.decode = function (s) {
+    s = decodeURIComponent(s);
+    s = s.replace('+', ' ');
+    return s;
+}
+
+// getQueryParamValues(key) returns the first query param value found for the key 'key'
+jsUri.prototype.getQueryParamValue = function (key) {
+    for (var p in this.query.params) {
+        var param = this.query.params[p];
+        if (this.query.decode(key) == this.query.decode(param[0]))
+            return param[1];
+    }
+}
+
+// getQueryParamValues(key) returns an array of query param values for the key 'key'
+jsUri.prototype.getQueryParamValues = function (key) {
+    var arr = [];
+    for (var p in this.query.params) {
+        var param = this.query.params[p];
+        if (this.query.decode(key) == this.query.decode(param[0]))
+            arr.push(param[1]);
+    }
+    return arr;
+}
 
 // deleteQueryParam(key) removes all instances of parameters named (key) 
 // deleteQueryParam(key, val) removes all instances where the value matches (val)
@@ -255,9 +280,9 @@ jsUri.prototype.deleteQueryParam = function (key, val) {
 
     for (var p in this.query.params) {
         var param = this.query.params[p];
-        if (arguments.length == 2 && param[0] == key && param[1] == val)
+        if (arguments.length == 2 && this.query.decode(param[0]) == this.query.decode(key) && this.query.decode(param[1]) == this.query.decode(val))
             continue;
-        else if (arguments.length == 1 && param[0] == key)
+        else if (arguments.length == 1 && this.query.decode(param[0]) == this.query.decode(key))
             continue;
 
         arr.push(param);
@@ -290,7 +315,7 @@ jsUri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
         var index = -1;
         for (var p in this.query.params) {
             var param = this.query.params[p];
-            if (param[0] == key && param[1] == oldVal) {
+            if (this.query.decode(param[0]) == this.query.decode(key) && decodeURIComponent(param[1]) == this.query.decode(oldVal)) {
                 index = p;
                 break;
             }
@@ -301,7 +326,7 @@ jsUri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
         var index = -1;
         for (var p in this.query.params) {
             var param = this.query.params[p];
-            if (param[0] == key) {
+            if (this.query.decode(param[0]) == this.query.decode(key)) {
                 index = p;
                 break;
             }
