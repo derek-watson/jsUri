@@ -48,190 +48,190 @@
 
         function testReplacingProtocol() {
             var uri = new jsUri('http://www.test.com/index.html?arr=1&arr=&arr=2');
-            uri.protocol = 'https';
+            uri.protocol('https');
             assertEquals('Protocol should switch to https', 'https://www.test.com/index.html?arr=1&arr=&arr=2', uri.toString());
         }
 
         function testReplacingProtocolWithColon() {
             var uri = new jsUri('http://www.test.com/index.html?arr=1&arr=&arr=2');
-            uri.protocol = 'https:';
+            uri.protocol('https:');
             assertEquals('There should not be a double colon', 'https://www.test.com/index.html?arr=1&arr=&arr=2', uri.toString());
         }
 
         function testDisablingHasAuthorityPrefix() {
             var uri = new jsUri('//test.com/index.html');
-            uri.hasAuthorityPrefix = false;
+            uri.hasAuthorityPrefix(false);
             assertEquals('The authority prefix slashes (//) should be removed', 'test.com/index.html', uri.toString());
         }
 
         function testDeletingProtocolKeepsAuthorityPrefix() {
             var uri = new jsUri('https://test.com/index.html');
-            uri.protocol = null;
+            uri.protocol(null);
             assertEquals('Authority prefix (//) slashes should remain intact', '//test.com/index.html', uri.toString());
         }
 
         function testDeletingProtocolAndHasAuthorityPrefix() {
             var uri = new jsUri('https://test.com/index.html');
-            uri.protocol = null;
-            uri.hasAuthorityPrefix = false;
+            uri.protocol(null);
+            uri.hasAuthorityPrefix(false);
             assertEquals('Authority prefix (//) slashes should be suppressed', 'test.com/index.html', uri.toString());
         }
 
         function testDisablingHasAuthorityPrefixWithProtocolConflict() {
             var uri = new jsUri('http://www.test.com/');
-            uri.hasAuthorityPrefix = false;
+            uri.hasAuthorityPrefix(false);
             assertEquals('Authority prefix (//) slashes should remain intact', 'http://www.test.com/', uri.toString());
         }
 
         function testDisablingProtocolAndHasAuthorityPrefix() {
             var uri = new jsUri('http://www.test.com/');
-            uri.protocol = null;
-            uri.hasAuthorityPrefix = false;
-            assertEquals('Authority prefix should remain intact', 'www.test.com/', uri.toString());
+            uri.protocol(null);
+            uri.hasAuthorityPrefix(false);
+            assertEquals('Authority prefix should be stripped', 'www.test.com/', uri.toString());
         }
 
         function testAddingUserInfo() {
             var uri = new jsUri('https://test.com/index.html');
-            uri.userInfo = 'username:password';
+            uri.userInfo('username:password');
             assertEquals('The dummy login information should be included in the uri', 'https://username:password@test.com/index.html', uri.toString());
         }
 
         function testAddingUserInfoWithTrailing() {
             var uri = new jsUri('https://test.com/index.html');
-            uri.userInfo = 'username:password@';
+            uri.userInfo('username:password@');
             assertEquals('The superfluous trailing symbol should be stripped', 'https://username:password@test.com/index.html', uri.toString());
         }
 
         function testAddingHostnameRelative() {
             var uri = new jsUri('/index.html');
-            uri.host = 'wherever.com';
+            uri.host('wherever.com');
             assertEquals('The hostname should be added to the uri', 'wherever.com/index.html', uri.toString());
         }
 
         function testChangingHostnameRelative() {
             var uri = new jsUri('test.com/index.html');
-            uri.host = 'wherever.com';
+            uri.host('wherever.com');
             assertEquals('The hostname should be added to the uri', 'wherever.com/index.html', uri.toString());
         }
 
         function testChangingHostnameAbsolute() {
             var uri = new jsUri('http://test.com/index.html');
-            uri.host = 'wherever.com';
+            uri.host('wherever.com');
             assertEquals('The hostname should be changed to whatever.com', 'http://wherever.com/index.html', uri.toString());
         }
 
         function testAddingPortRelativeWithoutHost() {
             var uri = new jsUri('/index.html');
-            uri.port = 8080;
+            uri.port(8080);
             assertEquals('The port will not show without a host', '/index.html', uri.toString());
         }
 
         function testAddingPortAndHostRelative() {
             var uri = new jsUri('/index.html');
-            uri.port = 8080;
-            uri.host = 'test.com';
+            uri.port(8080);
+            uri.host('test.com');
             assertEquals('The port will not show without a host', 'test.com:8080/index.html', uri.toString());
         }
 
         function testChangingPortRelative() {
             var uri = new jsUri('test.com:80/index.html');
-            uri.port = 8080;
+            uri.port(8080);
             assertEquals('The port should be changed to 8080', 'test.com:8080/index.html', uri.toString());
         }
 
         function testChangingPortAbsolute() {
             var uri = new jsUri('http://test.com/index.html');
-            uri.port = 8080;
+            uri.port(8080);
             assertEquals('The hostname should be changed to whatever.com', 'http://test.com:8080/index.html', uri.toString());
         }
 
         function testAddingAPath() {
             var uri = new jsUri('www.test.com');
-            uri.path = '/some/article.html';
+            uri.path('/some/article.html');
             assertEquals('The path should be appended to the uri', 'www.test.com/some/article.html', uri.toString());
         }
         
         function testChangingPath() {
             var uri = new jsUri('http://www.test.com/news/latest.html');
-            uri.path = '/contact-us.html';
+            uri.path('/contact-us.html');
             assertEquals('The path be changed', 'http://www.test.com/contact-us.html', uri.toString());
         }
 
         function testNullifyingPath() {
             var uri = new jsUri('http://www.test.com/news/latest.html');
-            uri.path = null;
+            uri.path(null);
             assertEquals('The path be removed', 'http://www.test.com', uri.toString());
         }
 
         function testEmptyPath() {
             var uri = new jsUri('http://www.test.com/news/latest.html');
-            uri.path = '';
+            uri.path('');
             assertEquals('The path be removed', 'http://www.test.com', uri.toString());
         }
 
         function testAddingAQueryToNothing() {
             var uri = new jsUri('');
-            uri.query = 'this=that&something=else';
+            uri.query('this=that&something=else');
             assertEquals('The query string, question mark and slash should all be added to the url', '?this=that&something=else', uri.toString());
         }
 
         function testAddingAQueryToARelativePath() {
             var uri = new jsUri('/some/file.html');
-            uri.query = 'this=that&something=else';
+            uri.query('this=that&something=else');
             assertEquals('The query string, question mark and slash should all be added to the url', '/some/file.html?this=that&something=else', uri.toString());
         }
 
         function testAddingAQueryToADomain() {
             var uri = new jsUri('www.test.com');
-            uri.query = 'this=that&something=else';
+            uri.query('this=that&something=else');
             assertEquals('The query string, question mark and slash should all be added to the url', 'www.test.com/?this=that&something=else', uri.toString());
         }
 
         function testSwappingQuery() {
             var uri = new jsUri('www.test.com?this=that&a=1&b=2;c=3');
-            uri.query = 'one=1&two=2';
+            uri.query('one=1&two=2');
             assertEquals('The query string should be replaced', 'www.test.com/?one=1&two=2', uri.toString());
         }
 
         function testNullifyingQuery() {
             var uri = new jsUri('www.test.com?this=that&a=1&b=2;c=3');
-            uri.query = null;
+            uri.query(null);
             assertEquals('The query string and path placeholder should be removed', 'www.test.com', uri.toString());
         }
 
         function testEmptyingQuery() {
             var uri = new jsUri('www.test.com?this=that&a=1&b=2;c=3');
-            uri.query = '';
+            uri.query('');
             assertEquals('The query string and path placeholder should be removed', 'www.test.com', uri.toString());
         }
 
         function testAddingAnchorToDomain() {
             var uri = new jsUri('www.test.com');
-            uri.anchor = 'content';
+            uri.anchor('content');
             assertEquals('The anchor and path placeholder should be added', 'www.test.com/#content', uri.toString());
         }
 
         function testAddingAnchorWithHash() {
             var uri = new jsUri('www.test.com');
-            uri.anchor = '#content';
+            uri.anchor('#content');
             assertEquals('The anchor and path placeholder should be added but no double hash', 'www.test.com/#content', uri.toString());
         }
 
         function testAddingAnchorToPath() {
             var uri = new jsUri('a/b/c/123.html');
-            uri.anchor = 'content';
+            uri.anchor('content');
             assertEquals('The anchor should be added', 'a/b/c/123.html#content', uri.toString());
         }
 
         function testChangingAnchor() {
             var uri = new jsUri('a/b/c/123.html#content');
-            uri.anchor = 'footer';
+            uri.anchor('footer');
             assertEquals('The anchor should be changed', 'a/b/c/123.html#footer', uri.toString());
         }
 
         function testEmptyingAnchor() {
             var uri = new jsUri('a/b/c/123.html#content');
-            uri.anchor = '';
+            uri.anchor('');
             assertEquals('The anchor should be removed', 'a/b/c/123.html', uri.toString());
         }
 
