@@ -1,6 +1,6 @@
 =jsUri=
 
-Uri parsing, fluent modification, query string extensions and high-fidelity object stringification in javascript.
+Uri parsing, modification, query string manipulation and high-fidelity re-stringification in javascript.
 
 ==Basic Usage==
 
@@ -13,29 +13,28 @@ var uri = new jsUri('http://user:pass@www.test.com:81/index.html?q=books#fragmen
 
 /* The following read/write properties are public members of each uri instance. */
 
-uri.protocol;                              // http
-uri.userInfo;                              // user:pass
-uri.host;                                  // www.test.com
-uri.port;                                  // 81
-uri.path;                                  // /index.html
-uri.query;                                 // q=books
-uri.anchor;                                // fragment
+uri.protocol();                              // http
+uri.userInfo();                              // user:pass
+uri.host();                                  // www.test.com
+uri.port();                                  // 81
+uri.path();                                  // /index.html
+uri.query();                                 // q=books
+uri.anchor();                                // fragment
 
 
-/* Assigning a new value to a property will be reflected in the string representation of the object. 
-   `toString()` is called automatically when the uri object is in a string context, here it is also called explicitly. */
+/* Pass a new value as the first argument to any of these methds and the object's property will be updated.  */
 
-uri.userInfo = null;
-uri.host = 'mydomain.com';
+uri.userInfo(null);
+uri.toString();                              // http://www.test.com:81/index.html?q=books#fragment
 
-uri;                                       // http://mydomain.com:81/index.html?q=books#fragment (Object)
-uri.toString();                            // http://mydomain.com:81/index.html?q=books#fragment (String)
+uri.host('mydomain.com');
+uri.toString();                              // http://mydomain.com:81/index.html?q=books#fragment
 
 }}}
 
 ==Fluent Manipulation==
 
-The fluent interface provides a simple way to modify uri properties and use the resulting url.
+The fluent interface provides a simple way to chain property assignment
 
 {{{
 
