@@ -1,7 +1,7 @@
-jsUri
+isUri
 =====
 
-Uri parsing, modification and query string manipulation in javascript.
+Uri and query string parsing and manipulation javascript.
 
 This project incorporates the excellent [parseUri](http://blog.stevenlevithan.com/archives/parseuri) regular expression library by Steven Levithan. You can safely parse URLs of all shapes and sizes, however invalid or hideous.
 
