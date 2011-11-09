@@ -137,11 +137,11 @@ jsUri.prototype.protocol = function(val) {
 // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
 jsUri.prototype.hasAuthorityPrefix = function(val) {
 
-    if (typeof val != 'undefined') {
+    if (typeof val !== 'undefined') {
         this._hasAuthorityPrefix = val;
     }
 
-    if (this._hasAuthorityPrefix === null)
+    if (typeof this._hasAuthorityPrefix === 'undefined' || this._hasAuthorityPrefix === null)
         return (this._uri.source.indexOf('//') != -1);
     else
         return this._hasAuthorityPrefix;
