@@ -61,11 +61,13 @@ Special methods are available for fetching, building and modifying query string 
 
 ### Getting query param values by name
 
-Returns the first query param value found for the key matching `key`
+Returns the first query param value for the key
 
     new jsUri('?cat=1&cat=2&cat=3').getQueryParamValue('cat')             // 1
 
-    new jsUri('?cat=1&cat=2&cat=3').getQueryParamValue('cat')             // [1, 2, 3]
+Returns all query param values the key
+
+    new jsUri('?cat=1&cat=2&cat=3').getQueryParamValues('cat')            // [1, 2, 3]
 
 ### Adding query param values
 
