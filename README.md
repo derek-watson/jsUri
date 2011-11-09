@@ -1,9 +1,9 @@
 jsUri
 =====
 
-Uri parsing, modification, query string manipulation and high-fidelity re-stringification in javascript.
+Uri parsing, modification and query string manipulation in javascript.
 
-This project incorporates the excellent [parseUri](http://blog.stevenlevithan.com/archives/parseuri) regular expression library by Steven Levithan. You can safely parse URLs of all shapes and sizes by passing them to the object constructor...
+This project incorporates the excellent [parseUri](http://blog.stevenlevithan.com/archives/parseuri) regular expression library by Steven Levithan. You can safely parse URLs of all shapes and sizes, however invalid or hideous.
 
 
 Basic Usage
