@@ -117,7 +117,7 @@ Duplication (via `.clone()`) is an easy way to inflate an identical uri object, 
 Testing
 -------
 
-There are a comprensive set of tests written in [jasmine](http://pivotal.github.com/jasmine/). 
+There is a comprensive set of unit tests written in [jasmine](http://pivotal.github.com/jasmine/). 
 
 The [jasmine gem](https://github.com/pivotal/jasmine-gem) is configured in the project. To run the tests locally, type
 
