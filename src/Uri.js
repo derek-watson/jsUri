@@ -396,5 +396,7 @@ var Uri;
     Uri.prototype.clone = function () {
         return new Uri(this.toString());
     };
-
 }());
+
+// add compatibility for users of jsUri <= 1.1.0
+var jsUri = Uri;

@@ -104,6 +104,11 @@ describe("Uri", function() {
       expect(new Uri('//www.test.com/').toString())
         .toEqual('//www.test.com/');
     });
+	
+	it('can construct an object using the old syntax', function() {
+	  expect(new jsUri('www.test.com/helloworld.html').toString())
+		.toEqual('www.test.com/helloworld.html');
+	});
   });
 
   describe("Manipulation", function() {
