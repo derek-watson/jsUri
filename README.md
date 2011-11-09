@@ -109,7 +109,7 @@ Object Cloning
 
 Duplication (via `.clone()`) is an easy way to inflate an identical uri object, which you can muck around with as much as you like without destroying the original.
 
-    var baseUri = new Uri(http://localhost/);
+    var baseUri = new Uri('http://localhost/');
 
         baseUri.clone().setProtocol('https');  // https://localhost/
         baseUri;                               // http://localhost/
