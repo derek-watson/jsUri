@@ -38,12 +38,14 @@ var Uri;
 
     'use strict';
 
+    /*jslint regexp: true, plusplus: true */
+
     Uri = function (s) {
         if (typeof(s) === 'undefined') {
             s = '';
         }
-        this._uri = this.parseUri(s);
-        this._query = new Uri.query(this._uri.query);
+        this.uriParts = this.parseUri(s);
+        this.queryObj = new Uri.query(this.uriParts.query);
     };
 
     Uri.options = {
@@ -85,8 +87,8 @@ var Uri;
     // toString() stringifies the current state of the uri
     Uri.prototype.toString = function () {
 
-        var s = '';
-        var is = function (s) { return (s !== null && s !== ''); };
+        var s = '', 
+            is = function (s) { return (s !== null && s !== ''); };
 
         if (is(this.protocol())) {
             s += this.protocol();
@@ -147,9 +149,9 @@ var Uri;
 
     Uri.prototype.protocol = function(val) {
         if (typeof val !== 'undefined') {
-            this._uri.protocol = val;
+            this.uriParts.protocol = val;
         }
-        return this._uri.protocol;
+        return this.uriParts.protocol;
     };
 
     // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
@@ -160,7 +162,7 @@ var Uri;
         }
 
         if (typeof this._hasAuthorityPrefix === 'undefined' || this._hasAuthorityPrefix === null) {
-            return (this._uri.source.indexOf('//') !== -1);
+            return (this.uriParts.source.indexOf('//') !== -1);
         }
         else {
             return this._hasAuthorityPrefix;
@@ -169,44 +171,44 @@ var Uri;
 
     Uri.prototype.userInfo = function(val) {
         if (typeof val !== 'undefined') {
-            this._uri.userInfo = val;
+            this.uriParts.userInfo = val;
         }
-        return this._uri.userInfo;
+        return this.uriParts.userInfo;
     };
 
     Uri.prototype.host = function(val) {
         if (typeof val !== 'undefined') {
-            this._uri.host = val;
+            this.uriParts.host = val;
         }
-        return this._uri.host;
+        return this.uriParts.host;
     };
 
     Uri.prototype.port = function(val) {
         if (typeof val !== 'undefined') {
-            this._uri.port = val;
+            this.uriParts.port = val;
         }
-        return this._uri.port;
+        return this.uriParts.port;
     };
 
     Uri.prototype.path = function(val) {
         if (typeof val !== 'undefined') {
-            this._uri.path = val;
+            this.uriParts.path = val;
         }
-        return this._uri.path;
+        return this.uriParts.path;
     };
 
     Uri.prototype.query = function(val) {
         if (typeof val !== 'undefined') {
-            this._query = new Uri.query(val);
+            this.queryObj = new Uri.query(val);
         }
-        return this._query;
+        return this.queryObj;
     };
 
     Uri.prototype.anchor = function(val) {
         if (typeof val !== 'undefined') {
-            this._uri.anchor = val;
+            this.uriParts.anchor = val;
         }
-        return this._uri.anchor;
+        return this.uriParts.anchor;
     };
 
 
@@ -271,8 +273,8 @@ var Uri;
 
         var s = '', i;
         for(i = 0; i < this.params.length; i++) {
-            var param = this.params[i];
-            var joined = param.join('=');
+            var param = this.params[i],
+                joined = param.join('=');
             if (s.length > 0) {
                 s += '&';
             }
