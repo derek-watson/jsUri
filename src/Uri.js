@@ -269,9 +269,9 @@ var Uri;
     // toString() returns a string representation of the internal state of the object
     Uri.query.prototype.toString = function () {
 
-        var s = '';
-        for (var p in this.params) {
-            var param = this.params[p];
+        var s = '', i;
+        for(i = 0; i < this.params.length; i++) {
+            var param = this.params[i];
             var joined = param.join('=');
             if (s.length > 0) {
                 s += '&';
@@ -284,7 +284,7 @@ var Uri;
     // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
     Uri.query.prototype.parseQuery = function(q) {
 
-        var arr = [];
+        var arr = [], i;
 
         if (q === null || q === '') {
             return arr;
@@ -292,8 +292,8 @@ var Uri;
 
         var params = q.toString().split(/[&;]/);
 
-        for (var p in params) {
-            var param = params[p];
+        for (i = 0; i < params.length; i++) {
+            var param = params[i];
             var keyval = param.split('=');
             arr.push([ keyval[0], keyval[1] ]);
         }
@@ -309,8 +309,9 @@ var Uri;
 
     // getQueryParamValues(key) returns the first query param value found for the key 'key'
     Uri.prototype.getQueryParamValue = function (key) {
-        for (var p in this.query().params) {
-            var param = this.query().params[p];
+        var param, i;
+        for(i = 0; i < this.query().params.length; i++) {
+            param = this.query().params[i];
             if (this.query().decode(key) === this.query().decode(param[0])) {
                 return param[1];
             }
@@ -319,9 +320,9 @@ var Uri;
 
     // getQueryParamValues(key) returns an array of query param values for the key 'key'
     Uri.prototype.getQueryParamValues = function (key) {
-        var arr = [];
-        for (var p in this.query().params) {
-            var param = this.query().params[p];
+        var arr = [], i, param;
+        for(i = 0; i < this.query().params.length; i++) {
+            param = this.query().params[i];
             if (this.query().decode(key) === this.query().decode(param[0])) {
                 arr.push(param[1]);
             }
@@ -333,10 +334,10 @@ var Uri;
     // deleteQueryParam(key, val) removes all instances where the value matches (val)
     Uri.prototype.deleteQueryParam = function (key, val) {
 
-        var arr = [];
+        var arr = [], i, param;
 
-        for (var p in this.query().params) {
-            var param = this.query().params[p];
+        for(i = 0; i < this.query().params.length; i++) {
+            param = this.query().params[i];
             if (arguments.length === 2 && this.query().decode(param[0]) === this.query().decode(key) && this.query().decode(param[1]) === this.query().decode(val)) {
                 continue;
             }
@@ -369,22 +370,23 @@ var Uri;
     // this function attempts to preserve query param ordering
     Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
     
-        var index = -1, p, param;
+        var index = -1, i, param;
+
         if (arguments.length === 3) {
-            for (p in this.query().params) {
-                param = this.query().params[p];
+            for(i = 0; i < this.query().params.length; i++) {
+                param = this.query().params[i];
                 if (this.query().decode(param[0]) === this.query().decode(key) && decodeURIComponent(param[1]) === this.query().decode(oldVal)) {
-                    index = p;
+                    index = i;
                     break;
                 }
             }
             return this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
         }
         else {
-            for (p in this.query().params) {
-                param = this.query().params[p];
+            for(i = 0; i < this.query().params.length; i++) {
+                param = this.query().params[i];
                 if (this.query().decode(param[0]) === this.query().decode(key)) {
-                    index = p;
+                    index = i;
                     break;
                 }
             }
