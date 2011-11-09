@@ -9,11 +9,11 @@ This project incorporates the excellent [parseUri](http://blog.stevenlevithan.co
 Basic Usage
 -----------
 
-Parsing
+###Parsing
 
     var uri = new jsUri('http://user:pass@www.test.com:81/index.html?q=books#fragment');
 
-Getting 
+###Getting 
 
     uri.protocol();                              // http
     uri.userInfo();                              // user:pass
@@ -23,7 +23,7 @@ Getting
     uri.query();                                 // q=books
     uri.anchor();                                // fragment
 
-Setting
+###Setting
 
     uri.protocol('https');
     uri.toString();                              // https://user:pass@www.test.com:81/index.html?q=books#fragment
@@ -59,37 +59,26 @@ Query Parameter Access and Manipulation
 
 Special methods are available for fetching, building and modifying query string parameters. An emhpasis is placed on query string integrity; duplicate parameter names and values are preserved. Parameter ordering is preserved when possible. URI Components are decoded for comparision, but are otherwise left in their original state.
 
-`getQueryParamValue(key)`
+### Getting query param values by name
 
 Returns the first query param value found for the key matching `key`
 
-    new jsUri('?cat=1&cat=2&cat=3')
-        .getQueryParamValue('cat')             // 1
+    new jsUri('?cat=1&cat=2&cat=3').getQueryParamValue('cat')             // 1
 
-`getQueryParamValues(key)`
+    new jsUri('?cat=1&cat=2&cat=3').getQueryParamValue('cat')             // [1, 2, 3]
 
-Returns an array of query param values found for the key matching `key`
+### Adding query param values
 
-    new jsUri('?cat=1&cat=2&cat=3')
-        .getQueryParamValue('cat')             // [1, 2, 3]
+    new jsUri().addQueryParam('q', 'books')                         // ?q=books
 
-
-`addQueryParam(key, value[, index])`
-
-Adds an element to the end of the list of query parameters.
-
-    new jsUri().addQueryParam('q', 'books')    // ?q=books
-
-    new jsUri('http://www.microsoft.com')
+    new jsUri('http://www.github.com')
         .addQueryParam('testing', '123')
-        .addQueryParam('one', 1)               // http://www.microsoft.com/?testing=123&one=1
+        .addQueryParam('one', 1)                                    // http://www.github.com/?testing=123&one=1
 
+    // insert param at index 0
+    new jsUri('?b=2&c=3&d=4').addQueryParam('a', '1', 0)            // ?a=1&b=2&c=3&d=4
 
-    // add a=1 to index 0 (prepend)
-    new jsUri('?b=2&c=3&d=4')
-        .addQueryParam('a', '1', 0)            // ?a=1&b=2&c=3&d=4
-
-`replaceQueryParam(key, newVal[, oldVal])`
+### Replacing query param values
 
 Replaces every query string parameter named `key` with a single instance with the value `newVal`. If `oldValue` is supplied, only parameters valued `oldVal` will be replaced.
 
@@ -102,7 +91,7 @@ Replaces every query string parameter named `key` with a single instance with th
     new jsUri().replaceQueryParam('page', 2)   // ?page=2
 
 
-`deleteQueryParam(key[, value])`
+### Deleting query param values
 
 Removes instances of query parameters named `key`. If `value` is passed, only params named `key` and valued `value` will be deleted.
 
