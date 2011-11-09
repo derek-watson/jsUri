@@ -23,7 +23,7 @@ Basic Usage
     uri.query();                                 // q=books
     uri.anchor();                                // fragment
 
-###Setting
+###Setting and Serialization
 
     uri.protocol('https');
     uri.toString();                              // https://user:pass@www.test.com:81/index.html?q=books#fragment
