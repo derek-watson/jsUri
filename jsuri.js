@@ -33,11 +33,11 @@
 */
 
 jsUri = function (s) {
-    if (s == undefined)
+    if (typeof(s) === 'undefined')
         s = '';
     this._uri = this.parseUri(s);
     this._query = new jsUri.query(this._uri.query);
-}
+};
 
 jsUri.options = {
     strictMode: false,
@@ -69,13 +69,13 @@ jsUri.prototype.parseUri = function(str) {
     });
 
     return uri;
-}
+};
 
 // toString() stringifies the current state of the uri
 jsUri.prototype.toString = function () {
 
     var s = '';
-    var is = function (s) { return (s != null && s != ''); }
+    var is = function (s) { return (s !== null && s !== ''); };
 
     if (is(this.protocol())) {
         s += this.protocol();
@@ -108,19 +108,19 @@ jsUri.prototype.toString = function () {
             s += '/';
 
     if (is(this.query().toString())) {
-        if (this.query().toString().indexOf('?') != 0)
+        if (this.query().toString().indexOf('?') !== 0)
             s += '?';
         s += this.query().toString();
     }
 
     if (is(this.anchor())) {
-        if (this.anchor().indexOf('#') != 0)
+        if (this.anchor().indexOf('#') !== 0)
             s += '#';
         s += this.anchor();
     }
 
     return s;
-}
+};
 
 
 /*
@@ -132,7 +132,7 @@ jsUri.prototype.protocol = function(val) {
         this._uri.protocol = val;
     }
     return this._uri.protocol;
-}
+};
 
 // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
 jsUri.prototype.hasAuthorityPrefix = function(val) {
@@ -141,53 +141,53 @@ jsUri.prototype.hasAuthorityPrefix = function(val) {
         this._hasAuthorityPrefix = val;
     }
 
-    if (this._hasAuthorityPrefix == null)
+    if (this._hasAuthorityPrefix === null)
         return (this._uri.source.indexOf('//') != -1);
     else
         return this._hasAuthorityPrefix;
-}
+};
 
 jsUri.prototype.userInfo = function(val) {
     if (typeof val != 'undefined') {
         this._uri.userInfo = val;
     }
     return this._uri.userInfo;
-}
+};
 
 jsUri.prototype.host = function(val) {
     if (typeof val != 'undefined') {
         this._uri.host = val;
     }
     return this._uri.host;
-}
+};
 
 jsUri.prototype.port = function(val) {
     if (typeof val != 'undefined') {
         this._uri.port = val;
     }
     return this._uri.port;
-}
+};
 
 jsUri.prototype.path = function(val) {
     if (typeof val != 'undefined') {
         this._uri.path = val;
     }
     return this._uri.path;
-}
+};
 
 jsUri.prototype.query = function(val) {
     if (typeof val != 'undefined') {
         this._query = new jsUri.query(val);
     }
     return this._query;
-}
+};
 
 jsUri.prototype.anchor = function(val) {
     if (typeof val != 'undefined') {
         this._uri.anchor = val;
     }
     return this._uri.anchor;
-}
+};
 
 
 /*
@@ -197,42 +197,42 @@ jsUri.prototype.anchor = function(val) {
 jsUri.prototype.setProtocol = function (val) {
     this.protocol(val);
     return this;
-}
+};
 
 jsUri.prototype.setHasAuthorityPrefix = function (val) {
     this.hasAuthorityPrefix(val);
     return this;
-}
+};
 
 jsUri.prototype.setUserInfo = function (val) {
     this.userInfo(val);
     return this;
-}
+};
 
 jsUri.prototype.setHost = function (val) {
     this.host(val);
     return this;
-}
+};
 
 jsUri.prototype.setPort = function (val) {
     this.port(val);
     return this;
-}
+};
 
 jsUri.prototype.setPath = function (val) {
     this.path(val);
     return this;
-}
+};
 
 jsUri.prototype.setQuery = function (val) {
     this.query(val);
     return this;
-}
+};
 
 jsUri.prototype.setAnchor = function (val) {
     this.anchor(val);
     return this;
-}
+};
 
 
 /*
@@ -242,7 +242,7 @@ jsUri.prototype.setAnchor = function (val) {
 
 jsUri.query = function (q) {
     this.params = this.parseQuery(q);
-}
+};
 
 jsUri.query.prototype = {};
 
@@ -258,14 +258,14 @@ jsUri.query.prototype.toString = function () {
         s += param.join('=');
     }
     return s;
-}
+};
 
 // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
 jsUri.query.prototype.parseQuery = function(q) {
 
     var arr = [];
 
-    if (q == null || q == '')
+    if (q === null || q === '')
         return arr;
 
     var params = q.toString().split(/[&;]/);
@@ -277,13 +277,13 @@ jsUri.query.prototype.parseQuery = function(q) {
     }
 
     return arr;
-}
+};
 
 jsUri.query.prototype.decode = function (s) {
     s = decodeURIComponent(s);
     s = s.replace('+', ' ');
     return s;
-}
+};
 
 // getQueryParamValues(key) returns the first query param value found for the key 'key'
 jsUri.prototype.getQueryParamValue = function (key) {
@@ -292,7 +292,7 @@ jsUri.prototype.getQueryParamValue = function (key) {
         if (this.query().decode(key) == this.query().decode(param[0]))
             return param[1];
     }
-}
+};
 
 // getQueryParamValues(key) returns an array of query param values for the key 'key'
 jsUri.prototype.getQueryParamValues = function (key) {
@@ -303,7 +303,7 @@ jsUri.prototype.getQueryParamValues = function (key) {
             arr.push(param[1]);
     }
     return arr;
-}
+};
 
 // deleteQueryParam(key) removes all instances of parameters named (key) 
 // deleteQueryParam(key, val) removes all instances where the value matches (val)
@@ -323,7 +323,7 @@ jsUri.prototype.deleteQueryParam = function (key, val) {
 
     this.query().params = arr;
     return this;
-}
+};
 
 // addQueryParam(key, val) Adds an element to the end of the list of query parameters
 // addQueryParam(key, val, index) adds the param at the specified position (index)
@@ -337,17 +337,17 @@ jsUri.prototype.addQueryParam = function (key, val, index) {
         this.query().params.push([key, val]);
     
     return this;
-}
+};
 
 // replaceQueryParam(key, newVal) deletes all instances of params named (key) and replaces them with the new single value
 // replaceQueryParam(key, newVal, oldVal) deletes only instances of params named (key) with the value (val) and replaces them with the new single value
 // this function attempts to preserve query param ordering
 jsUri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
-
+    
+    var index = -1, p, param;
     if (arguments.length == 3) {
-        var index = -1;
-        for (var p in this.query().params) {
-            var param = this.query().params[p];
+        for (p in this.query().params) {
+            param = this.query().params[p];
             if (this.query().decode(param[0]) == this.query().decode(key) && decodeURIComponent(param[1]) == this.query().decode(oldVal)) {
                 index = p;
                 break;
@@ -356,9 +356,8 @@ jsUri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
         return this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
     }
     else {
-        var index = -1;
-        for (var p in this.query().params) {
-            var param = this.query().params[p];
+        for (p in this.query().params) {
+            param = this.query().params[p];
             if (this.query().decode(param[0]) == this.query().decode(key)) {
                 index = p;
                 break;
@@ -366,9 +365,9 @@ jsUri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
         }
         return this.deleteQueryParam(key).addQueryParam(key, newVal, index);
     }
-}
+};
 
 // clone() returns a new, identical jsUri instance
 jsUri.prototype.clone = function () {
     return new jsUri(this.toString());
-}
+};
