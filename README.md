@@ -130,7 +130,7 @@ and then, in the project root
 License
 -------
 
-Copyright (c) 2010 Derek Watson
+Copyright (c) 2011 Derek Watson
 Copyright (c) 2007 Steven Levithan
 
 Permission is hereby granted, free of charge, to any person obtaining a 
