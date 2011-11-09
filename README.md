@@ -114,6 +114,19 @@ Duplication (via `.clone()`) is an easy way to inflate an identical uri object, 
         baseUri.clone().setProtocol('https');  // https://localhost/
         baseUri;                               // http://localhost/
 
+Testing
+-------
+
+There are a comprensive set of tests written in [jasmine](http://pivotal.github.com/jasmine/). 
+
+The [jasmine gem](https://github.com/pivotal/jasmine-gem) is configured in the project. To run the tests locally, type
+
+`gem install jasmine`
+
+and then, in the project root
+
+`rake jasmine`
+
 License
 -------
 
