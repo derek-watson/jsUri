@@ -111,7 +111,7 @@ Duplication (via `.clone()`) is an easy way to inflate an identical uri object, 
 
     var baseUri = new jsUri(http://localhost/);
 
-        baseUri.clone().setProtocol(https);    // https://localhost/
+        baseUri.clone().setProtocol('https');  // https://localhost/
         baseUri;                               // http://localhost/
 
 License
