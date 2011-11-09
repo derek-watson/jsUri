@@ -118,14 +118,7 @@ Testing
 -------
 
 There is a comprensive set of unit tests written in [jasmine](http://pivotal.github.com/jasmine/). 
-
-The [jasmine gem](https://github.com/pivotal/jasmine-gem) is configured in the project. To run the tests locally, type
-
-`gem install jasmine`
-
-and then, in the project root
-
-`rake jasmine`
+To run them, simply open `testrunner.html` from the root of the project in a browser.
 
 License
 -------
