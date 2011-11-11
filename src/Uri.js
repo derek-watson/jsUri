@@ -26,7 +26,6 @@
     version 1.2.0
 
     Uri parsing, manipulation and stringification.
-
     For library updates or issues, visit https://github.com/derek-watson/jsUri
 
     This software incorporates MIT-licence dcode from parseUri (http://blog.stevenlevithan.com/archives/parseuri).
@@ -65,6 +64,8 @@ var Uri;
 
     // parseUri(str) parses the supplied uri and returns an object containing its components
     Uri.prototype.parseUri = function (str) {
+
+        /*jslint unparam: true */
         var o = Uri.options,
 		    m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
 		    uri = {},
@@ -337,13 +338,12 @@ var Uri;
             q = this.query();
 
         for (i = 0; i < q.params.length; i++) {
-            
+
             param = q.params[i];
             keyMatchesFilter = q.decode(param[0]) === q.decode(key);
             valMatchesFilter = q.decode(param[1]) === q.decode(val);
-                                 
-            if ((arguments.length === 1 && !keyMatchesFilter) || 
-                (arguments.length === 2 && !keyMatchesFilter && !valMatchesFilter)) {
+
+            if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && !keyMatchesFilter && !valMatchesFilter)) {
                 arr.push(param);
             }
         }
@@ -359,8 +359,7 @@ var Uri;
         if (arguments.length === 3 && index !== -1) {
             index = Math.min(index, this.query().params.length);
             this.query().params.splice(index, 0, [key, val]);
-        }
-        else if (arguments.length > 0) {
+        } else if (arguments.length > 0) {
             this.query().params.push([key, val]);
         }
         return this;
@@ -370,7 +369,7 @@ var Uri;
     // replaceQueryParam(key, newVal, oldVal) deletes only instances of params named (key) with the value (val) and replaces them with the new single value
     // this function attempts to preserve query param ordering
     Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
-    
+
         var index = -1, i, param;
 
         if (arguments.length === 3) {
