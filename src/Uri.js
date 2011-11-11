@@ -273,7 +273,7 @@ var Uri = function (uriString) {
 
     // public api
     return {
-        toString: toString,
+
         protocol: protocol,
         hasAuthorityPrefix: hasAuthorityPrefix,
         userInfo: userInfo,
@@ -282,6 +282,7 @@ var Uri = function (uriString) {
         path: path,
         query: query,
         anchor: anchor,
+        
         setProtocol: setProtocol,
         setHasAuthorityPrefix: setHasAuthorityPrefix,
         setUserInfo: setUserInfo,
@@ -290,11 +291,14 @@ var Uri = function (uriString) {
         setPath: setPath,
         setQuery: setQuery,
         setAnchor: setAnchor,
+        
         getQueryParamValue: getQueryParamValue,
         getQueryParamValues: getQueryParamValues,
         deleteQueryParam: deleteQueryParam,
         addQueryParam: addQueryParam,
         replaceQueryParam: replaceQueryParam,
+        
+        toString: toString,
         clone: clone
     };
 };

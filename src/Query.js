@@ -143,11 +143,12 @@ var Query = function (queryString) {
 
     // public api
     return {
-        toString: toString,
         getParamValue: getParamValue,
         getParamValues: getParamValues,
         deleteParam: deleteParam,
         addParam: addParam,
-        replaceParam: replaceParam
+        replaceParam: replaceParam,
+        
+        toString: toString
     };
 };
