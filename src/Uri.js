@@ -1,35 +1,3 @@
-/*
-    Copyright (c) 2011 Derek Watson
-    Copyright (c) 2007 Steven Levithan
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    THE SOFTWARE.
-*/
-
-/*
-    jsUri
-    version 1.2.0
-
-    Uri parsing, manipulation and stringification.
-    For library updates or issues, visit https://github.com/derek-watson/jsUri
-
-    This software incorporates MIT-licence dcode from parseUri (http://blog.stevenlevithan.com/archives/parseuri).
-*/
 
 var Uri;
 
@@ -37,6 +5,7 @@ var Uri;
 
     'use strict';
 
+    /*global Query: true */
     /*jslint regexp: true, plusplus: true */
 
     Uri = function (s) {
@@ -44,7 +13,7 @@ var Uri;
             s = '';
         }
         this.uriParts = this.parseUri(s);
-        this.queryObj = new Uri.query(this.uriParts.query);
+        this.queryObj = new Query(this.uriParts.query);
     };
 
     Uri.options = {
@@ -197,7 +166,7 @@ var Uri;
 
     Uri.prototype.query = function (val) {
         if (typeof val !== 'undefined') {
-            this.queryObj = new Uri.query(val);
+            this.queryObj = new Query(val);
         }
         return this.queryObj;
     };
@@ -256,142 +225,50 @@ var Uri;
 
 
     /*
-        Uri.query
-        query string parsing, parameter manipulation and stringification
+        Query method wrappers
     */
-
-    Uri.query = function (q) {
-        this.params = this.parseQuery(q);
-    };
-
-    Uri.query.prototype = {};
-
-    // toString() returns a string representation of the internal state of the object
-    Uri.query.prototype.toString = function () {
-
-        var s = '', i, param, joined;
-        for (i = 0; i < this.params.length; i++) {
-            param = this.params[i];
-            joined = param.join('=');
-            if (s.length > 0) {
-                s += '&';
-            }
-            s += param.join('=');
-        }
-        return s;
-    };
-
-    // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
-    Uri.query.prototype.parseQuery = function (q) {
-
-        var arr = [], i, params, param, keyval;
-
-        if (q === null || q === '') {
-            return arr;
-        }
-
-        params = q.toString().split(/[&;]/);
-
-        for (i = 0; i < params.length; i++) {
-            param = params[i];
-            keyval = param.split('=');
-            arr.push([ keyval[0], keyval[1] ]);
-        }
-
-        return arr;
-    };
-
-    Uri.query.prototype.decode = function (s) {
-        s = decodeURIComponent(s);
-        s = s.replace('+', ' ');
-        return s;
-    };
-
-    // getQueryParamValues(key) returns the first query param value found for the key 'key'
     Uri.prototype.getQueryParamValue = function (key) {
-        var param, i;
-        for (i = 0; i < this.query().params.length; i++) {
-            param = this.query().params[i];
-            if (this.query().decode(key) === this.query().decode(param[0])) {
-                return param[1];
-            }
-        }
+        return this.query().getParamValue(key);
     };
 
-    // getQueryParamValues(key) returns an array of query param values for the key 'key'
     Uri.prototype.getQueryParamValues = function (key) {
-        var arr = [], i, param;
-        for (i = 0; i < this.query().params.length; i++) {
-            param = this.query().params[i];
-            if (this.query().decode(key) === this.query().decode(param[0])) {
-                arr.push(param[1]);
-            }
-        }
-        return arr;
+        return this.query().getParamValues(key);
     };
 
-    // deleteQueryParam(key) removes all instances of parameters named (key) 
-    // deleteQueryParam(key, val) removes all instances where the value matches (val)
     Uri.prototype.deleteQueryParam = function (key, val) {
-
-        var arr = [], i, param, keyMatchesFilter, valMatchesFilter,
-            q = this.query();
-
-        for (i = 0; i < q.params.length; i++) {
-
-            param = q.params[i];
-            keyMatchesFilter = q.decode(param[0]) === q.decode(key);
-            valMatchesFilter = q.decode(param[1]) === q.decode(val);
-
-            if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && !keyMatchesFilter && !valMatchesFilter)) {
-                arr.push(param);
-            }
-        }
-
-        this.query().params = arr;
-        return this;
-    };
-
-    // addQueryParam(key, val) Adds an element to the end of the list of query parameters
-    // addQueryParam(key, val, index) adds the param at the specified position (index)
-    Uri.prototype.addQueryParam = function (key, val, index) {
-
-        if (arguments.length === 3 && index !== -1) {
-            index = Math.min(index, this.query().params.length);
-            this.query().params.splice(index, 0, [key, val]);
-        } else if (arguments.length > 0) {
-            this.query().params.push([key, val]);
-        }
-        return this;
-    };
-
-    // replaceQueryParam(key, newVal) deletes all instances of params named (key) and replaces them with the new single value
-    // replaceQueryParam(key, newVal, oldVal) deletes only instances of params named (key) with the value (val) and replaces them with the new single value
-    // this function attempts to preserve query param ordering
-    Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
-
-        var index = -1, i, param;
-
-        if (arguments.length === 3) {
-            for (i = 0; i < this.query().params.length; i++) {
-                param = this.query().params[i];
-                if (this.query().decode(param[0]) === this.query().decode(key) && decodeURIComponent(param[1]) === this.query().decode(oldVal)) {
-                    index = i;
-                    break;
-                }
-            }
-            return this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
+        if (arguments.length == 2) {
+            this.query().deleteParam(key, val);
         } else {
-            for (i = 0; i < this.query().params.length; i++) {
-                param = this.query().params[i];
-                if (this.query().decode(param[0]) === this.query().decode(key)) {
-                    index = i;
-                    break;
-                }
-            }
-            return this.deleteQueryParam(key).addQueryParam(key, newVal, index);
+            this.query().deleteParam(key);
         }
+        
+        return this;
     };
+
+    Uri.prototype.addQueryParam = function (key, val, index) {
+        if (arguments.length === 3) {
+            this.query().addParam(key, val, index);
+        }
+        else {
+            this.query().addParam(key, val);
+        }
+        return this;
+    };
+
+    Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
+        if (arguments.length === 3) {
+            this.query().replaceParam(key, newVal, oldVal);
+        } else {
+            this.query().replaceParam(key, newVal);
+        }
+        
+        return this;
+    };
+
+
+    /*
+        Cloning
+    */
 
     // clone() returns a new, identical Uri instance
     Uri.prototype.clone = function () {
