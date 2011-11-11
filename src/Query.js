@@ -13,7 +13,13 @@ var Query = function (queryString) {
         parseQuery = function (q) {
             var arr = [], i, ps, p, keyval;
 
-            if (q === null || q === '') { return arr; }
+            if (typeof (q) === 'undefined' || q === null || q === '') {
+                return arr;
+            }
+
+            if (q.indexOf('?') === 0) {
+                q = q.substring(1);
+            }
 
             ps = q.toString().split(/[&;]/);
 
@@ -38,7 +44,7 @@ var Query = function (queryString) {
                 }
                 s += param.join('=');
             }
-            return s;
+            return s.length > 0 ? '?' + s : s;
         },
 
         decode = function (s) {
@@ -88,7 +94,7 @@ var Query = function (queryString) {
             }
 
             params = arr;
-            
+
             return this;
         },
 
@@ -120,7 +126,7 @@ var Query = function (queryString) {
                         break;
                     }
                 }
-                return deleteParam(key, oldVal).addParam(key, newVal, index);
+                deleteParam(key, oldVal).addParam(key, newVal, index);
             } else {
                 for (i = 0; i < params.length; i++) {
                     param = params[i];
@@ -130,8 +136,9 @@ var Query = function (queryString) {
                     }
                 }
                 deleteParam(key);
-                return addParam(key, newVal, index);
+                addParam(key, newVal, index);
             }
+            return this;
         };
 
     // public api

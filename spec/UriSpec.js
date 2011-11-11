@@ -304,7 +304,7 @@ describe("Uri", function() {
     });
   });
   
-  describe("Query manipulation", function() {
+  describe("Query manipulation wrappers", function() {
     var u;
     
     it('should return the first value for each query param', function() {
@@ -381,57 +381,4 @@ describe("Uri", function() {
     });
   });
   
-  describe("Semicolon as query param separator", function() {
-    var u;
-
-    it('should replace semicolons with ampersands', function() {
-      u = new Uri('test.com/?one=1;two=2;three=3');
-      expect(u.toString()).toEqual('test.com/?one=1&two=2&three=3');
-    });
-
-    it('should replace semicolons with ampersands, delete the first param and add another', function() {
-      u = new Uri('www.test.com/?one=1;two=2;three=3&four=4')
-          .deleteQueryParam('one')
-          .addQueryParam('test', 'val', 1);
-      expect(u.toString()).toEqual('www.test.com/?two=2&test=val&three=3&four=4');
-    });
-    
-  });
-
-  describe("Comparing encoded vs. non or partially encoded query param keys and values", function() {
-    var u;
-
-    it('is able to find the value of an encoded multiword key from a non encoded search', function() {
-      u = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
-      expect(u.getQueryParamValue('this is a multiword key')).toEqual('value');
-    });
-    
-    it('is able to find all value s of an encoded multiword key from a non encoded search', function() {
-      u = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
-      expect(u.getQueryParamValues('this is a multiword key')[0]).toEqual('value');
-    });
-
-    it('is be able to delete a multiword encoded key', function() {
-      u = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
-        .deleteQueryParam('this is a multiword key');
-      expect(u.toString()).toEqual('?a=1&c=3');
-    });
-
-    it('is be able to delete a multiword encoded key by its value', function() {
-      u = new Uri('?a=1&b=this is a multiword value&c=3')
-        .deleteQueryParam('b', 'this%20is%20a%20multiword%20value');
-      expect(u.toString()).toEqual('?a=1&c=3');
-    });
-
-    it('is able to replace a multiword query param', function() {
-      u = new Uri('?this is a multiword key=1')
-        .replaceQueryParam('this%20is%20a%20multiword%20key', 2);
-      expect(u.toString()).toEqual('?this%20is%20a%20multiword%20key=2');
-    });
-
-    it('should be able to search for a plus-separated word pair', function() {
-      u = new Uri('?multi+word=true').replaceQueryParam('multi word', 2); 
-      expect(u.toString()).toEqual('?multi word=2');
-    });
-  });
 });
