@@ -34,14 +34,14 @@
 
 var Uri;
 
-(function() {
+(function () {
 
     'use strict';
 
     /*jslint regexp: true, plusplus: true */
 
     Uri = function (s) {
-        if (typeof(s) === 'undefined') {
+        if (typeof (s) === 'undefined') {
             s = '';
         }
         this.uriParts = this.parseUri(s);
@@ -64,7 +64,7 @@ var Uri;
     Uri.prototype = {};
 
     // parseUri(str) parses the supplied uri and returns an object containing its components
-    Uri.prototype.parseUri = function(str) {
+    Uri.prototype.parseUri = function (str) {
         var o = Uri.options,
 		    m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
 		    uri = {},
@@ -87,7 +87,7 @@ var Uri;
     // toString() stringifies the current state of the uri
     Uri.prototype.toString = function () {
 
-        var s = '', 
+        var s = '',
             is = function (s) { return (s !== null && s !== ''); };
 
         if (is(this.protocol())) {
@@ -96,8 +96,7 @@ var Uri;
                 s += ':';
             }
             s += '//';
-        }
-        else {
+        } else {
             if (this.hasAuthorityPrefix() && is(this.host())) {
                 s += '//';
             }
@@ -119,8 +118,7 @@ var Uri;
 
         if (is(this.path())) {
             s += this.path();
-        }
-        else {
+        } else {
             if (is(this.host()) && (is(this.query().toString()) || is(this.anchor()))) {
                 s += '/';
             }
@@ -147,7 +145,7 @@ var Uri;
         Basic get/set functions for all properties
     */
 
-    Uri.prototype.protocol = function(val) {
+    Uri.prototype.protocol = function (val) {
         if (typeof val !== 'undefined') {
             this.uriParts.protocol = val;
         }
@@ -155,56 +153,55 @@ var Uri;
     };
 
     // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
-    Uri.prototype.hasAuthorityPrefix = function(val) {
+    Uri.prototype.hasAuthorityPrefix = function (val) {
 
         if (typeof val !== 'undefined') {
-            this._hasAuthorityPrefix = val;
+            this.hasAuthorityPrefixUserPref = val;
         }
 
-        if (typeof this._hasAuthorityPrefix === 'undefined' || this._hasAuthorityPrefix === null) {
+        if (typeof this.hasAuthorityPrefixUserPref === 'undefined' || this.hasAuthorityPrefixUserPref === null) {
             return (this.uriParts.source.indexOf('//') !== -1);
-        }
-        else {
-            return this._hasAuthorityPrefix;
+        } else {
+            return this.hasAuthorityPrefixUserPref;
         }
     };
 
-    Uri.prototype.userInfo = function(val) {
+    Uri.prototype.userInfo = function (val) {
         if (typeof val !== 'undefined') {
             this.uriParts.userInfo = val;
         }
         return this.uriParts.userInfo;
     };
 
-    Uri.prototype.host = function(val) {
+    Uri.prototype.host = function (val) {
         if (typeof val !== 'undefined') {
             this.uriParts.host = val;
         }
         return this.uriParts.host;
     };
 
-    Uri.prototype.port = function(val) {
+    Uri.prototype.port = function (val) {
         if (typeof val !== 'undefined') {
             this.uriParts.port = val;
         }
         return this.uriParts.port;
     };
 
-    Uri.prototype.path = function(val) {
+    Uri.prototype.path = function (val) {
         if (typeof val !== 'undefined') {
             this.uriParts.path = val;
         }
         return this.uriParts.path;
     };
 
-    Uri.prototype.query = function(val) {
+    Uri.prototype.query = function (val) {
         if (typeof val !== 'undefined') {
             this.queryObj = new Uri.query(val);
         }
         return this.queryObj;
     };
 
-    Uri.prototype.anchor = function(val) {
+    Uri.prototype.anchor = function (val) {
         if (typeof val !== 'undefined') {
             this.uriParts.anchor = val;
         }
@@ -271,10 +268,10 @@ var Uri;
     // toString() returns a string representation of the internal state of the object
     Uri.query.prototype.toString = function () {
 
-        var s = '', i;
-        for(i = 0; i < this.params.length; i++) {
-            var param = this.params[i],
-                joined = param.join('=');
+        var s = '', i, param, joined;
+        for (i = 0; i < this.params.length; i++) {
+            param = this.params[i];
+            joined = param.join('=');
             if (s.length > 0) {
                 s += '&';
             }
@@ -284,19 +281,19 @@ var Uri;
     };
 
     // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
-    Uri.query.prototype.parseQuery = function(q) {
+    Uri.query.prototype.parseQuery = function (q) {
 
-        var arr = [], i;
+        var arr = [], i, params, param, keyval;
 
         if (q === null || q === '') {
             return arr;
         }
 
-        var params = q.toString().split(/[&;]/);
+        params = q.toString().split(/[&;]/);
 
         for (i = 0; i < params.length; i++) {
-            var param = params[i];
-            var keyval = param.split('=');
+            param = params[i];
+            keyval = param.split('=');
             arr.push([ keyval[0], keyval[1] ]);
         }
 
@@ -312,7 +309,7 @@ var Uri;
     // getQueryParamValues(key) returns the first query param value found for the key 'key'
     Uri.prototype.getQueryParamValue = function (key) {
         var param, i;
-        for(i = 0; i < this.query().params.length; i++) {
+        for (i = 0; i < this.query().params.length; i++) {
             param = this.query().params[i];
             if (this.query().decode(key) === this.query().decode(param[0])) {
                 return param[1];
@@ -323,7 +320,7 @@ var Uri;
     // getQueryParamValues(key) returns an array of query param values for the key 'key'
     Uri.prototype.getQueryParamValues = function (key) {
         var arr = [], i, param;
-        for(i = 0; i < this.query().params.length; i++) {
+        for (i = 0; i < this.query().params.length; i++) {
             param = this.query().params[i];
             if (this.query().decode(key) === this.query().decode(param[0])) {
                 arr.push(param[1]);
@@ -336,17 +333,19 @@ var Uri;
     // deleteQueryParam(key, val) removes all instances where the value matches (val)
     Uri.prototype.deleteQueryParam = function (key, val) {
 
-        var arr = [], i, param;
+        var arr = [], i, param, keyMatchesFilter, valMatchesFilter,
+            q = this.query();
 
-        for(i = 0; i < this.query().params.length; i++) {
-            param = this.query().params[i];
-            if (arguments.length === 2 && this.query().decode(param[0]) === this.query().decode(key) && this.query().decode(param[1]) === this.query().decode(val)) {
-                continue;
+        for (i = 0; i < q.params.length; i++) {
+            
+            param = q.params[i];
+            keyMatchesFilter = q.decode(param[0]) === q.decode(key);
+            valMatchesFilter = q.decode(param[1]) === q.decode(val);
+                                 
+            if ((arguments.length === 1 && !keyMatchesFilter) || 
+                (arguments.length === 2 && !keyMatchesFilter && !valMatchesFilter)) {
+                arr.push(param);
             }
-            else if (arguments.length === 1 && this.query().decode(param[0]) === this.query().decode(key)) {
-                continue;
-            }
-            arr.push(param);
         }
 
         this.query().params = arr;
@@ -375,7 +374,7 @@ var Uri;
         var index = -1, i, param;
 
         if (arguments.length === 3) {
-            for(i = 0; i < this.query().params.length; i++) {
+            for (i = 0; i < this.query().params.length; i++) {
                 param = this.query().params[i];
                 if (this.query().decode(param[0]) === this.query().decode(key) && decodeURIComponent(param[1]) === this.query().decode(oldVal)) {
                     index = i;
@@ -383,9 +382,8 @@ var Uri;
                 }
             }
             return this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
-        }
-        else {
-            for(i = 0; i < this.query().params.length; i++) {
+        } else {
+            for (i = 0; i < this.query().params.length; i++) {
                 param = this.query().params[i];
                 if (this.query().decode(param[0]) === this.query().decode(key)) {
                     index = i;

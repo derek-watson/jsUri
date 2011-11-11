@@ -340,7 +340,7 @@ describe("Uri", function() {
 
     it('should be able to delete a query param by value', function() {
       u = new Uri('test.com?a=1&b=2&c=3&a=eh').deleteQueryParam('a', 'eh');
-      expect(u.toString()).toEqual('test.com/?a=1&b=2&c=3');
+      expect(u.toString()).toEqual('test.com/?b=2&c=3');
     });
 
     it('should be able to add a null param', function() {
