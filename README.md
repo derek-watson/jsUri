@@ -23,7 +23,7 @@ and then use the following accessor methods to get at the various parts.
     uri.query();                                 // q=books
     uri.anchor();                                // fragment
 
-All of the accessor methods accept an optional value to set the property with
+The accessor methods accept an optional value for setting the property
 
     uri.protocol('https');
     uri.toString();                              // https://user:pass@www.test.com:81/index.html?q=books#fragment
