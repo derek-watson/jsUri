@@ -32,7 +32,7 @@ README_WIKI = ${DIST_DIR}/README.wiki
 
 all: core
 
-core: dist_dir jsuri min lint v minv
+core: dist_dir jsuri min lint v minv readme_wiki
 	@@echo "jsUri build complete."
 
 dist_dir:
@@ -70,10 +70,13 @@ minv: min dist_dir
 	@@echo "Copying ${JSURI_MIN} to ${JSURI_MINV}";
 	@@cp ${JSURI_MIN} ${JSURI_MINV}
 
-readme:
+readme_wiki:
 	@@if test ! -z ${PANDOC}; then \
 		echo "Building ${README_WIKI}..."; \
-		${PANDOC} -f markdown -t mediawiki README.md -o ${README_WIKI}; \
+		${PANDOC} -f markdown -t mediawiki README.md | \
+			sed "s/<pre>/\n{{{\n/" | \
+			sed "s/<\/pre>/\n}}}\n/" \
+			> ${README_WIKI}; \
 	else \
 		@@echo "You must have pandoc installed in order to convert README.md to README.wiki."; \
 	fi
