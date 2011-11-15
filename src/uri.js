@@ -1,14 +1,12 @@
-/*
-    Uri
-    uri string parsing, attribute manipulation and stringification
-*/
 
 var Uri = function (uriString) {
+
+    // uri string parsing, attribute manipulation and stringification
 
     'use strict';
 
     /*global Query: true */
-    /*jslint regexp: true, plusplus: true */
+    /*jslint regexp: false, plusplus: false */
 
     var strictMode = false,
 
@@ -26,8 +24,8 @@ var Uri = function (uriString) {
                     parser: /(?:^|&)([^&=]*)=?([^&]*)/g
                 },
                 m = parsers[strictMode ? "strict" : "loose"].exec(str),
-		        uri = {},
-		        i = 14;
+                uri = {},
+                i = 14;
 
             while (i--) {
                 uri[keys[i]] = m[i] || "";
@@ -210,7 +208,9 @@ var Uri = function (uriString) {
         toString = function () {
 
             var s = '',
-                is = function (s) { return (s !== null && s !== ''); };
+                is = function (s) {
+                    return (s !== null && s !== '');
+                };
 
             if (is(protocol())) {
                 s += protocol();
@@ -302,6 +302,3 @@ var Uri = function (uriString) {
         clone: clone
     };
 };
-
-// add compatibility for users of jsUri <= 1.1.0
-var jsUri = Uri;

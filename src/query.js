@@ -1,13 +1,9 @@
-/*
-    Query
-    query string parsing, parameter manipulation and stringification
-*/
 
 var Query = function (queryString) {
 
-    'use strict';
+    // query string parsing, parameter manipulation and stringification
 
-    /*jslint regexp: true, plusplus: true */
+    'use strict';
 
     var // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
         parseQuery = function (q) {
@@ -76,7 +72,7 @@ var Query = function (queryString) {
             return arr;
         },
 
-        // deleteParam(key) removes all instances of parameters named (key) 
+        // deleteParam(key) removes all instances of parameters named (key)
         // deleteParam(key, val) removes all instances where the value matches (val)
         deleteParam = function (key, val) {
 
