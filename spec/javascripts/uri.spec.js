@@ -109,6 +109,10 @@ describe("Uri", function() {
       expect(new jsUri('www.test.com/helloworld.html').toString())
         .toEqual('www.test.com/helloworld.html');
     });
+
+    it('can construct a path and single query kvp', function() {
+      expect(new jsUri("/contacts?name=m").toString()).toEqual('/contacts?name=m');
+    });
   });
 
   describe("Manipulation", function() {

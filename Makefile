@@ -22,7 +22,7 @@ JSURI = ${DIST_DIR}/jsuri.js
 JSURI_MIN = ${DIST_DIR}/jsuri.min.js
 
 JSURI_V = ${DIST_DIR}/jsuri-${VERSION}.js
-JSURI_MINV = ${DIST_DIR}/jsuri.min-${VERSION}.js
+JSURI_MINV = ${DIST_DIR}/jsuri-${VERSION}.min.js
 
 DATE=$(shell git log -1 --pretty=format:%ad)
 
