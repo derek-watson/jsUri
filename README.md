@@ -9,11 +9,11 @@ This project incorporates the excellent [parseUri](http://blog.stevenlevithan.co
 Basic Usage
 -----------
 
-###Parsing
+Pass anything that your browser would recognize as a url to the new Uri() constructor
 
     var uri = new Uri('http://user:pass@www.test.com:81/index.html?q=books#fragment');
 
-###Getting 
+and then use the following accessor methods to get at the various parts.
 
     uri.protocol();                              // http
     uri.userInfo();                              // user:pass
@@ -23,7 +23,7 @@ Basic Usage
     uri.query();                                 // q=books
     uri.anchor();                                // fragment
 
-###Setting and Serialization
+All of the accessor methods accept an optional value to set the property with
 
     uri.protocol('https');
     uri.toString();                              // https://user:pass@www.test.com:81/index.html?q=books#fragment
