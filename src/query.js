@@ -7,7 +7,7 @@ var Query = function (queryString) {
 
     var // parseQuery(q) parses the uri query string and returns a multi-dimensional array of the components
         parseQuery = function (q) {
-            var arr = [], i, ps, p, keyval;
+            var arr = [], i, ps, p, kvp, k, v;
 
             if (typeof (q) === 'undefined' || q === null || q === '') {
                 return arr;
@@ -21,8 +21,10 @@ var Query = function (queryString) {
 
             for (i = 0; i < ps.length; i++) {
                 p = ps[i];
-                keyval = p.split('=');
-                arr.push([keyval[0], keyval[1]]);
+                kvp = p.split('=');
+                k = kvp[0];
+                v = p.indexOf('=') === -1 ? null : (kvp[1] === null ? '' : kvp[1]);
+                arr.push([k, v]);
             }
 
             return arr;
@@ -38,7 +40,12 @@ var Query = function (queryString) {
                 if (s.length > 0) {
                     s += '&';
                 }
-                s += param.join('=');
+                if (param[1] === null) {
+                  s += param[0];
+                }
+                else {
+                  s += param.join('=');
+                }
             }
             return s.length > 0 ? '?' + s : s;
         },

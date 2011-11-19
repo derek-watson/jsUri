@@ -1,4 +1,28 @@
 describe("Query", function() {
+    
+  describe('Construction', function() {
+
+    it('should include an equal sign if there was one present without a query value', function() {
+      q = new Query('?11=');
+      expect(q.toString()).toEqual('?11=');
+    });
+    
+    it('should not include an equal sign if one was not present originally', function() {
+      q = new Query('?11');
+      expect(q.toString()).toEqual('?11');
+    });
+    
+    it('should preserve missing equals signs across many keys', function() {
+      q = new Query('?11&12&13&14');
+      expect(q.toString()).toEqual('?11&12&13&14');
+    });
+    
+    it('should preserve missing equals signs in a mixed scenario', function() {
+      q = new Query('?11=eleven&12=&13&14=fourteen');
+      expect(q.toString()).toEqual('?11=eleven&12=&13&14=fourteen');
+    });
+  
+  });
   
   describe("Manipulation", function() {
     var q;
@@ -117,5 +141,7 @@ describe("Query", function() {
       q = new Query('?multi+word=true').replaceParam('multi word', 2); 
       expect(q.toString()).toEqual('?multi word=2');
     });
+    
+  
   });
 });
