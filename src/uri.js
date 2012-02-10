@@ -115,9 +115,8 @@ var Uri = function (uriString) {
             return uriParts.anchor;
         },
 
-
         /*
-            Fluent setters for Uri uri properties
+            Fluent setters for Uri properties
         */
 
         setProtocol = function (val) {
@@ -203,9 +202,7 @@ var Uri = function (uriString) {
         /*
             Serialization
         */
-
-        // toString() stringifies the current state of the uri
-        toString = function () {
+        scheme = function () {
 
             var s = '',
                 is = function (s) {
@@ -224,6 +221,22 @@ var Uri = function (uriString) {
                 }
             }
 
+            return s;
+        },
+        
+        /*
+            Same as Mozilla nsIURI.prePath
++           cf. https://developer.mozilla.org/en/nsIURI
++       */
+        origin = function () {
+
+            var s = '',
+                is = function (s) {
+                    return (s !== null && s !== '');
+                };
+
+            s += scheme();
+
             if (is(userInfo()) && is(host())) {
                 s += userInfo();
                 if (userInfo().indexOf('@') !== userInfo().length - 1) {
@@ -237,6 +250,20 @@ var Uri = function (uriString) {
                     s += ':' + port();
                 }
             }
+
+            return s;
+        },
+
+
+        // toString() stringifies the current state of the uri
+        toString = function () {
+
+            var s = '',
+                is = function (s) {
+                    return (s !== null && s !== '');
+                };
+
+            s += origin();
 
             if (is(path())) {
                 s += path();
@@ -282,7 +309,8 @@ var Uri = function (uriString) {
         path: path,
         query: query,
         anchor: anchor,
-        
+        origin: origin,
+
         setProtocol: setProtocol,
         setHasAuthorityPrefix: setHasAuthorityPrefix,
         setUserInfo: setUserInfo,

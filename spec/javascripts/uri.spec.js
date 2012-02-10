@@ -113,6 +113,10 @@ describe("Uri", function() {
     it('can construct a path and single query kvp', function() {
       expect(new jsUri("/contacts?name=m").toString()).toEqual('/contacts?name=m');
     });
+
+    it('returns successfully returns the origin with a scheme, auth, host and port', function() {
+        expect(new Uri('http://me:here@test.com:81/this/is/a/path').origin()).toEqual('http://me:here@test.com:81');
+    });
   });
 
   describe("Manipulation", function() {
