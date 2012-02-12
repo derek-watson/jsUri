@@ -1,332 +1,297 @@
+var Uri = (function () {
 
-var Uri = function (uriString) {
+  'use strict';
 
-    // uri string parsing, attribute manipulation and stringification
+  /*jslint white: true, plusplus: true, regexp: true, indent: 2 */
+  /*global Query: true */
 
-    'use strict';
+  function is(s) {
+    return (s !== null && s !== '');
+  }
 
-    /*global Query: true */
-    /*jslint regexp: false, plusplus: false */
+  function Uri(uriStr) {
 
-    var strictMode = false,
+    uriStr = uriStr || '';
 
-        // parseUri(str) parses the supplied uri and returns an object containing its components
-        parseUri = function (str) {
+    var parser = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/,
+      keys = [
+        "source", 
+        "protocol", 
+        "authority", 
+        "userInfo", 
+        "user", 
+        "password", 
+        "host", 
+        "port", 
+        "relative", 
+        "path", 
+        "directory", 
+        "file", 
+        "query", 
+        "anchor" 
+      ],
+      q = {
+        name: 'queryKey',
+        parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+      },
+      m = parser.exec(uriStr),
+      i = 14,
+      self = this;
 
-            /*jslint unparam: true */
-            var parsers = {
-                    strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-                    loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
-                },
-                keys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
-                q = {
-                    name: "queryKey",
-                    parser: /(?:^|&)([^&=]*)=?([^&]*)/g
-                },
-                m = parsers[strictMode ? "strict" : "loose"].exec(str),
-                uri = {},
-                i = 14;
+    this.uriParts = {};
 
-            while (i--) {
-                uri[keys[i]] = m[i] || "";
-            }
+    while (i--) {
+      this.uriParts[keys[i]] = m[i] || "";
+    }
 
-            uri[q.name] = {};
-            uri[keys[12]].replace(q.parser, function ($0, $1, $2) {
-                if ($1) {
-                    uri[q.name][$1] = $2;
-                }
-            });
+    this.uriParts[q.name] = {};
+    this.uriParts[keys[12]].replace(q.parser, function ($0, $1, $2) {
+      if ($1) {
+        self.uriParts[q.name][$1] = $2;
+      }
+    });
 
-            return uri;
-        },
+    this.queryObj = new Query(this.uriParts.query);
 
-        uriParts = parseUri(uriString || ''),
-
-        queryObj = new Query(uriParts.query),
-
-
-        /*
-            Basic get/set functions for all properties
-        */
-
-        protocol = function (val) {
-            if (typeof val !== 'undefined') {
-                uriParts.protocol = val;
-            }
-            return uriParts.protocol;
-        },
-
-        hasAuthorityPrefixUserPref = null,
-
-        // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
-        hasAuthorityPrefix = function (val) {
-
-            if (typeof val !== 'undefined') {
-                hasAuthorityPrefixUserPref = val;
-            }
-
-            if (hasAuthorityPrefixUserPref === null) {
-                return (uriParts.source.indexOf('//') !== -1);
-            } else {
-                return hasAuthorityPrefixUserPref;
-            }
-        },
-
-        userInfo = function (val) {
-            if (typeof val !== 'undefined') {
-                uriParts.userInfo = val;
-            }
-            return uriParts.userInfo;
-        },
-
-        host = function (val) {
-            if (typeof val !== 'undefined') {
-                uriParts.host = val;
-            }
-            return uriParts.host;
-        },
-
-        port = function (val) {
-            if (typeof val !== 'undefined') {
-                uriParts.port = val;
-            }
-            return uriParts.port;
-        },
-
-        path = function (val) {
-            if (typeof val !== 'undefined') {
-                uriParts.path = val;
-            }
-            return uriParts.path;
-        },
-
-        query = function (val) {
-            if (typeof val !== 'undefined') {
-                queryObj = new Query(val);
-            }
-            return queryObj;
-        },
-
-        anchor = function (val) {
-            if (typeof val !== 'undefined') {
-                uriParts.anchor = val;
-            }
-            return uriParts.anchor;
-        },
-
-        /*
-            Fluent setters for Uri properties
-        */
-
-        setProtocol = function (val) {
-            protocol(val);
-            return this;
-        },
-
-        setHasAuthorityPrefix = function (val) {
-            hasAuthorityPrefix(val);
-            return this;
-        },
-
-        setUserInfo = function (val) {
-            userInfo(val);
-            return this;
-        },
-
-        setHost = function (val) {
-            host(val);
-            return this;
-        },
-
-        setPort = function (val) {
-            port(val);
-            return this;
-        },
-
-        setPath = function (val) {
-            path(val);
-            return this;
-        },
-
-        setQuery = function (val) {
-            query(val);
-            return this;
-        },
-
-        setAnchor = function (val) {
-            anchor(val);
-            return this;
-        },
-
-        /*
-            Query method wrappers
-        */
-        getQueryParamValue = function (key) {
-            return query().getParamValue(key);
-        },
-
-        getQueryParamValues = function (key) {
-            return query().getParamValues(key);
-        },
-
-        deleteQueryParam = function (key, val) {
-            if (arguments.length === 2) {
-                query().deleteParam(key, val);
-            } else {
-                query().deleteParam(key);
-            }
-
-            return this;
-        },
-
-        addQueryParam = function (key, val, index) {
-            if (arguments.length === 3) {
-                query().addParam(key, val, index);
-            } else {
-                query().addParam(key, val);
-            }
-            return this;
-        },
-
-        replaceQueryParam = function (key, newVal, oldVal) {
-            if (arguments.length === 3) {
-                query().replaceParam(key, newVal, oldVal);
-            } else {
-                query().replaceParam(key, newVal);
-            }
-
-            return this;
-        },
-
-        /*
-            Serialization
-        */
-        scheme = function () {
-
-            var s = '',
-                is = function (s) {
-                    return (s !== null && s !== '');
-                };
-
-            if (is(protocol())) {
-                s += protocol();
-                if (protocol().indexOf(':') !== protocol().length - 1) {
-                    s += ':';
-                }
-                s += '//';
-            } else {
-                if (hasAuthorityPrefix() && is(host())) {
-                    s += '//';
-                }
-            }
-
-            return s;
-        },
-        
-        /*
-            Same as Mozilla nsIURI.prePath
-+           cf. https://developer.mozilla.org/en/nsIURI
-+       */
-        origin = function () {
-
-            var s = '',
-                is = function (s) {
-                    return (s !== null && s !== '');
-                };
-
-            s += scheme();
-
-            if (is(userInfo()) && is(host())) {
-                s += userInfo();
-                if (userInfo().indexOf('@') !== userInfo().length - 1) {
-                    s += '@';
-                }
-            }
-
-            if (is(host())) {
-                s += host();
-                if (is(port())) {
-                    s += ':' + port();
-                }
-            }
-
-            return s;
-        },
+    this.hasAuthorityPrefixUserPref = null;
+  }
 
 
-        // toString() stringifies the current state of the uri
-        toString = function () {
+  /*
+    Basic get/set functions for all properties
+  */
 
-            var s = '',
-                is = function (s) {
-                    return (s !== null && s !== '');
-                };
+  Uri.prototype.protocol = function (val) {
+    if (typeof val !== 'undefined') {
+      this.uriParts.protocol = val;
+    }
+    return this.uriParts.protocol;
+  };
 
-            s += origin();
+  // hasAuthorityPrefix: if there is no protocol, the leading // can be enabled or disabled
+  Uri.prototype.hasAuthorityPrefix = function (val) {
 
-            if (is(path())) {
-                s += path();
-            } else {
-                if (is(host()) && (is(query().toString()) || is(anchor()))) {
-                    s += '/';
-                }
-            }
-            if (is(query().toString())) {
-                if (query().toString().indexOf('?') !== 0) {
-                    s += '?';
-                }
-                s += query().toString();
-            }
+    if (typeof val !== 'undefined') {
+      this.hasAuthorityPrefixUserPref = val;
+    }
 
-            if (is(anchor())) {
-                if (anchor().indexOf('#') !== 0) {
-                    s += '#';
-                }
-                s += anchor();
-            }
+    if (this.hasAuthorityPrefixUserPref === null) {
+      return (this.uriParts.source.indexOf('//') !== -1);
+    } else {
+      return this.hasAuthorityPrefixUserPref;
+    }
+  };
 
-            return s;
-        },
+  Uri.prototype.userInfo = function (val) {
+    if (typeof val !== 'undefined') {
+      this.uriParts.userInfo = val;
+    }
+    return this.uriParts.userInfo;
+  };
 
-        /*
-            Cloning
-        */
+  Uri.prototype.host = function (val) {
+    if (typeof val !== 'undefined') {
+      this.uriParts.host = val;
+    }
+    return this.uriParts.host;
+  };
 
-        // clone() returns a new, identical Uri instance
-        clone = function () {
-            return new Uri(toString());
-        };
+  Uri.prototype.port = function (val) {
+    if (typeof val !== 'undefined') {
+      this.uriParts.port = val;
+    }
+    return this.uriParts.port;
+  };
 
-    // public api
-    return {
+  Uri.prototype.path = function (val) {
+    if (typeof val !== 'undefined') {
+      this.uriParts.path = val;
+    }
+    return this.uriParts.path;
+  };
 
-        protocol: protocol,
-        hasAuthorityPrefix: hasAuthorityPrefix,
-        userInfo: userInfo,
-        host: host,
-        port: port,
-        path: path,
-        query: query,
-        anchor: anchor,
-        origin: origin,
+  Uri.prototype.query = function (val) {
+    if (typeof val !== 'undefined') {
+      this.queryObj = new Query(val);
+    }
+    return this.queryObj;
+  };
 
-        setProtocol: setProtocol,
-        setHasAuthorityPrefix: setHasAuthorityPrefix,
-        setUserInfo: setUserInfo,
-        setHost: setHost,
-        setPort: setPort,
-        setPath: setPath,
-        setQuery: setQuery,
-        setAnchor: setAnchor,
-        
-        getQueryParamValue: getQueryParamValue,
-        getQueryParamValues: getQueryParamValues,
-        deleteQueryParam: deleteQueryParam,
-        addQueryParam: addQueryParam,
-        replaceQueryParam: replaceQueryParam,
-        
-        toString: toString,
-        clone: clone
-    };
-};
+  Uri.prototype.anchor = function (val) {
+    if (typeof val !== 'undefined') {
+      this.uriParts.anchor = val;
+    }
+    return this.uriParts.anchor;
+  };
+
+  /*
+      Fluent setters for Uri properties
+  */
+  Uri.prototype.setProtocol = function (val) {
+    this.protocol(val);
+    return this;
+  };
+
+  Uri.prototype.setHasAuthorityPrefix = function (val) {
+    this.hasAuthorityPrefix(val);
+    return this;
+  };
+
+  Uri.prototype.setUserInfo = function (val) {
+    this.userInfo(val);
+    return this;
+  };
+
+  Uri.prototype.setHost = function (val) {
+    this.host(val);
+    return this;
+  };
+
+  Uri.prototype.setPort = function (val) {
+    this.port(val);
+    return this;
+  };
+
+  Uri.prototype.setPath = function (val) {
+    this.path(val);
+    return this;
+  };
+
+  Uri.prototype.setQuery = function (val) {
+    this.query(val);
+    return this;
+  };
+
+  Uri.prototype.setAnchor = function (val) {
+    this.anchor(val);
+    return this;
+  };
+
+
+  /*
+      Query method wrappers
+  */
+  Uri.prototype.getQueryParamValue = function (key) {
+    return this.query().getParamValue(key);
+  };
+
+  Uri.prototype.getQueryParamValues = function (key) {
+    return this.query().getParamValues(key);
+  };
+
+  Uri.prototype.deleteQueryParam = function (key, val) {
+    if (arguments.length === 2) {
+      this.query().deleteParam(key, val);
+    } else {
+      this.query().deleteParam(key);
+    }
+
+    return this;
+  };
+
+  Uri.prototype.addQueryParam = function (key, val, index) {
+    if (arguments.length === 3) {
+      this.query().addParam(key, val, index);
+    } else {
+      this.query().addParam(key, val);
+    }
+    return this;
+  };
+
+  Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
+    if (arguments.length === 3) {
+      this.query().replaceParam(key, newVal, oldVal);
+    } else {
+      this.query().replaceParam(key, newVal);
+    }
+
+    return this;
+  };
+
+
+  /*
+    Serialization
+  */    
+  Uri.prototype.scheme = function () {
+
+    var s = '';
+
+    if (is(this.protocol())) {
+      s += this.protocol();
+      if (this.protocol().indexOf(':') !== this.protocol().length - 1) {
+        s += ':';
+      }
+      s += '//';
+    } else {
+      if (this.hasAuthorityPrefix() && is(this.host())) {
+        s += '//';
+      }
+    }
+
+    return s;
+  };
+
+  /*
+    Same as Mozilla nsIURI.prePath
+    cf. https://developer.mozilla.org/en/nsIURI
+  */
+  Uri.prototype.origin = function () {
+
+    var s = this.scheme();
+
+    if (is(this.userInfo()) && is(this.host())) {
+      s += this.userInfo();
+      if (this.userInfo().indexOf('@') !== this.userInfo().length - 1) {
+        s += '@';
+      }
+    }
+
+    if (is(this.host())) {
+      s += this.host();
+      if (is(this.port())) {
+        s += ':' + this.port();
+      }
+    }
+
+    return s;
+  };
+
+
+  // toString() stringifies the current state of the uri
+  Uri.prototype.toString = function () {
+
+    var s = this.origin();
+
+    if (is(this.path())) {
+      s += this.path();
+    } else {
+      if (is(this.host()) && (is(this.query().toString()) || is(this.anchor()))) {
+        s += '/';
+      }
+    }
+    if (is(this.query().toString())) {
+      if (this.query().toString().indexOf('?') !== 0) {
+        s += '?';
+      }
+      s += this.query().toString();
+    }
+
+    if (is(this.anchor())) {
+      if (this.anchor().indexOf('#') !== 0) {
+        s += '#';
+      }
+      s += this.anchor();
+    }
+
+    return s;
+  };
+
+  /*
+    Cloning
+  */
+  Uri.prototype.clone = function () {
+    return new Uri(this.toString());
+  };
+
+  return Uri;
+}());
