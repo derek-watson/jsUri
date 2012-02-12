@@ -4,7 +4,6 @@
  *
  * Copyright 2011, Derek Watson
  * Released under the MIT license.
- * http://jquery.org/license
  *
  * Includes parseUri regular expressions
  * http://blog.stevenlevithan.com/archives/parseuri
