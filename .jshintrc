@@ -17,10 +17,10 @@
     "mootools"      : false,
     "dojo"          : false,
 
-    "predef"        : [  // Extra globals.
-        //"coolVar"
+    "predef": [
+        "module",
+        "require"
     ],
-
 
     // Development.
     "debug"         : false,  // Allow debugger statements e.g. browser breakpoints.

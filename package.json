@@ -1,0 +1,23 @@
+{
+  "author": "Derek Watson <watson@dcw.ca> (http://dcw.ca)",
+  "name": "jsUri",
+  "description": "Uri and query string manipulation",
+  "version": "1.1.1",
+  "homepage": "https://github.com/derek-watson/jsUri",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/derek-watson/jsUri.git"
+  },
+  "main": "uri",
+  "scripts": {
+    "test": "jake test"
+  },
+  "dependencies": {
+    "jasmine-node": ">= 1.0.26"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}

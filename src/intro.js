@@ -1,8 +1,8 @@
 /*!
- * jsUri v@VERSION
+ * jsUri
  * https://github.com/derek-watson/jsUri
  *
- * Copyright 2011, Derek Watson
+ * Copyright 2012, Derek Watson
  * Released under the MIT license.
  *
  * Includes parseUri regular expressions
@@ -10,6 +10,4 @@
  * Copyright 2007, Steven Levithan
  * Released under the MIT license.
  *
- * Date: @DATE
  */
-    
