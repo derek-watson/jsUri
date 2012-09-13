@@ -1,6 +1,6 @@
 describe("Uri", function() {
 
-    var Uri = require('../src/Uri');
+    var Uri = require('../lib/Uri');
 
     describe("Construction and re-stringification", function() {
 

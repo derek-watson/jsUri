@@ -1,6 +1,6 @@
 describe("Query", function() {
 
-    var Query = require('../src/Query');
+    var Query = require('../lib/Query');
 
     describe('Construction', function() {
 

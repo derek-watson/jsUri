@@ -1,5 +1,5 @@
 var jasmine = require('jasmine-node'),
-    srcDir = './src',
+    srcDir = './lib',
     distDir = './dist',
     sources = [
         'intro.js',
