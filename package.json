@@ -12,10 +12,10 @@
   "scripts": {
     "test": "jake test"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "jasmine-node": ">= 1.0.26"
   },
-  "devDependencies": {},
   "optionalDependencies": {},
   "engines": {
     "node": "*"
