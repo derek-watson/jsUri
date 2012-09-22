@@ -17,7 +17,7 @@ task('all', ['lint', 'test', 'dist_dir', 'compile', 'min']);
 
 desc('Shake out the lint');
 task('lint', function() {
-    var lint = 'jshint',
+    var lint = './node_modules/.bin/jshint',
         targets = sources.slice().concat('Jakefile'),
         commands = targets.map(function(target) {
             return lint + ' ' + target;
@@ -60,7 +60,7 @@ desc('Minify the compiled uri.js file');
 task('min', function() {
     var source = distDir + '/uri.js',
         target = distDir + '/uri.min.js',
-        command = 'uglifyjs ' + distDir + '/uri.js > ' +target;
+        command = './node_modules/.bin/uglifyjs ' + distDir + '/uri.js > ' +target;
     console.log('minifying', source, 'into', target);
     jake.exec([command], {
         printStdout: true
