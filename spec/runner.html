@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Browser Spec Runner</title>
+
+  <link rel="stylesheet" href="../node_modules/jasmine-node/node_modules/jasmine-reporters/ext/jasmine.css">
+  <script src="../node_modules/jasmine-node/node_modules/jasmine-reporters/ext/jasmine.js"></script>
+  <script src="../node_modules/jasmine-node/node_modules/jasmine-reporters/ext/jasmine-html.js"></script>
+
+  <script src="../Uri.js"></script>
+  <script src="Uri.spec.js"></script>
+
+  <script>
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var reporter = new jasmine.TrivialReporter();
+
+      jasmineEnv.addReporter(reporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return reporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+</head>
+<body></body>
+</html>

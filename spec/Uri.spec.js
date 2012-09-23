@@ -1,6 +1,6 @@
 describe("Uri", function() {
 
-    var Uri = require('../Uri');
+    var Uri = (typeof(require) === 'function') ? require('../Uri') : window.Uri;
 
     describe("Construction and re-stringification", function() {
 
