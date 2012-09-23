@@ -41,3 +41,14 @@ task('min', function() {
         printStdout: true
     });
 });
+
+new jake.NpmPublishTask('jake', [
+    '.gitignore',
+    '.jshintrc',
+    'Jakefile',
+    'LICENSE',
+    'package.json',
+    'README.md',
+    'Uri.js',
+    'spec/*'
+]);

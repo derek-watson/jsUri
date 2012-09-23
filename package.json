@@ -2,7 +2,7 @@
   "author": "Derek Watson <watson@dcw.ca> (http://dcw.ca)",
   "name": "jsUri",
   "description": "Uri and query string manipulation",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "homepage": "https://github.com/derek-watson/jsUri",
   "repository": {
     "type": "git",
