@@ -8,6 +8,12 @@
     "type": "git",
     "url": "git://github.com/derek-watson/jsUri.git"
   },
+  "keywords": [
+    "uri",
+    "url",
+    "query",
+    "path"
+  ],
   "main": "uri",
   "scripts": {
     "test": "jake test"
