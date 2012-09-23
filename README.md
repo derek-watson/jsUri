@@ -6,8 +6,8 @@ Uri and query string manipulation in javascript.
 This project incorporates the excellent [parseUri](http://blog.stevenlevithan.com/archives/parseuri) regular expression library by Steven Levithan. You can safely parse URLs of all shapes and sizes, however invalid or hideous.
 
 
-Basic Usage
------------
+Usage
+-----
 
 Pass anything that your browser would recognize as a url to the new Uri() constructor
 
@@ -32,8 +32,8 @@ The accessor methods accept an optional value for setting the property
     uri.toString();                              // https://user:pass@www.mydomain.com:81/index.html?q=books#fragment
 
 
-Fluent Manipulation
--------------------
+Fluent Setters
+--------------
 
 The fluent interface provides a simple way to chain property assignment
 

@@ -14,7 +14,7 @@
     "query",
     "path"
   ],
-  "main": "uri",
+  "main": "Uri",
   "scripts": {
     "test": "jake test"
   },

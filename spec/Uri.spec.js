@@ -1,6 +1,6 @@
 describe("Uri", function() {
 
-    var Uri = require('../lib/Uri');
+    var Uri = require('../Uri');
 
     describe("Construction and re-stringification", function() {
 
@@ -292,73 +292,140 @@ describe("Uri", function() {
         });
     });
 
-    describe("Query manipulation wrappers", function() {
-        var u;
+    describe("Query", function() {
+        describe('Construction', function() {
+            it('should include an equal sign if there was one present without a query value', function() {
+                q = new Uri('?11=');
+                expect(q.toString()).toEqual('?11=');
+            });
 
-        it('should return the first value for each query param', function() {
-            u = new Uri('?a=1&a=2&b=3&b=4&c=567');
-            expect(u.getQueryParamValue('a')).toEqual('1');
-            expect(u.getQueryParamValue('b')).toEqual('3');
-            expect(u.getQueryParamValue('c')).toEqual('567');
+            it('should not include an equal sign if one was not present originally', function() {
+                q = new Uri('?11');
+                expect(q.toString()).toEqual('?11');
+            });
+
+            it('should preserve missing equals signs across many keys', function() {
+                q = new Uri('?11&12&13&14');
+                expect(q.toString()).toEqual('?11&12&13&14');
+            });
+
+            it('should preserve missing equals signs in a mixed scenario', function() {
+                q = new Uri('?11=eleven&12=&13&14=fourteen');
+                expect(q.toString()).toEqual('?11=eleven&12=&13&14=fourteen');
+            });
         });
 
-        it('should return arrays for multi-valued query params', function() {
-            u = new Uri('?a=1&a=2&b=3&b=4&c=567');
-            expect(u.getQueryParamValues('a')[0]).toEqual('1');
-            expect(u.getQueryParamValues('a')[1]).toEqual('2');
-            expect(u.getQueryParamValues('b')[0]).toEqual('3');
-            expect(u.getQueryParamValues('b')[1]).toEqual('4');
-            expect(u.getQueryParamValues('c')[0]).toEqual('567');
+        describe("Manipulation", function() {
+            var q;
+
+            it('should return the first value for each query param', function() {
+                q = new Uri('?a=1&a=2&b=3&b=4&c=567');
+                expect(q.getQueryParamValue('a')).toEqual('1');
+                expect(q.getQueryParamValue('b')).toEqual('3');
+                expect(q.getQueryParamValue('c')).toEqual('567');
+            });
+
+            it('should return arrays for multi-valued query params', function() {
+                q = new Uri('?a=1&a=2&b=3&b=4&c=567');
+                expect(q.getQueryParamValues('a')[0]).toEqual('1');
+                expect(q.getQueryParamValues('a')[1]).toEqual('2');
+                expect(q.getQueryParamValues('b')[0]).toEqual('3');
+                expect(q.getQueryParamValues('b')[1]).toEqual('4');
+                expect(q.getQueryParamValues('c')[0]).toEqual('567');
+            });
+
+            it('should be able to add a new query param to a blank url', function() {
+                q = new Uri('').addQueryParam('q', 'books');
+                expect(q.toString()).toEqual('?q=books');
+            });
+
+            it('should be able to delete a query param', function() {
+                q = new Uri('?a=1&b=2&c=3&a=eh').deleteQueryParam('b');
+                expect(q.toString()).toEqual('?a=1&c=3&a=eh');
+            });
+
+            it('should be able to delete a query param by value', function() {
+                q = new Uri('?a=1&b=2&c=3&a=eh').deleteQueryParam('a', 'eh');
+                expect(q.toString()).toEqual('?b=2&c=3');
+            });
+
+            it('should be able to add a null param', function() {
+                q = new Uri('?a=1&b=2&c=3').addQueryParam('d');
+                expect(q.toString()).toEqual('?a=1&b=2&c=3&d=');
+            });
+
+            it('should be able to add a key and a value', function() {
+                q = new Uri('?a=1&b=2&c=3').addQueryParam('d', '4');
+                expect(q.toString()).toEqual('?a=1&b=2&c=3&d=4');
+            });
+
+            it('should be able to prepend a key and a value', function() {
+                q = new Uri('?a=1&b=2&c=3').addQueryParam('d', '4', 0);
+                expect(q.toString()).toEqual('?d=4&a=1&b=2&c=3');
+            });
+
+            it('should be able to delete and replace a query param', function() {
+                q = new Uri('?a=1&b=2&c=3').deleteQueryParam('a').addQueryParam('a', 'eh');
+                expect(q.toString()).toEqual('?b=2&c=3&a=eh');
+            });
+
+            it('should be able to directly replace a query param', function() {
+                q = new Uri('?a=1&b=2&c=3').replaceQueryParam('a', 'eh');
+                expect(q.toString()).toEqual('?a=eh&b=2&c=3');
+            });
+
+            it('should be able to replace a query param value that does not exist', function() {
+                q = new Uri().replaceQueryParam('page', 2);
+                expect(q.toString()).toEqual('?page=2');
+            });
         });
 
-        it('should be able to add a new query param to a blank url', function() {
-            u = new Uri('').addQueryParam('q', 'books');
-            expect(u.toString()).toEqual('?q=books');
+        describe("Semicolon as query param separator", function() {
+            var q;
+
+            it('should replace semicolons with ampersands', function() {
+                q = new Uri('?one=1;two=2;three=3');
+                expect(q.toString()).toEqual('?one=1&two=2&three=3');
+            });
+
+            it('should replace semicolons with ampersands, delete the first param and add another', function() {
+                q = new Uri('?one=1;two=2;three=3&four=4').deleteQueryParam('one').addQueryParam('test', 'val', 1);
+                expect(q.toString()).toEqual('?two=2&test=val&three=3&four=4');
+            });
         });
 
-        it('should be able to add query params to an absolute domain', function() {
-            u = new Uri('http://www.microsoft.com').addQueryParam('testing', '123').addQueryParam('one', 1);
-            expect(u.toString()).toEqual('http://www.microsoft.com/?testing=123&one=1');
-        });
+        describe("Comparing encoded vs. non or partially encoded query param keys and values", function() {
+            var q;
 
-        it('should be able to delete a query param', function() {
-            u = new Uri('test.com?a=1&b=2&c=3&a=eh').deleteQueryParam('b');
-            expect(u.toString()).toEqual('test.com/?a=1&c=3&a=eh');
-        });
+            it('is able to find the value of an encoded multiword key from a non encoded search', function() {
+                q = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
+                expect(q.getQueryParamValue('this is a multiword key')).toEqual('value');
+            });
 
-        it('should be able to delete a query param by value', function() {
-            u = new Uri('test.com?a=1&b=2&c=3&a=eh').deleteQueryParam('a', 'eh');
-            expect(u.toString()).toEqual('test.com/?b=2&c=3');
-        });
+            it('is able to find all value s of an encoded multiword key from a non encoded search', function() {
+                q = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
+                expect(q.getQueryParamValues('this is a multiword key')[0]).toEqual('value');
+            });
 
-        it('should be able to add a null param', function() {
-            u = new Uri('?a=1&b=2&c=3').addQueryParam('d');
-            expect(u.toString()).toEqual('?a=1&b=2&c=3&d=');
-        });
+            it('is be able to delete a multiword encoded key', function() {
+                q = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3').deleteQueryParam('this is a multiword key');
+                expect(q.toString()).toEqual('?a=1&c=3');
+            });
 
-        it('should be able to add a key and a value', function() {
-            u = new Uri('?a=1&b=2&c=3').addQueryParam('d', '4');
-            expect(u.toString()).toEqual('?a=1&b=2&c=3&d=4');
-        });
+            it('is be able to delete a multiword encoded key by its value', function() {
+                q = new Uri('?a=1&b=this is a multiword value&c=3').deleteQueryParam('b', 'this%20is%20a%20multiword%20value');
+                expect(q.toString()).toEqual('?a=1&c=3');
+            });
 
-        it('should be able to prepend a key and a value', function() {
-            u = new Uri('?a=1&b=2&c=3').addQueryParam('d', '4', 0);
-            expect(u.toString()).toEqual('?d=4&a=1&b=2&c=3');
-        });
+            it('is able to replace a multiword query param', function() {
+                q = new Uri('?this is a multiword key=1').replaceQueryParam('this%20is%20a%20multiword%20key', 2);
+                expect(q.toString()).toEqual('?this%20is%20a%20multiword%20key=2');
+            });
 
-        it('should be able to delete and replace a query param', function() {
-            u = new Uri('?a=1&b=2&c=3').deleteQueryParam('a').addQueryParam('a', 'eh');
-            expect(u.toString()).toEqual('?b=2&c=3&a=eh');
-        });
-
-        it('should be able to directly replace a query param', function() {
-            u = new Uri('?a=1&b=2&c=3').replaceQueryParam('a', 'eh');
-            expect(u.toString()).toEqual('?a=eh&b=2&c=3');
-        });
-
-        it('should be able to replace a query param value that does not exist', function() {
-            u = new Uri().replaceQueryParam('page', 2);
-            expect(u.toString()).toEqual('?page=2');
+            it('should be able to search for a plus-separated word pair', function() {
+                q = new Uri('?multi+word=true').replaceQueryParam('multi word', 2);
+                expect(q.toString()).toEqual('?multi word=2');
+            });
         });
     });
 
