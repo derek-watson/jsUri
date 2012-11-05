@@ -144,7 +144,11 @@
             if (param[1] === null) {
                 s += param[0];
             } else {
-                s += param.join('=');
+                s += param[0];
+                s += '=';
+                if (param[1]) {
+                    s += encodeURIComponent(param[1]);
+                }
             }
         }
         return s.length > 0 ? '?' + s : s;
