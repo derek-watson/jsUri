@@ -364,6 +364,16 @@ describe("Uri", function() {
                 expect(q.toString()).toEqual('?d=4&a=1&b=2&c=3');
             });
 
+            it('should return query param values correctly', function() {
+                q = new Uri('').addQueryParam('k', 'value@example.com');
+                expect(q.getQueryParamValue('k')).toEqual('value@example.com');
+            });
+
+            it('should escape param values correctly', function() {
+                q = new Uri('http://example.com').addQueryParam('k', 'user@example.org');
+                expect(q.toString()).toEqual('http://example.com/?k=user%40example.org');
+            });
+
             it('should be able to delete and replace a query param', function() {
                 q = new Uri('?a=1&b=2&c=3').deleteQueryParam('a').addQueryParam('a', 'eh');
                 expect(q.toString()).toEqual('?b=2&c=3&a=eh');
