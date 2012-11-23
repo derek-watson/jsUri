@@ -365,11 +365,16 @@
     };
 
     /**
-     * export via CommonJS, otherwise leak a global
+     * export via CommonJS or AMD, otherwise leak a global
      */
-    if (typeof module === 'undefined') {
-        global.Uri = Uri;
-    } else {
+    if (typeof module !== 'undefined') {
         module.exports = Uri;
+    } else if (typeof define === 'function' && define.amd) {
+        // Return the library as an AMD module:
+        define([], function() {
+            return Uri;
+        });
+    } else {
+        global.Uri = Uri;
     }
 }(this));
