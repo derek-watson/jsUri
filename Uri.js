@@ -32,8 +32,10 @@
      * @return {string}   decoded value
      */
     function decode(s) {
-        s = decodeURIComponent(s);
-        s = s.replace('+', ' ');
+        if (s) {
+            s = decodeURIComponent(s);
+            s = s.replace('+', ' ');
+        }
         return s;
     }
 
@@ -93,6 +95,11 @@
         this.queryPairs = parseQuery(this.uriParts.query);
         this.hasAuthorityPrefixUserPref = null;
     }
+
+    /*
+     * Export the decode function.
+     */
+    Uri.decode = decode;
 
     /**
      * Define getter/setter methods
@@ -164,7 +171,7 @@
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
             if (decode(key) === decode(param[0])) {
-                return param[1];
+                return decode(param[1]);
             }
         }
     };
@@ -180,7 +187,7 @@
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
             if (decode(key) === decode(param[0])) {
-                arr.push(param[1]);
+                arr.push(decode(param[1]));
             }
         }
         return arr;
