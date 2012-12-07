@@ -313,6 +313,11 @@ describe("Uri", function() {
                 q = new Uri('?11=eleven&12=&13&14=fourteen');
                 expect(q.toString()).toEqual('?11=eleven&12=&13&14=fourteen');
             });
+
+            it('should not decode entities when parsing', function(){
+                q = new Uri('?email=user%40example.com');
+                expect(q.getQueryParamValue('email')).toEqual('user@example.com');
+            });
         });
 
         describe("Manipulation", function() {
