@@ -367,9 +367,9 @@
     /**
      * export via CommonJS, otherwise leak a global
      */
-    if (typeof module === 'undefined') {
-        global.Uri = Uri;
-    } else {
+    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         module.exports = Uri;
+    } else {
+        global.Uri = Uri;
     }
 }(this));
