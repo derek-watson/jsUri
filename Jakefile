@@ -23,12 +23,17 @@ desc('Run Jasmine specs');
 task('test', function() {
     var specDir = './spec';
     console.log('running jasmine tests from', specDir);
-    jasmine.executeSpecsInFolder(specDir, function(runner, log) {
+    jasmine.executeSpecsInFolder({specFolder: specDir, 
+      onComplete: function(runner, log) {
         var failed = runner.results().failedCount;
         if (failed > 0) {
             fail();
         }
-    }, false, true, ".spec.js$");
+      }, 
+      isVerbose: false, 
+      showColors: true, 
+      regExpSpec: ".spec.js$"
+    });
 });
 
 desc('Minify the compiled Uri.js file');

@@ -60,10 +60,19 @@
      * @return {array}      array of arrays (key/value pairs)
      */
     function parseQuery(str) {
-        var i, ps, p, kvp, k, v,
+        var i, ps, p, kvp, k, v, qu,
             pairs = [];
 
         if (typeof(str) === 'undefined' || str === null || str === '') {
+            return pairs;
+        }
+
+        if (typeof (str) === 'object') {
+            for (qu in str) {
+                if (str.hasOwnProperty(qu)) {
+                    pairs.push([qu, str[qu]]);
+                }
+            }
             return pairs;
         }
 
@@ -184,6 +193,18 @@
             }
         }
         return arr;
+    };
+
+    /**
+     * returns an associative array of the query parameters
+     * @return {Object}         returns associative array of parameters & values
+     */
+    Uri.prototype.getQueryParams = function () {
+      var obj = {}, i;
+      for (i = 0; i < this.queryPairs.length; i++) {
+        obj[this.queryPairs[i][0]] = this.queryPairs[i][1];
+      }
+      return obj;
     };
 
     /**
