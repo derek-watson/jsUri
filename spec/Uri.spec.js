@@ -266,6 +266,28 @@ describe("Uri", function() {
             u.anchor(null);
             expect(u.toString()).toEqual('/a/b/c/index.html');
         });
+
+        it('should be able to get single encoded values', function() {
+            u = new Uri('http://example.com/search?q=%40');
+            expect(u.getQueryParamValue('q')).toEqual('@');
+        });
+
+        it('should be able to get double encoded values', function() {
+            u = new Uri('http://example.com/search?q=%2540');
+            expect(u.getQueryParamValue('q')).toEqual('%40');
+        });
+
+        it('should be able to work with %40 values', function() {
+            u = new Uri('http://example.com/search?q=%40&stupid=yes');
+            u.deleteQueryParam('stupid');
+            expect(u.toString()).toEqual('http://example.com/search?q=%40');
+        });
+
+        it('should be able to work with %25 values', function() {
+            u = new Uri('http://example.com/search?q=100%25&stupid=yes');
+            u.deleteQueryParam('stupid');
+            expect(u.toString()).toEqual('http://example.com/search?q=100%25');
+        });
     });
 
     describe("Fluent setters", function() {
@@ -312,6 +334,11 @@ describe("Uri", function() {
             it('should preserve missing equals signs in a mixed scenario', function() {
                 q = new Uri('?11=eleven&12=&13&14=fourteen');
                 expect(q.toString()).toEqual('?11=eleven&12=&13&14=fourteen');
+            });
+
+            it('should not decode entities when parsing', function(){
+                q = new Uri('?email=user%40example.com');
+                expect(q.getQueryParamValue('email')).toEqual('user@example.com');
             });
         });
 

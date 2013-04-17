@@ -10,6 +10,10 @@
  * Copyright 2007, Steven Levithan
  * Released under the MIT license.
  *
+ * Fork by Slik
+ * https://github.com/SlikNL/jsUri
+ * (at least until our pull is merged at
+ * https://github.com/derek-watson/jsUri/pull/18)
  */
 
 (function(global) {
@@ -72,12 +76,12 @@
         }
 
         ps = str.toString().split(/[&;]/);
-
         for (i = 0; i < ps.length; i++) {
             p = ps[i];
             kvp = p.split('=');
             k = kvp[0];
             v = p.indexOf('=') === -1 ? null : (kvp[1] === null ? '' : kvp[1]);
+            v = v && decodeURIComponent(v);
             pairs.push([k, v]);
         }
         return pairs;
@@ -200,7 +204,7 @@
 
             param = this.queryPairs[i];
             keyMatchesFilter = decode(param[0]) === decode(key);
-            valMatchesFilter = decode(param[1]) === decode(val);
+            valMatchesFilter = param[1] === val;
 
             if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && !keyMatchesFilter && !valMatchesFilter)) {
                 arr.push(param);
