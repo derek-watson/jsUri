@@ -10,6 +10,10 @@
  * Copyright 2007, Steven Levithan
  * Released under the MIT license.
  *
+ * Fork by Slik
+ * https://github.com/SlikNL/jsUri
+ * (at least until our pull is merged at
+ * https://github.com/derek-watson/jsUri/pull/18)
  */
 
 (function(global) {
