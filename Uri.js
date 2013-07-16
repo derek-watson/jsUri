@@ -60,7 +60,7 @@
      * @return {array}      array of arrays (key/value pairs)
      */
     function parseQuery(str) {
-        var i, ps, p, kvp, k, v,
+        var i, ps, p, n, k, v,
             pairs = [];
 
         if (typeof(str) === 'undefined' || str === null || str === '') {
@@ -75,10 +75,13 @@
 
         for (i = 0; i < ps.length; i++) {
             p = ps[i];
-            kvp = p.split('=');
-            k = kvp[0];
-            v = p.indexOf('=') === -1 ? null : (kvp[1] === null ? '' : kvp[1]);
-            pairs.push([k, v]);
+            n = p.indexOf('=');
+
+            if (n !== 0) {
+                k = p.substring(0, n)
+                v = p.substring(n + 1)
+                pairs.push(n === -1 ? [p, null] : [k, v]);
+            }
         }
         return pairs;
     }
