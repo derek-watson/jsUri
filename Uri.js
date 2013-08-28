@@ -326,9 +326,10 @@
 
     /**
      * Serializes the internal state of the Uri object
+     * @param  {boolean} trailing       add a trailing slash if true
      * @return {string}
      */
-    Uri.prototype.toString = function() {
+    Uri.prototype.toString = function(trailing) {
 
         var s = this.origin();
 
@@ -339,6 +340,10 @@
                 s += '/';
             }
         }
+
+        if (trailing && s.substr(-1) !== '/')
+            s += '/';
+
         if (this.query().toString()) {
             if (this.query().toString().indexOf('?') !== 0) {
                 s += '?';

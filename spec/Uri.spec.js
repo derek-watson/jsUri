@@ -111,6 +111,10 @@ describe("Uri", function() {
         it('returns successfully returns the origin with a scheme, auth, host and port', function() {
             expect(new Uri('http://me:here@test.com:81/this/is/a/path').origin()).toEqual('http://me:here@test.com:81');
         });
+
+        it("can add a trailing slash", function() {
+            expect(new Uri('http://www.example.com/path?arr=1&arr=2').toString(true)).toEqual('http://www.example.com/path/?arr=1&arr=2');
+        });
     });
 
     describe("Manipulation", function() {
