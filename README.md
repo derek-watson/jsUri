@@ -129,7 +129,7 @@ To run them, simply open `testrunner.html` from the root of the project in a bro
 License
 -------
 
-Copyright (c) 2012 Derek Watson
+Copyright (c) 2012 Derek Watson  
 Copyright (c) 2007 Steven Levithan
 
 Permission is hereby granted, free of charge, to any person obtaining a

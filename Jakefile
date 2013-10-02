@@ -1,3 +1,5 @@
+/*globals jake, desc, task, fail, console */
+
 var jasmine = require('jasmine-node');
 
 desc('Default (build all)');
@@ -23,12 +25,17 @@ desc('Run Jasmine specs');
 task('test', function() {
     var specDir = './spec';
     console.log('running jasmine tests from', specDir);
-    jasmine.executeSpecsInFolder(specDir, function(runner, log) {
-        var failed = runner.results().failedCount;
-        if (failed > 0) {
-            fail();
-        }
-    }, false, true, ".spec.js$");
+    jasmine.executeSpecsInFolder({
+        specFolders: [specDir],
+        onComplete: function(runner, log) {
+            var failed = runner.results().failedCount;
+            if (failed > 0) {
+                fail();
+            }
+        },
+        isVerbose: false,
+        showColors: true
+    });
 });
 
 desc('Minify the compiled Uri.js file');
