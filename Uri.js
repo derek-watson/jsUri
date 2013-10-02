@@ -11,6 +11,7 @@
  * Released under the MIT license.
  *
  */
+/*globals define, module */
 
 (function(global) {
 
@@ -365,9 +366,13 @@
     };
 
     /**
-     * export via CommonJS, otherwise leak a global
+     * export via AMD or CommonJS, otherwise leak a global
      */
-    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    if (typeof define === 'function' && define.amd) {
+        define(function() {
+            return Uri;
+        });
+    } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         module.exports = Uri;
     } else {
         global.Uri = Uri;
