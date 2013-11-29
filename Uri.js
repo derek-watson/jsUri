@@ -15,6 +15,12 @@
 
 (function(global) {
 
+    var STARTS_WITH_SLASHES, ENDS_WITH_SLASHES;
+
+    // cache regex for readability of code
+    STARTS_WITH_SLASHES = /^\/+/;
+    ENDS_WITH_SLASHES = /\/+$/;
+
     /**
      * Define forEach for older js environments
      * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach#Compatibility
@@ -331,10 +337,19 @@
      */
     Uri.prototype.toString = function() {
 
-        var s = this.origin();
+        var path, s = this.origin();
 
         if (this.path()) {
-            s += this.path();
+            path = this.path();
+            if (!(ENDS_WITH_SLASHES.test(s) || STARTS_WITH_SLASHES.test(path))) {
+                s += '/';
+            } else {
+                if (s) {
+                    s.replace(ENDS_WITH_SLASHES, '/');
+                }
+                path = path.replace(STARTS_WITH_SLASHES, '/');
+            }
+            s += path;
         } else {
             if (this.host() && (this.query().toString() || this.anchor())) {
                 s += '/';

@@ -111,6 +111,7 @@ describe("Uri", function() {
         it('returns successfully returns the origin with a scheme, auth, host and port', function() {
             expect(new Uri('http://me:here@test.com:81/this/is/a/path').origin()).toEqual('http://me:here@test.com:81');
         });
+
     });
 
     describe("Manipulation", function() {
@@ -266,6 +267,25 @@ describe("Uri", function() {
             u.anchor(null);
             expect(u.toString()).toEqual('/a/b/c/index.html');
         });
+
+        it('should insert missing slash when orign and path have no slash', function () {
+            u = new Uri('http://test.com');
+            u.setPath('relativePath');
+            expect(u.toString()).toEqual('http://test.com/relativePath');
+        });
+
+        it('should remove extra slash when orign and path both provide a slash', function () {
+            u = new Uri('http://test.com/');
+            u.setPath('/relativePath');
+            expect(u.toString()).toEqual('http://test.com/relativePath');
+        });
+
+        it('should remove extra slashes when orign and path both provide too many slashes', function () {
+            u = new Uri('http://test.com//');
+            u.setPath('//relativePath');
+            expect(u.toString()).toEqual('http://test.com/relativePath');
+        });
+
     });
 
     describe("Fluent setters", function() {
