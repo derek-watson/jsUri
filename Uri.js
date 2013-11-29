@@ -369,7 +369,8 @@
      * export via AMD or CommonJS, otherwise leak a global
      */
     if (typeof define === 'function' && define.amd) {
-        define(function() {
+        // not all asset pipelines understands anonymous AMD modules
+        define('jsuri', [], function() {
             return Uri;
         });
     } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
