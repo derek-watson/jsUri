@@ -9,17 +9,19 @@
  * http://blog.stevenlevithan.com/archives/parseuri
  * Copyright 2007, Steven Levithan
  * Released under the MIT license.
- *
  */
 /*globals define, module */
 
 (function(global) {
 
-    var STARTS_WITH_SLASHES, ENDS_WITH_SLASHES;
+    var STARTS_WITH_SLASHES, ENDS_WITH_SLASHES, PLUSES, QUERY_SEPARATOR, URI_PARSER;
 
     // cache regex for readability of code
     STARTS_WITH_SLASHES = /^\/+/;
     ENDS_WITH_SLASHES = /\/+$/;
+    PLUSES = /\+/g;
+    QUERY_SEPARATOR = /[&;]/;
+    URI_PARSER = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
 
     /**
      * Define forEach for older js environments
@@ -39,8 +41,10 @@
      * @return {string}   decoded value
      */
     function decode(s) {
-        s = decodeURIComponent(s);
-        s = s.replace('+', ' ');
+        if (s) {
+            s = decodeURIComponent(s);
+            s = s.replace(PLUSES, ' ');
+        }
         return s;
     }
 
@@ -50,7 +54,7 @@
      * @return {object}     parts
      */
     function parseUri(str) {
-        var parser = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/,
+        var parser = URI_PARSER,
             parserKeys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
             m = parser.exec(str || ''),
             parts = {};
@@ -78,7 +82,7 @@
             str = str.substring(1);
         }
 
-        ps = str.toString().split(/[&;]/);
+        ps = str.toString().split(QUERY_SEPARATOR);
 
         for (i = 0; i < ps.length; i++) {
             p = ps[i];
@@ -171,7 +175,7 @@
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
             if (decode(key) === decode(param[0])) {
-                return param[1];
+                return decode(param[1]);
             }
         }
     };
@@ -187,7 +191,7 @@
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
             if (decode(key) === decode(param[0])) {
-                arr.push(param[1]);
+                arr.push(decode(param[1]));
             }
         }
         return arr;
