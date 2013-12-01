@@ -450,6 +450,11 @@ describe("Uri", function() {
                 expect(q.getQueryParamValue('this is a multiword key')).toEqual('value');
             });
 
+            it('is able to on the fly decode an encoded param value', function() {
+                q = new Uri('?a=1&b=this%20is%20a%20multiword%20val&c=3')
+                expect(q.getQueryParamValue('b')).toEqual('this is a multiword val');
+            });
+
             it('is able to find all value s of an encoded multiword key from a non encoded search', function() {
                 q = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
                 expect(q.getQueryParamValues('this is a multiword key')[0]).toEqual('value');
@@ -474,6 +479,13 @@ describe("Uri", function() {
                 q = new Uri('?multi+word=true').replaceQueryParam('multi word', 2);
                 expect(q.toString()).toEqual('?multi word=2');
             });
+        });
+    });
+
+    describe("Additional exports", function() {
+        it('should export the decode function', function() {
+            expect(Uri.decode).toBeTruthy();
+            expect(Uri.decode("f+s")).toEqual("f s");
         });
     });
 
