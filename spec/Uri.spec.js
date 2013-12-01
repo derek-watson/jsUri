@@ -268,6 +268,28 @@ describe("Uri", function() {
             expect(u.toString()).toEqual('/a/b/c/index.html');
         });
 
+        it('should be able to get single encoded values', function() {
+            u = new Uri('http://example.com/search?q=%40');
+            expect(u.getQueryParamValue('q')).toEqual('@');
+        });
+
+        it('should be able to get double encoded values', function() {
+            u = new Uri('http://example.com/search?q=%2540');
+            expect(u.getQueryParamValue('q')).toEqual('%40');
+        });
+
+        it('should be able to work with %40 values', function() {
+            u = new Uri('http://example.com/search?q=%40&stupid=yes');
+            u.deleteQueryParam('stupid');
+            expect(u.toString()).toEqual('http://example.com/search?q=%40');
+        });
+
+        it('should be able to work with %25 values', function() {
+            u = new Uri('http://example.com/search?q=100%25&stupid=yes');
+            u.deleteQueryParam('stupid');
+            expect(u.toString()).toEqual('http://example.com/search?q=100%25');
+        });
+
         it('should insert missing slash when orign and path have no slash', function () {
             u = new Uri('http://test.com');
             u.setPath('relativePath');
@@ -314,6 +336,11 @@ describe("Uri", function() {
 
     describe("Query", function() {
         describe('Construction', function() {
+            it('should decode entities when parsing', function(){
+                q = new Uri('?email=user%40example.com');
+                expect(q.getQueryParamValue('email')).toEqual('user@example.com');
+            });
+
             it('should include an equal sign if there was one present without a query value', function() {
                 q = new Uri('?11=');
                 expect(q.toString()).toEqual('?11=');
@@ -455,6 +482,16 @@ describe("Uri", function() {
                 expect(q.getQueryParamValue('b')).toEqual('this is a multiword val');
             });
 
+            it('is able to on the fly decode a space-encoded param value', function() {
+                q = new Uri('?a=1&b=this is a multiword value&c=3')
+                expect(q.getQueryParamValue('b')).toEqual('this is a multiword value');
+            });
+
+            it('is able to on the fly decode a double-encoded param value', function() {
+                q = new Uri('?a=1&b=this%2520is%2520a%2520multiword%2520value&c=3')
+                expect(q.getQueryParamValue('b')).toEqual('this%20is%20a%20multiword%20value');
+            });
+
             it('is able to find all value s of an encoded multiword key from a non encoded search', function() {
                 q = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3')
                 expect(q.getQueryParamValues('this is a multiword key')[0]).toEqual('value');
@@ -462,11 +499,6 @@ describe("Uri", function() {
 
             it('is be able to delete a multiword encoded key', function() {
                 q = new Uri('?a=1&this%20is%20a%20multiword%20key=value&c=3').deleteQueryParam('this is a multiword key');
-                expect(q.toString()).toEqual('?a=1&c=3');
-            });
-
-            it('is be able to delete a multiword encoded key by its value', function() {
-                q = new Uri('?a=1&b=this is a multiword value&c=3').deleteQueryParam('b', 'this%20is%20a%20multiword%20value');
                 expect(q.toString()).toEqual('?a=1&c=3');
             });
 

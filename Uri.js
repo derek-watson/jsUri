@@ -87,8 +87,8 @@
         for (i = 0; i < ps.length; i++) {
             p = ps[i];
             kvp = p.split('=');
-            k = kvp[0];
-            v = p.indexOf('=') === -1 ? null : (kvp[1] === null ? '' : kvp[1]);
+            k = decodeURIComponent(kvp[0]);
+            v = p.indexOf('=') === -1 ? null : decodeURIComponent(kvp[1] === null ? '' : kvp[1]);
             pairs.push([k, v]);
         }
         return pairs;
@@ -174,8 +174,8 @@
         var param, i;
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
-            if (decode(key) === decode(param[0])) {
-                return decode(param[1]);
+            if (key === param[0]) {
+                return param[1];
             }
         }
     };
@@ -190,8 +190,8 @@
             i, param;
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
-            if (decode(key) === decode(param[0])) {
-                arr.push(decode(param[1]));
+            if (key === param[0]) {
+                arr.push(param[1]);
             }
         }
         return arr;
@@ -211,7 +211,7 @@
 
             param = this.queryPairs[i];
             keyMatchesFilter = decode(param[0]) === decode(key);
-            valMatchesFilter = decode(param[1]) === decode(val);
+            valMatchesFilter = param[1] === val;
 
             if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && (!keyMatchesFilter || !valMatchesFilter))) {
                 arr.push(param);
