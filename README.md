@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
+
 jsUri
 =====
 
@@ -53,6 +55,7 @@ The fluent interface provides a simple way to chain property assignment
     new Uri()
         .setPath('/archives/1979/')
         .setQuery('?page=1')                   // /archives/1979?page=1
+
 
 Query Parameter Access and Manipulation
 ---------------------------------------
@@ -120,11 +123,13 @@ Duplication (via `.clone()`) is an easy way to inflate an identical uri object, 
         baseUri.clone().setProtocol('https');  // https://localhost/
         baseUri;                               // http://localhost/
 
+
 Testing
 -------
 
 There is a comprensive set of unit tests written in [jasmine](http://pivotal.github.com/jasmine/).
-To run them, simply open `testrunner.html` from the root of the project in a browser.
+To run them, simply open `spec/runner.html` in a browser.
+
 
 License
 -------
