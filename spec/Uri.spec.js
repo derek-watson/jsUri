@@ -366,7 +366,7 @@ describe("Uri", function() {
 
             it('should be able to delete a query param by value', function() {
                 q = new Uri('?a=1&b=2&c=3&a=eh').deleteQueryParam('a', 'eh');
-                expect(q.toString()).toEqual('?b=2&c=3');
+                expect(q.toString()).toEqual('?a=1&b=2&c=3');
             });
 
             it('should be able to add a null param', function() {
@@ -407,6 +407,24 @@ describe("Uri", function() {
             it('should be able to replace a query param value that does not exist', function() {
                 q = new Uri().replaceQueryParam('page', 2);
                 expect(q.toString()).toEqual('?page=2');
+            });
+
+            it('should be able to handle multiple values for the same key', function() {
+                q = new Uri().addQueryParam('a', 1);
+                expect(q.toString()).toEqual('?a=1');
+                expect(q.getQueryParamValues('a').length).toEqual(1);
+                q.addQueryParam('a', 2);
+                expect(q.toString()).toEqual('?a=1&a=2');
+                expect(q.getQueryParamValues('a').length).toEqual(2);
+                q.addQueryParam('a', 3);
+                expect(q.toString()).toEqual('?a=1&a=2&a=3');
+                expect(q.getQueryParamValues('a').length).toEqual(3);
+                q.deleteQueryParam('a', 2);
+                expect(q.toString()).toEqual('?a=1&a=3');
+                expect(q.getQueryParamValues('a').length).toEqual(2);
+                q.deleteQueryParam('a');
+                expect(q.toString()).toEqual('');
+                expect(q.getQueryParamValues('a').length).toEqual(0);
             });
         });
 

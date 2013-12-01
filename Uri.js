@@ -209,7 +209,7 @@
             keyMatchesFilter = decode(param[0]) === decode(key);
             valMatchesFilter = decode(param[1]) === decode(val);
 
-            if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && !keyMatchesFilter && !valMatchesFilter)) {
+            if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && (!keyMatchesFilter || !valMatchesFilter))) {
                 arr.push(param);
             }
         }
