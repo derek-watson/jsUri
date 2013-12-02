@@ -124,17 +124,10 @@ Duplication (via `.clone()`) is an easy way to inflate an identical uri object, 
         baseUri;                               // http://localhost/
 
 
-Testing
--------
-
-There is a comprensive set of unit tests written in [jasmine](http://pivotal.github.com/jasmine/).
-To run them, simply open `spec/runner.html` in a browser.
-
-
 License
 -------
 
-Copyright (c) 2012 Derek Watson  
+Copyright (c) 2012 Derek Watson
 Copyright (c) 2007 Steven Levithan
 
 Permission is hereby granted, free of charge, to any person obtaining a
