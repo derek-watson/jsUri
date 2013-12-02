@@ -212,7 +212,12 @@ describe('Uri', function() {
   it('preserves the format of file uris', function() {
     var str = 'file://c:/parent/child.ext'
     var uri = new Uri(str)
-    console.log(uri.host())
     expect(uri.toString()).to.equal(str)
+  })
+
+  it('correctly composes url encoded urls', function() {
+     var originalQuery = '?k=%40v'
+     var parsed = new Uri('http://example.com' + originalQuery)
+     expect(parsed.query()).to.equal(originalQuery)
   })
 })
