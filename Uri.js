@@ -14,12 +14,14 @@
  /*globals define, module */
 
 (function(global) {
-  // regex constants
-  var STARTS_WITH_SLASHES = /^\/+/;
-  var ENDS_WITH_SLASHES = /\/+$/;
-  var PLUSES = /\+/g;
-  var QUERY_SEPARATOR = /[&;]/;
-  var URI_PARSER = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
+
+  var re = {
+    starts_with_slashes: /^\/+/,
+    ends_with_slashes: /\/+$/,
+    pluses: /\+/g,
+    query_separator: /[&;]/,
+    uri_parser: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+  };
 
   /**
    * Define forEach for older js environments
@@ -41,7 +43,7 @@
   function decode(s) {
     if (s) {
       s = decodeURIComponent(s);
-      s = s.replace(PLUSES, ' ');
+      s = s.replace(re.pluses, ' ');
     }
     return s;
   }
@@ -52,7 +54,7 @@
    * @return {object}     parts
    */
   function parseUri(str) {
-    var parser = URI_PARSER;
+    var parser = re.uri_parser;
     var parserKeys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"];
     var m = parser.exec(str || '');
     var parts = {};
@@ -81,7 +83,7 @@
       str = str.substring(1);
     }
 
-    ps = str.toString().split(QUERY_SEPARATOR);
+    ps = str.toString().split(re.query_separator);
 
     for (i = 0; i < ps.length; i++) {
       p = ps[i];
@@ -336,13 +338,13 @@
 
     if (this.path()) {
       path = this.path();
-      if (!(ENDS_WITH_SLASHES.test(s) || STARTS_WITH_SLASHES.test(path))) {
+      if (!(re.ends_with_slashes.test(s) || re.starts_with_slashes.test(path))) {
         s += '/';
       } else {
         if (s) {
-          s.replace(ENDS_WITH_SLASHES, '/');
+          s.replace(re.ends_with_slashes, '/');
         }
-        path = path.replace(STARTS_WITH_SLASHES, '/');
+        path = path.replace(re.starts_with_slashes, '/');
       }
       s += path;
     } else {
