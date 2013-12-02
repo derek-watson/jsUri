@@ -208,4 +208,11 @@ describe('Uri', function() {
       .toString()
     expect(str).to.equal('http://www.example.com/path/?arr=1&arr=2')
   })
+
+  it('preserves the format of file uris', function() {
+    var str = 'file://c:/parent/child.ext'
+    var uri = new Uri(str)
+    console.log(uri.host())
+    expect(uri.toString()).to.equal(str)
+  })
 })

@@ -316,6 +316,10 @@
   Uri.prototype.origin = function() {
     var s = this.scheme();
 
+    if (s == 'file://') {
+      return s + this.uriParts.authority
+    }
+
     if (this.userInfo() && this.host()) {
       s += this.userInfo();
       if (this.userInfo().indexOf('@') !== this.userInfo().length - 1) {
