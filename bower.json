@@ -1,0 +1,7 @@
+{
+  "name": "jsUri",
+  "version": "1.2.2",
+  "main": "./Uri.js",
+  "dependencies": {
+  }
+}
