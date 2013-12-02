@@ -1,8 +1,12 @@
-[![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
-
 # jsUri
 
 Uri parsing and manipulation for node.js and the browser.
+
+[![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
+
+[![NPM](https://nodei.co/npm/jsuri.png)](https://nodei.co/npm/jsuri/)
+
+Pass any url into the constructor
 
     var uri = new Uri('http://user:pass@www.test.com:81/index.html?q=books#fragment')
 
