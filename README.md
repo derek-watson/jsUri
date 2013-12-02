@@ -28,7 +28,7 @@ Property methods accept an optional value to set
     uri.toString()    // https://user:pass@www.test.com:81/index.html?q=books#fragment
 
     uri.host('mydomain.com')
-    uri.toString()    // https://user:pass@www.mydomain.com:81/index.html?q=books#fragment
+    uri.toString()    // https://user:pass@mydomain.com:81/index.html?q=books#fragment
 
 Chainable setter methods help you compose strings
 
