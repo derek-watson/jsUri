@@ -23,13 +23,14 @@
   ],
   "main": "Uri",
   "scripts": {
-    "test": "jake test"
+    "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {},
   "devDependencies": {
-    "jasmine-node": "~1.11.0",
     "jshint": "~2.1.11",
-    "uglify-js": "~2.4.0"
+    "uglify-js": "~2.4.0",
+    "mocha": "~1.14.0",
+    "chai": "~1.8.1"
   },
   "optionalDependencies": {},
   "engines": {
