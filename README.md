@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
 
-Uri and query parsing and manipulation in javascript.
+Uri and query parsing and manipulation for node.js and the browser.
 
     var uri = new Uri('http://user:pass@www.test.com:81/index.html?q=books#fragment')
 
