@@ -27,6 +27,14 @@
     "lint": "./node_modules/.bin/jshint Uri.js",
     "minify": "./node_modules/.bin/uglifyjs Uri.js > Uri.min.js"
   },
+  "testling": {
+    "browsers": [
+      "ie6", "ie7", "ie8", "ie9", "ie10", "ie11",
+      "firefox/15", "chrome/22", "opera/12", "safari/5.1"
+    ],
+    "harness" : "mocha",
+    "files": "test/*.js"
+  },  
   "dependencies": {},
   "devDependencies": {
     "jshint": "~2.1.11",
