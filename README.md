@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
-
 # jsUri
+
+[![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
 
 Uri and query parsing and manipulation in javascript.
 
