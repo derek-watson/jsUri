@@ -23,7 +23,9 @@
   ],
   "main": "Uri",
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha",
+    "lint": "./node_modules/.bin/jshint Uri.js",
+    "minify": "./node_modules/.bin/uglifyjs Uri.js > Uri.min.js"
   },
   "dependencies": {},
   "devDependencies": {
