@@ -6,6 +6,8 @@ Uri parsing and manipulation for node.js and the browser.
 
 [![NPM](https://nodei.co/npm/jsuri.png)](https://nodei.co/npm/jsuri/)
 
+[![browser support](https://ci.testling.com/derek-watson/jsUri.png)](http://ci.testling.com/derek-watson/jsUri)
+
 Pass any url into the constructor
 
     var uri = new Uri('http://user:pass@www.test.com:81/index.html?q=books#fragment')
