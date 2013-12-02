@@ -4,10 +4,6 @@
 
 Uri and query parsing and manipulation in javascript.
 
-## Usage
-
-Pass anything that your browser would recognize as a url to the new Uri() constructor
-
     var uri = new Uri('http://user:pass@www.test.com:81/index.html?q=books#fragment')
 
 Use property methods to get at the various parts
