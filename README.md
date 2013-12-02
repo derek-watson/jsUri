@@ -3,8 +3,8 @@
 Uri parsing and manipulation for node.js and the browser.
 
 [![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
-
-[![NPM](https://nodei.co/npm/jsuri.png)](https://nodei.co/npm/jsuri/) | [![browser support](https://ci.testling.com/derek-watson/jsUri.png)](http://ci.testling.com/derek-watson/jsUri)
+[![NPM](https://nodei.co/npm/jsuri.png)](https://nodei.co/npm/jsuri/)
+[![browser support](https://ci.testling.com/derek-watson/jsUri.png)](http://ci.testling.com/derek-watson/jsUri)
 
 Pass any url into the constructor
 
