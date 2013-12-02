@@ -28,13 +28,16 @@
     "minify": "./node_modules/.bin/uglifyjs Uri.js > Uri.min.js"
   },
   "testling": {
-    "browsers": [
-      "ie6", "ie7", "ie8", "ie9", "ie10", "ie11",
-      "firefox/15", "chrome/22", "opera/12", "safari/5.1"
-    ],
-    "harness" : "mocha",
+    "browsers": {
+      "ie": [ 6, 7, 8, 9, 10, 11 ],
+      "firefox": [ 17, 18, 19, 20, 21, 22, 23, 24, 25 ],
+      "chrome": [ 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 ],
+      "safari": [ 5, 5.1, 6.1, 7 ],
+      "opera": [ 12, 13, 14, 15, 16, 17, 18 ]
+    },
+    "harness": "mocha",
     "files": "test/*.js"
-  },  
+  },
   "dependencies": {},
   "devDependencies": {
     "jshint": "~2.1.11",
