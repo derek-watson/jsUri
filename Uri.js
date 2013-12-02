@@ -2,7 +2,7 @@
  * jsUri
  * https://github.com/derek-watson/jsUri
  *
- * Copyright 2012, Derek Watson
+ * Copyright 2013, Derek Watson
  * Released under the MIT license.
  *
  * Includes parseUri regular expressions
@@ -10,29 +10,27 @@
  * Copyright 2007, Steven Levithan
  * Released under the MIT license.
  */
-/*globals define, module */
 
-(function(global) {
+ /*globals define, module */
 
-    var STARTS_WITH_SLASHES, ENDS_WITH_SLASHES, PLUSES, QUERY_SEPARATOR, URI_PARSER;
-
-    // cache regex for readability of code
-    STARTS_WITH_SLASHES = /^\/+/;
-    ENDS_WITH_SLASHES = /\/+$/;
-    PLUSES = /\+/g;
-    QUERY_SEPARATOR = /[&;]/;
-    URI_PARSER = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
+  (function(global) {
+    // regex constants
+    var STARTS_WITH_SLASHES = /^\/+/;
+    var ENDS_WITH_SLASHES = /\/+$/;
+    var PLUSES = /\+/g;
+    var QUERY_SEPARATOR = /[&;]/;
+    var URI_PARSER = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
 
     /**
      * Define forEach for older js environments
      * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach#Compatibility
      */
     if (!Array.prototype.forEach) {
-        Array.prototype.forEach = function(fn, scope) {
-            for (var i = 0, len = this.length; i < len; ++i) {
-                fn.call(scope || this, this[i], i, this);
-            }
-        };
+      Array.prototype.forEach = function(fn, scope) {
+        for (var i = 0, len = this.length; i < len; ++i) {
+          fn.call(scope || this, this[i], i, this);
+        }
+      };
     }
 
     /**
@@ -41,11 +39,11 @@
      * @return {string}   decoded value
      */
     function decode(s) {
-        if (s) {
-            s = decodeURIComponent(s);
-            s = s.replace(PLUSES, ' ');
-        }
-        return s;
+      if (s) {
+        s = decodeURIComponent(s);
+        s = s.replace(PLUSES, ' ');
+      }
+      return s;
     }
 
     /**
@@ -54,15 +52,16 @@
      * @return {object}     parts
      */
     function parseUri(str) {
-        var parser = URI_PARSER,
-            parserKeys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
-            m = parser.exec(str || ''),
-            parts = {};
+      var parser = URI_PARSER;
+      var parserKeys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"];
+      var m = parser.exec(str || '');
+      var parts = {};
 
-        parserKeys.forEach(function(key, i) {
-            parts[key] = m[i] || '';
-        });
-        return parts;
+      parserKeys.forEach(function(key, i) {
+        parts[key] = m[i] || '';
+      });
+
+      return parts;
     }
 
     /**
@@ -71,27 +70,27 @@
      * @return {array}      array of arrays (key/value pairs)
      */
     function parseQuery(str) {
-        var i, ps, p, kvp, k, v,
-            pairs = [];
+      var i, ps, p, kvp, k, v;
+      var pairs = [];
 
-        if (typeof(str) === 'undefined' || str === null || str === '') {
-            return pairs;
-        }
-
-        if (str.indexOf('?') === 0) {
-            str = str.substring(1);
-        }
-
-        ps = str.toString().split(QUERY_SEPARATOR);
-
-        for (i = 0; i < ps.length; i++) {
-            p = ps[i];
-            kvp = p.split('=');
-            k = decodeURIComponent(kvp[0]);
-            v = p.indexOf('=') === -1 ? null : decodeURIComponent(kvp[1] === null ? '' : kvp[1]);
-            pairs.push([k, v]);
-        }
+      if (typeof(str) === 'undefined' || str === null || str === '') {
         return pairs;
+      }
+
+      if (str.indexOf('?') === 0) {
+        str = str.substring(1);
+      }
+
+      ps = str.toString().split(QUERY_SEPARATOR);
+
+      for (i = 0; i < ps.length; i++) {
+        p = ps[i];
+        kvp = p.split('=');
+        k = decodeURIComponent(kvp[0]);
+        v = p.indexOf('=') === -1 ? null : decodeURIComponent(kvp[1] === null ? '' : kvp[1]);
+        pairs.push([k, v]);
+      }
+      return pairs;
     }
 
     /**
@@ -100,21 +99,21 @@
      * @param {string} str
      */
     function Uri(str) {
-        this.uriParts = parseUri(str);
-        this.queryPairs = parseQuery(this.uriParts.query);
-        this.hasAuthorityPrefixUserPref = null;
+      this.uriParts = parseUri(str);
+      this.queryPairs = parseQuery(this.uriParts.query);
+      this.hasAuthorityPrefixUserPref = null;
     }
 
     /**
      * Define getter/setter methods
      */
     ['protocol', 'userInfo', 'host', 'port', 'path', 'anchor'].forEach(function(key) {
-        Uri.prototype[key] = function(val) {
-            if (typeof val !== 'undefined') {
-                this.uriParts[key] = val;
-            }
-            return this.uriParts[key];
-        };
+      Uri.prototype[key] = function(val) {
+        if (typeof val !== 'undefined') {
+          this.uriParts[key] = val;
+        }
+        return this.uriParts[key];
+      };
     });
 
     /**
@@ -123,15 +122,15 @@
      * @return {Boolean}
      */
     Uri.prototype.hasAuthorityPrefix = function(val) {
-        if (typeof val !== 'undefined') {
-            this.hasAuthorityPrefixUserPref = val;
-        }
+      if (typeof val !== 'undefined') {
+        this.hasAuthorityPrefixUserPref = val;
+      }
 
-        if (this.hasAuthorityPrefixUserPref === null) {
-            return (this.uriParts.source.indexOf('//') !== -1);
-        } else {
-            return this.hasAuthorityPrefixUserPref;
-        }
+      if (this.hasAuthorityPrefixUserPref === null) {
+        return (this.uriParts.source.indexOf('//') !== -1);
+      } else {
+        return this.hasAuthorityPrefixUserPref;
+      }
     };
 
     /**
@@ -140,29 +139,28 @@
      * @return {string}         query string
      */
     Uri.prototype.query = function(val) {
-        var s = '',
-            i, param;
+      var s = '', i, param;
 
-        if (typeof val !== 'undefined') {
-            this.queryPairs = parseQuery(val);
-        }
+      if (typeof val !== 'undefined') {
+        this.queryPairs = parseQuery(val);
+      }
 
-        for (i = 0; i < this.queryPairs.length; i++) {
-            param = this.queryPairs[i];
-            if (s.length > 0) {
-                s += '&';
-            }
-            if (param[1] === null) {
-                s += param[0];
-            } else {
-                s += param[0];
-                s += '=';
-                if (param[1]) {
-                    s += encodeURIComponent(param[1]);
-                }
-            }
+      for (i = 0; i < this.queryPairs.length; i++) {
+        param = this.queryPairs[i];
+        if (s.length > 0) {
+          s += '&';
         }
-        return s.length > 0 ? '?' + s : s;
+        if (param[1] === null) {
+          s += param[0];
+        } else {
+          s += param[0];
+          s += '=';
+          if (param[1]) {
+            s += encodeURIComponent(param[1]);
+          }
+        }
+      }
+      return s.length > 0 ? '?' + s : s;
     };
 
     /**
@@ -171,13 +169,13 @@
      * @return {string}     first value found for key
      */
     Uri.prototype.getQueryParamValue = function (key) {
-        var param, i;
-        for (i = 0; i < this.queryPairs.length; i++) {
-            param = this.queryPairs[i];
-            if (key === param[0]) {
-                return param[1];
-            }
+      var param, i;
+      for (i = 0; i < this.queryPairs.length; i++) {
+        param = this.queryPairs[i];
+        if (key === param[0]) {
+          return param[1];
         }
+      }
     };
 
     /**
@@ -186,15 +184,14 @@
      * @return {array}      array of values
      */
     Uri.prototype.getQueryParamValues = function (key) {
-        var arr = [],
-            i, param;
-        for (i = 0; i < this.queryPairs.length; i++) {
-            param = this.queryPairs[i];
-            if (key === param[0]) {
-                arr.push(param[1]);
-            }
+      var arr = [], i, param;
+      for (i = 0; i < this.queryPairs.length; i++) {
+        param = this.queryPairs[i];
+        if (key === param[0]) {
+          arr.push(param[1]);
         }
-        return arr;
+      }
+      return arr;
     };
 
     /**
@@ -204,23 +201,22 @@
      * @return {Uri}            returns self for fluent chaining
      */
     Uri.prototype.deleteQueryParam = function (key, val) {
-        var arr = [],
-            i, param, keyMatchesFilter, valMatchesFilter;
+      var arr = [], i, param, keyMatchesFilter, valMatchesFilter;
 
-        for (i = 0; i < this.queryPairs.length; i++) {
+      for (i = 0; i < this.queryPairs.length; i++) {
 
-            param = this.queryPairs[i];
-            keyMatchesFilter = decode(param[0]) === decode(key);
-            valMatchesFilter = param[1] === val;
+        param = this.queryPairs[i];
+        keyMatchesFilter = decode(param[0]) === decode(key);
+        valMatchesFilter = param[1] === val;
 
-            if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && (!keyMatchesFilter || !valMatchesFilter))) {
-                arr.push(param);
-            }
+        if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && (!keyMatchesFilter || !valMatchesFilter))) {
+          arr.push(param);
         }
+      }
 
-        this.queryPairs = arr;
+      this.queryPairs = arr;
 
-        return this;
+      return this;
     };
 
     /**
@@ -231,13 +227,13 @@
      * @return {Uri}                returns self for fluent chaining
      */
     Uri.prototype.addQueryParam = function (key, val, index) {
-        if (arguments.length === 3 && index !== -1) {
-            index = Math.min(index, this.queryPairs.length);
-            this.queryPairs.splice(index, 0, [key, val]);
-        } else if (arguments.length > 0) {
-            this.queryPairs.push([key, val]);
-        }
-        return this;
+      if (arguments.length === 3 && index !== -1) {
+        index = Math.min(index, this.queryPairs.length);
+        this.queryPairs.splice(index, 0, [key, val]);
+      } else if (arguments.length > 0) {
+        this.queryPairs.push([key, val]);
+      }
+      return this;
     };
 
     /**
@@ -248,42 +244,40 @@
      * @return {Uri}                returns self for fluent chaining
      */
     Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
+      var index = -1, i, param;
 
-        var index = -1,
-            i, param;
-
-        if (arguments.length === 3) {
-            for (i = 0; i < this.queryPairs.length; i++) {
-                param = this.queryPairs[i];
-                if (decode(param[0]) === decode(key) && decodeURIComponent(param[1]) === decode(oldVal)) {
-                    index = i;
-                    break;
-                }
-            }
-            this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
-        } else {
-            for (i = 0; i < this.queryPairs.length; i++) {
-                param = this.queryPairs[i];
-                if (decode(param[0]) === decode(key)) {
-                    index = i;
-                    break;
-                }
-            }
-            this.deleteQueryParam(key);
-            this.addQueryParam(key, newVal, index);
+      if (arguments.length === 3) {
+        for (i = 0; i < this.queryPairs.length; i++) {
+          param = this.queryPairs[i];
+          if (decode(param[0]) === decode(key) && decodeURIComponent(param[1]) === decode(oldVal)) {
+            index = i;
+            break;
+          }
         }
-        return this;
+        this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
+      } else {
+        for (i = 0; i < this.queryPairs.length; i++) {
+          param = this.queryPairs[i];
+          if (decode(param[0]) === decode(key)) {
+            index = i;
+            break;
+          }
+        }
+        this.deleteQueryParam(key);
+        this.addQueryParam(key, newVal, index);
+      }
+      return this;
     };
 
     /**
      * Define fluent setter methods (setProtocol, setHasAuthorityPrefix, etc)
      */
     ['protocol', 'hasAuthorityPrefix', 'userInfo', 'host', 'port', 'path', 'query', 'anchor'].forEach(function(key) {
-        var method = 'set' + key.charAt(0).toUpperCase() + key.slice(1);
-        Uri.prototype[method] = function(val) {
-            this[key](val);
-            return this;
-        };
+      var method = 'set' + key.charAt(0).toUpperCase() + key.slice(1);
+      Uri.prototype[method] = function(val) {
+        this[key](val);
+        return this;
+      };
     });
 
     /**
@@ -291,22 +285,21 @@
      * @return {string} http:// or possibly just //
      */
     Uri.prototype.scheme = function() {
+      var s = '';
 
-        var s = '';
-
-        if (this.protocol()) {
-            s += this.protocol();
-            if (this.protocol().indexOf(':') !== this.protocol().length - 1) {
-                s += ':';
-            }
-            s += '//';
-        } else {
-            if (this.hasAuthorityPrefix() && this.host()) {
-                s += '//';
-            }
+      if (this.protocol()) {
+        s += this.protocol();
+        if (this.protocol().indexOf(':') !== this.protocol().length - 1) {
+          s += ':';
         }
+        s += '//';
+      } else {
+        if (this.hasAuthorityPrefix() && this.host()) {
+          s += '//';
+        }
+      }
 
-        return s;
+      return s;
     };
 
     /**
@@ -315,24 +308,23 @@
      * @see  https://developer.mozilla.org/en/nsIURI
      */
     Uri.prototype.origin = function() {
+      var s = this.scheme();
 
-        var s = this.scheme();
-
-        if (this.userInfo() && this.host()) {
-            s += this.userInfo();
-            if (this.userInfo().indexOf('@') !== this.userInfo().length - 1) {
-                s += '@';
-            }
+      if (this.userInfo() && this.host()) {
+        s += this.userInfo();
+        if (this.userInfo().indexOf('@') !== this.userInfo().length - 1) {
+          s += '@';
         }
+      }
 
-        if (this.host()) {
-            s += this.host();
-            if (this.port()) {
-                s += ':' + this.port();
-            }
+      if (this.host()) {
+        s += this.host();
+        if (this.port()) {
+          s += ':' + this.port();
         }
+      }
 
-        return s;
+      return s;
     };
 
     /**
@@ -340,40 +332,39 @@
      * @return {string}
      */
     Uri.prototype.toString = function() {
+      var path, s = this.origin();
 
-        var path, s = this.origin();
-
-        if (this.path()) {
-            path = this.path();
-            if (!(ENDS_WITH_SLASHES.test(s) || STARTS_WITH_SLASHES.test(path))) {
-                s += '/';
-            } else {
-                if (s) {
-                    s.replace(ENDS_WITH_SLASHES, '/');
-                }
-                path = path.replace(STARTS_WITH_SLASHES, '/');
-            }
-            s += path;
+      if (this.path()) {
+        path = this.path();
+        if (!(ENDS_WITH_SLASHES.test(s) || STARTS_WITH_SLASHES.test(path))) {
+          s += '/';
         } else {
-            if (this.host() && (this.query().toString() || this.anchor())) {
-                s += '/';
-            }
+          if (s) {
+            s.replace(ENDS_WITH_SLASHES, '/');
+          }
+          path = path.replace(STARTS_WITH_SLASHES, '/');
         }
-        if (this.query().toString()) {
-            if (this.query().toString().indexOf('?') !== 0) {
-                s += '?';
-            }
-            s += this.query().toString();
+        s += path;
+      } else {
+        if (this.host() && (this.query().toString() || this.anchor())) {
+          s += '/';
         }
+      }
+      if (this.query().toString()) {
+        if (this.query().toString().indexOf('?') !== 0) {
+          s += '?';
+        }
+        s += this.query().toString();
+      }
 
-        if (this.anchor()) {
-            if (this.anchor().indexOf('#') !== 0) {
-                s += '#';
-            }
-            s += this.anchor();
+      if (this.anchor()) {
+        if (this.anchor().indexOf('#') !== 0) {
+          s += '#';
         }
+        s += this.anchor();
+      }
 
-        return s;
+      return s;
     };
 
     /**
@@ -381,19 +372,19 @@
      * @return {Uri} duplicate copy of the Uri
      */
     Uri.prototype.clone = function() {
-        return new Uri(this.toString());
+      return new Uri(this.toString());
     };
 
     /**
      * export via AMD or CommonJS, otherwise leak a global
      */
     if (typeof define === 'function' && define.amd) {
-        define(function() {
-            return Uri;
-        });
+      define(function() {
+        return Uri;
+      });
     } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-        module.exports = Uri;
+      module.exports = Uri;
     } else {
-        global.Uri = Uri;
+      global.Uri = Uri;
     }
-}(this));
+  }(this));
