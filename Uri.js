@@ -330,6 +330,19 @@
   };
 
   /**
+   * Adds a trailing slash to the path
+   */
+  Uri.prototype.addTrailingSlash = function() {
+    var path = this.path() || ''
+
+    if (path.substr(-1) !== '/') {
+      this.path(path + '/')
+    }
+
+    return this;
+  }
+
+  /**
    * Serializes the internal state of the Uri object
    * @return {string}
    */

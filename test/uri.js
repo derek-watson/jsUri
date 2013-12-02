@@ -201,4 +201,11 @@ describe('Uri', function() {
         b = a.clone().addQueryParam('b', '2')
     expect(a.toString()).to.not.equal(b.toString())
   })
+
+  it('can add a trailing slash to the path', function() {
+    var str = new Uri('http://www.example.com/path?arr=1&arr=2')
+      .addTrailingSlash()
+      .toString()
+    expect(str).to.equal('http://www.example.com/path/?arr=1&arr=2')
+  })
 })
