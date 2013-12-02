@@ -24,9 +24,10 @@ Property methods accept an optional value to set
     uri.host('mydomain.com')
     uri.toString()    // https://user:pass@www.mydomain.com:81/index.html?q=books#fragment
 
-### Fluent Manipulation
-
-The fluent interface provides a simple way to chain property assignment
+Chainable setter methods help you compose strings
+    new Uri()
+        .setPath('/archives/1979/')
+        .setQuery('?page=1')                   // /archives/1979?page=1
 
     new Uri()
         .setPath('/index.html')
@@ -41,9 +42,6 @@ The fluent interface provides a simple way to chain property assignment
         .setHost('www.yahoo.com')
         .setProtocol('https')                  // https://www.yahoo.com
 
-    new Uri()
-        .setPath('/archives/1979/')
-        .setQuery('?page=1')                   // /archives/1979?page=1
 
 
 ### Query Parameter Access and Manipulation
