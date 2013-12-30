@@ -317,7 +317,7 @@
     var s = this.scheme();
 
     if (s == 'file://') {
-      return s + this.uriParts.authority
+      return s + this.uriParts.authority;
     }
 
     if (this.userInfo() && this.host()) {
@@ -341,14 +341,14 @@
    * Adds a trailing slash to the path
    */
   Uri.prototype.addTrailingSlash = function() {
-    var path = this.path() || ''
+    var path = this.path() || '';
 
     if (path.substr(-1) !== '/') {
-      this.path(path + '/')
+      this.path(path + '/');
     }
 
     return this;
-  }
+  };
 
   /**
    * Serializes the internal state of the Uri object

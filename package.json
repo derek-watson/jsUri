@@ -48,5 +48,22 @@
   "optionalDependencies": {},
   "engines": {
     "node": "*"
+  },
+  "jshintConfig": {
+    "boss":      true,
+    "node":      true,
+    "smarttabs": true,
+    "undef":     true,
+    "unused":    true,
+    "onecase":   true,
+    "lastsemic": true,
+    "indent":    2,
+    "newcap"        : true,
+    "noempty"       : true,
+    "nonew"         : true,
+    "nomen"         : true,
+    "sub"           : false,
+    "trailing"      : true,
+    "white"         : false
   }
 }
