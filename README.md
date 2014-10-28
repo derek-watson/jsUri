@@ -6,6 +6,8 @@ Uri parsing and manipulation for node.js and the browser.
 
 [![NPM](https://nodei.co/npm/jsuri.png)](https://nodei.co/npm/jsuri/)
 
+[![spm package](http://spmjs.io/badge/jsuri)](http://spmjs.io/package/jsuri)
+
 [![browser support](https://ci.testling.com/derek-watson/jsUri.png)](http://ci.testling.com/derek-watson/jsUri)
 
 Pass any url into the constructor

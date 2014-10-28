@@ -65,5 +65,8 @@
     "sub"           : false,
     "trailing"      : true,
     "white"         : false
+  },
+  "spm": {
+    "main": "Uri.js"
   }
 }
