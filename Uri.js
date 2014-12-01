@@ -260,7 +260,7 @@
           break;
         }
       }
-      this.deleteQueryParam(key, oldVal).addQueryParam(key, newVal, index);
+      this.deleteQueryParam(key, decode(oldVal)).addQueryParam(key, newVal, index);
     } else {
       for (i = 0; i < this.queryPairs.length; i++) {
         param = this.queryPairs[i];
