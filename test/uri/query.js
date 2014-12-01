@@ -136,6 +136,11 @@ describe('Uri', function() {
         expect(q.toString()).to.equal('?a=three&a=two')
       })
 
+      it('should be able to replace a param value with a specified value that does not exist', function() {
+        q = new Uri('?page=4&page=2').replaceQueryParam('page', 3, 1)
+        expect(q.toString()).to.equal('?page=4&page=2&page=3')
+      })
+
       it('should be able to handle multiple values for the same key', function() {
         q = new Uri().addQueryParam('a', 1)
         expect(q.toString()).to.equal('?a=1')
