@@ -114,7 +114,7 @@ new Uri('test.com?a=1&b=2&c=3&a=eh')
     .deleteQueryParam('a', 'eh')           // test.com/?a=1&b=2&c=3
 ```
 
-Create an identical uri object with no shared state:
+Create an identical URI object with no shared state:
 
 ```js
 var baseUri = new Uri('http://localhost/')
