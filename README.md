@@ -1,6 +1,6 @@
 # jsUri
 
-Uri parsing and manipulation for node.js and the browser.
+URI parsing and manipulation for node.js and the browser.
 
 [![Build Status](https://travis-ci.org/derek-watson/jsUri.png)](https://travis-ci.org/derek-watson/jsUri)
 
@@ -10,13 +10,13 @@ Uri parsing and manipulation for node.js and the browser.
 
 [![browser support](https://ci.testling.com/derek-watson/jsUri.png)](http://ci.testling.com/derek-watson/jsUri)
 
-Pass any url into the constructor
+Pass any URL into the constructor:
 
 ```js
 var uri = new Uri('http://user:pass@www.test.com:81/index.html?q=books#fragment')
 ```
 
-Use property methods to get at the various parts
+Use property methods to get at the various parts:
 
 ```js
 uri.protocol()    // http
@@ -28,7 +28,7 @@ uri.query()       // q=books
 uri.anchor()      // fragment
 ```
 
-Property methods accept an optional value to set
+Property methods accept an optional value to set:
 
 ```js
 uri.protocol('https')
@@ -38,7 +38,7 @@ uri.host('mydomain.com')
 uri.toString()    // https://user:pass@mydomain.com:81/index.html?q=books#fragment
 ```
 
-Chainable setter methods help you compose strings
+Chainable setter methods help you compose strings:
 
 ```js
 new Uri()
@@ -61,25 +61,25 @@ new Uri('http://www.test.com')
 
 ## Query param methods
 
-Returns the first query param value for the key
+Returns the first query param value for the key:
 
 ```js
 new Uri('?cat=1&cat=2&cat=3').getQueryParamValue('cat')             // 1
 ```
 
-Returns all query param values for the given key
+Returns all query param values for the given key:
 
 ```js
 new Uri('?cat=1&cat=2&cat=3').getQueryParamValues('cat')            // [1, 2, 3]
 ```
 
-Internally, query key/value pairs are stored as a series of two-value arrays in the Query object
+Internally, query key/value pairs are stored as a series of two-value arrays in the Query object:
 
 ```js
 new Uri('?a=b&c=d').query().params                  // [ ['a', 'b'], ['c', 'd']]
 ```
 
-Add query param values
+Add query param values:
 
 ```js
 new Uri().addQueryParam('q', 'books')               // ?q=books
@@ -92,7 +92,7 @@ new Uri('http://www.github.com')
 new Uri('?b=2&c=3&d=4').addQueryParam('a', '1', 0)  // ?a=1&b=2&c=3&d=4
 ```
 
-Replace every query string parameter named `key` with `newVal`
+Replace every query string parameter named `key` with `newVal`:
 
 ```js
 new Uri().replaceQueryParam('page', 2)     // ?page=2
@@ -104,7 +104,7 @@ new Uri('?a=1&b=2&c=3&c=4&c=5&c=6')
     .replaceQueryParam('c', 'five', '5')   // ?a=1&b=2&c=3&c=4&c=five&c=6
 ```
 
-Removes instances of query parameters named `key`
+Removes instances of query parameters named `key`:
 
 ```js
 new Uri('?a=1&b=2&c=3')
@@ -114,7 +114,7 @@ new Uri('test.com?a=1&b=2&c=3&a=eh')
     .deleteQueryParam('a', 'eh')           // test.com/?a=1&b=2&c=3
 ```
 
-Create an identical uri object with no shared state
+Create an identical uri object with no shared state:
 
 ```js
 var baseUri = new Uri('http://localhost/')
