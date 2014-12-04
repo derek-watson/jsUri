@@ -111,9 +111,24 @@ describe('Uri', function() {
         expect(q.toString()).to.equal('?b=2&c=3&a=eh')
       })
 
+      it('should not do anything if passed no params', function() {
+        q = new Uri('?a=1&b=2&c=3').addQueryParam()
+        expect(q.toString()).to.equal('?a=1&b=2&c=3')
+      })
+
       it('should be able to directly replace a query param', function() {
         q = new Uri('?a=1&b=2&c=3').replaceQueryParam('a', 'eh')
         expect(q.toString()).to.equal('?a=eh&b=2&c=3')
+      })
+
+      it('should remove an extra question mark', function() {
+        q = new Uri('??a=1&b=2&c=3').replaceQueryParam('a', 4)
+        expect(q.toString()).to.equal('?a=4&b=2&c=3')
+      })
+
+      it('should remove a param without a key', function() {
+        q = new Uri('?=1&b=2&c=3').replaceQueryParam('a', 4)
+        expect(q.toString()).to.equal('?b=2&c=3&a=4')
       })
 
       it('should be able to replace a query param value that does not exist', function() {
@@ -141,6 +156,11 @@ describe('Uri', function() {
         expect(q.toString()).to.equal('?page=4&page=2&page=3')
       })
 
+      it('should replace a param value with an empty value if not provided a value', function() {
+        q = new Uri('?page=4&page=2').replaceQueryParam('page')
+        expect(q.toString()).to.equal('?page=')
+      })
+
       it('should be able to handle multiple values for the same key', function() {
         q = new Uri().addQueryParam('a', 1)
         expect(q.toString()).to.equal('?a=1')
@@ -157,6 +177,16 @@ describe('Uri', function() {
         q.deleteQueryParam('a')
         expect(q.toString()).to.equal('')
         expect(q.getQueryParamValues('a').length).to.equal(0)
+      })
+
+      it('should not add a trailing slash if one is already present', function () {
+        q = new Uri('stuff/').addTrailingSlash();
+        expect(q.toString()).to.equal('stuff/')
+      })
+
+      it('should add a trailing slash to an empty uri', function () {
+        q = new Uri().addTrailingSlash();
+        expect(q.toString()).to.equal('/')
       })
     })
 
