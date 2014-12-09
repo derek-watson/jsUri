@@ -43,7 +43,8 @@
     "jshint": "~2.1.11",
     "uglify-js": "~2.4.0",
     "mocha": "~1.14.0",
-    "chai": "~1.9.2"
+    "chai": "~1.9.2",
+    "ghooks": "~0.2.2"
   },
   "optionalDependencies": {},
   "engines": {
@@ -68,5 +69,10 @@
   },
   "spm": {
     "main": "Uri.js"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm test && npm run lint"
+    }
   }
 }
