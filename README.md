@@ -8,8 +8,6 @@ URI parsing and manipulation for node.js and the browser.
 
 [![spm package](http://spmjs.io/badge/jsuri)](http://spmjs.io/package/jsuri)
 
-[![browser support](https://ci.testling.com/derek-watson/jsUri.png)](http://ci.testling.com/derek-watson/jsUri)
-
 Pass any URL into the constructor:
 
 ```js
