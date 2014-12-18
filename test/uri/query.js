@@ -153,7 +153,7 @@ describe('Uri', function() {
 
       it('should be able to replace a param value with a specified value that does not exist', function() {
         q = new Uri('?page=4&page=2').replaceQueryParam('page', 3, 1)
-        expect(q.toString()).to.equal('?page=4&page=2&page=3')
+        expect(q.toString()).to.equal('?page=4&page=2')
       })
 
       it('should replace a param value with an empty value if not provided a value', function() {
