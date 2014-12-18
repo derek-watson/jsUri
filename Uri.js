@@ -85,7 +85,7 @@
 
     ps = str.toString().split(re.query_separator);
 
-    for (i = 0; i < ps.length; i++) {
+    for (i = 0, l = ps.length; i < l; i++) {
       p = ps[i];
       n = p.indexOf('=');
 
@@ -151,7 +151,7 @@
       this.queryPairs = parseQuery(val);
     }
 
-    for (i = 0; i < this.queryPairs.length; i++) {
+    for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
       if (s.length > 0) {
         s += '&';
@@ -176,7 +176,7 @@
    */
   Uri.prototype.getQueryParamValue = function (key) {
     var param, i;
-    for (i = 0; i < this.queryPairs.length; i++) {
+    for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
       if (key === param[0]) {
         return param[1];
@@ -191,7 +191,7 @@
    */
   Uri.prototype.getQueryParamValues = function (key) {
     var arr = [], i, param;
-    for (i = 0; i < this.queryPairs.length; i++) {
+    for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
       if (key === param[0]) {
         arr.push(param[1]);
@@ -209,7 +209,7 @@
   Uri.prototype.deleteQueryParam = function (key, val) {
     var arr = [], i, param, keyMatchesFilter, valMatchesFilter;
 
-    for (i = 0; i < this.queryPairs.length; i++) {
+    for (i = 0, l = this.queryPairs.length; i < l; i++) {
 
       param = this.queryPairs[i];
       keyMatchesFilter = decode(param[0]) === decode(key);
@@ -250,10 +250,10 @@
    * @return {Uri}                returns self for fluent chaining
    */
   Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
-    var index = -1, i, param;
+    var index = -1, len = this.queryPairs.length, i, param;
 
     if (arguments.length === 3) {
-      for (i = 0; i < this.queryPairs.length; i++) {
+      for (i = 0; i < len; i++) {
         param = this.queryPairs[i];
         if (decode(param[0]) === decode(key) && decodeURIComponent(param[1]) === decode(oldVal)) {
           index = i;
@@ -262,7 +262,7 @@
       }
       this.deleteQueryParam(key, decode(oldVal)).addQueryParam(key, newVal, index);
     } else {
-      for (i = 0; i < this.queryPairs.length; i++) {
+      for (i = 0; i < len; i++) {
         param = this.queryPairs[i];
         if (decode(param[0]) === decode(key)) {
           index = i;
