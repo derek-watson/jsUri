@@ -400,9 +400,6 @@
       }
     }
     if (this.query().toString()) {
-      if (this.query().toString().indexOf('?') !== 0) {
-        s += '?';
-      }
       s += this.query().toString();
     }
 
