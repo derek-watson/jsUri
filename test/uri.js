@@ -220,4 +220,15 @@ describe('Uri', function() {
      var parsed = new Uri('http://example.com' + originalQuery)
      expect(parsed.query()).to.equal(originalQuery)
   })
+
+  it('parse + character correctly without changing it', function() {
+     var parsed = new Uri('http://example.com?test=a+b')
+     expect(parsed.toString()).to.equal('http://example.com/?test=a%20b')
+  })
+
+  it('parse + character correctly without changing it', function() {
+     var test = new Uri('http://example.com?test=a+b').getQueryParamValue('test')
+     expect(test).to.equal('a b')
+  })
+
 })
