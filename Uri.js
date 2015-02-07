@@ -20,7 +20,7 @@
     ends_with_slashes: /\/+$/,
     pluses: /\+/g,
     query_separator: /[&;]/,
-    uri_parser: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d+))?(:)?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+    uri_parser: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d+|(?=:)))?(:)?)((((?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
   };
 
   /**
@@ -165,7 +165,7 @@
 
   Uri.prototype.isColonUri = function (val) {
     if (typeof val !== 'undefined') {
-      this.isColonUri = !!val;
+      this.uriParts.isColonUri = !!val;
     } else {
       return !!this.uriParts.isColonUri;
     }
@@ -359,7 +359,7 @@
 
     if (this.host()) {
       s += this.host();
-      if (this.port()) {
+      if (this.port() || (this.path() && this.path().substr(0, 1).match(/[0-9]/))) {
         s += ':' + this.port();
       }
     }
