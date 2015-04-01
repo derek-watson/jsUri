@@ -66,8 +66,8 @@
    */
   function decode(s) {
     if (s) {
-      s = decodeURIComponent(s);
-      s = s.replace(re.pluses, ' ');
+        s = s.toString().replace(re.pluses, '%20');
+        s = decodeURIComponent(s);
     }
     return s;
   }
@@ -114,8 +114,8 @@
       n = p.indexOf('=');
 
       if (n !== 0) {
-        k = decodeURIComponent(p.substring(0, n));
-        v = decodeURIComponent(p.substring(n + 1));
+        k = decode(p.substring(0, n));
+        v = decode(p.substring(n + 1));
         pairs.push(n === -1 ? [p, null] : [k, v]);
       }
 
