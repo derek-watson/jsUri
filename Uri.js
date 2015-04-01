@@ -20,7 +20,7 @@
     ends_with_slashes: /\/+$/,
     pluses: /\+/g,
     query_separator: /[&;]/,
-    uri_parser: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+    uri_parser: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*)(?::([^:@]*))?)?@)?(\[[0-9a-fA-F:.]+\]|[^:\/?#]*)(?::(\d+|(?=:)))?(:)?)((((?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
   };
 
   /**
@@ -79,7 +79,7 @@
    */
   function parseUri(str) {
     var parser = re.uri_parser;
-    var parserKeys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"];
+    var parserKeys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "isColonUri", "relative", "path", "directory", "file", "query", "anchor"];
     var m = parser.exec(str || '');
     var parts = {};
 
@@ -160,6 +160,14 @@
       return (this.uriParts.source.indexOf('//') !== -1);
     } else {
       return this.hasAuthorityPrefixUserPref;
+    }
+  };
+
+  Uri.prototype.isColonUri = function (val) {
+    if (typeof val !== 'undefined') {
+      this.uriParts.isColonUri = !!val;
+    } else {
+      return !!this.uriParts.isColonUri;
     }
   };
 
@@ -304,7 +312,7 @@
   /**
    * Define fluent setter methods (setProtocol, setHasAuthorityPrefix, etc)
    */
-  ['protocol', 'hasAuthorityPrefix', 'userInfo', 'host', 'port', 'path', 'query', 'anchor'].forEach(function(key) {
+  ['protocol', 'hasAuthorityPrefix', 'isColonUri', 'userInfo', 'host', 'port', 'path', 'query', 'anchor'].forEach(function(key) {
     var method = 'set' + key.charAt(0).toUpperCase() + key.slice(1);
     Uri.prototype[method] = function(val) {
       this[key](val);
@@ -342,10 +350,6 @@
   Uri.prototype.origin = function() {
     var s = this.scheme();
 
-    if (s == 'file://') {
-      return s + this.uriParts.authority;
-    }
-
     if (this.userInfo() && this.host()) {
       s += this.userInfo();
       if (this.userInfo().indexOf('@') !== this.userInfo().length - 1) {
@@ -355,7 +359,7 @@
 
     if (this.host()) {
       s += this.host();
-      if (this.port()) {
+      if (this.port() || (this.path() && this.path().substr(0, 1).match(/[0-9]/))) {
         s += ':' + this.port();
       }
     }
@@ -383,7 +387,11 @@
   Uri.prototype.toString = function() {
     var path, s = this.origin();
 
-    if (this.path()) {
+    if (this.isColonUri()) {
+      if (this.path()) {
+        s += ':'+this.path();
+      }
+    } else if (this.path()) {
       path = this.path();
       if (!(re.ends_with_slashes.test(s) || re.starts_with_slashes.test(path))) {
         s += '/';
