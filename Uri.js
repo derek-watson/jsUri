@@ -193,7 +193,7 @@
       } else {
         s += param[0];
         s += '=';
-        if (param[1]) {
+        if (typeof param[1] !== 'undefined') {
           s += encodeURIComponent(param[1]);
         }
       }
