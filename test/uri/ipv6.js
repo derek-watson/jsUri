@@ -4,6 +4,8 @@ var Uri = (typeof(require) === 'function') ? require('../../Uri') : window.Uri
 
 describe('Uri', function() {
 
+  var u
+
   it('understand ipv6 host', function (){
     expect(new Uri('https://[2001:db8:85a3:8d3:1319:8a2e:370:7348]:12:').toString()).to.equal('https://[2001:db8:85a3:8d3:1319:8a2e:370:7348]:12')
     expect(new Uri('https://[::ffff:192.169.0.1]:12:').toString()).to.equal('https://[::ffff:192.169.0.1]:12')

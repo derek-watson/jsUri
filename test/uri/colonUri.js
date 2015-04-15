@@ -5,7 +5,7 @@ var Uri = (typeof(require) === 'function') ? require('../../Uri') : window.Uri
 describe('Uri', function() {
   describe('ssh url', function() {
     it('should not add slashes when it is colon uri', function (){
-      u = new Uri('ssh://test.com:')
+      var u = new Uri('ssh://test.com:')
       u.setPath('relativePath')
       expect(u.toString()).to.equal('ssh://test.com:relativePath')
       u.setPath('/relativePath')
@@ -13,14 +13,14 @@ describe('Uri', function() {
     })
 
     it('understand isColonUti', function (){
-      u = new Uri('ssh://test.com')
+      var u = new Uri('ssh://test.com')
       u.isColonUri(true);
       u.setPath('relativePath')
       expect(u.toString()).to.equal('ssh://test.com:relativePath')
     })
 
     it('can remove and re-add isColonUti', function (){
-      u = new Uri('ssh://test.com:pathtest')
+      var u = new Uri('ssh://test.com:pathtest')
       u.isColonUri(false);
       u.setPath('relativePath')
       expect(u.toString()).to.equal('ssh://test.com/relativePath')
@@ -35,7 +35,7 @@ describe('Uri', function() {
     })
 
     it('should correctly add port', function (){
-      u = new Uri('test.com:')
+      var u = new Uri('test.com:')
       u.setPort(123);
       u.setPath('123this/is/a/path');
       expect(u.toString()).to.equal('test.com:123:123this/is/a/path')

@@ -223,22 +223,21 @@ describe('Uri', function() {
 
   it('parse + character correctly', function() {
      var parsed = new Uri('http://example.com?test=a%2Bb')
-     expect(parsed.toString()).to.equal('http://example.com/?test=a%2Bb')
+     assert.equal(parsed.toString(), 'http://example.com/?test=a%2Bb')
   })
 
   it('Read + character correctly', function() {
      var test = new Uri('http://example.com?test=a%2Bb').getQueryParamValue('test')
-     expect(test).to.equal('a+b')
+     assert.equal(test, 'a+b')
   })
 
   it('parse space character encoded as + correctly', function() {
      var parsed = new Uri('http://example.com?test=a+b')
-     expect(parsed.toString()).to.equal('http://example.com/?test=a%20b')
+     assert.equal(parsed.toString(), 'http://example.com/?test=a%20b')
   })
 
   it('Read parsed space character encoded as + correctly', function() {
      var test = new Uri('http://example.com?test=a+b').getQueryParamValue('test')
-     expect(test).to.equal('a b')
+     assert.equal(test, 'a b')
   })
-
 })

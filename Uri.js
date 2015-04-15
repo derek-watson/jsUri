@@ -96,7 +96,7 @@
    * @return {array}      array of arrays (key/value pairs)
    */
   function parseQuery(str) {
-    var i, ps, p, n, k, v;
+    var i, ps, p, n, k, v, l;
     var pairs = [];
 
     if (typeof(str) === 'undefined' || str === null || str === '') {
@@ -177,7 +177,7 @@
    * @return {string}         query string
    */
   Uri.prototype.query = function(val) {
-    var s = '', i, param;
+    var s = '', i, param, l;
 
     if (typeof val !== 'undefined') {
       this.queryPairs = parseQuery(val);
@@ -207,7 +207,7 @@
    * @return {string}     first value found for key
    */
   Uri.prototype.getQueryParamValue = function (key) {
-    var param, i;
+    var param, i, l;
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
       if (key === param[0]) {
@@ -222,7 +222,7 @@
    * @return {array}      array of values
    */
   Uri.prototype.getQueryParamValues = function (key) {
-    var arr = [], i, param;
+    var arr = [], i, param, l;
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
       if (key === param[0]) {
@@ -239,7 +239,7 @@
    * @return {Uri}            returns self for fluent chaining
    */
   Uri.prototype.deleteQueryParam = function (key, val) {
-    var arr = [], i, param, keyMatchesFilter, valMatchesFilter;
+    var arr = [], i, param, keyMatchesFilter, valMatchesFilter, l;
 
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
 
