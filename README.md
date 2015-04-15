@@ -112,6 +112,16 @@ new Uri('test.com?a=1&b=2&c=3&a=eh')
     .deleteQueryParam('a', 'eh')           // test.com/?a=1&b=2&c=3
 ```
 
+Test for the existence of query parameters named `key`:
+
+```js
+new Uri('?a=1&b=2&c=3')
+    .hasQueryParam('a')                    // true
+
+new Uri('?a=1&b=2&c=3')
+    .hasQueryParam('d')                    // false
+```
+
 Create an identical URI object with no shared state:
 
 ```js
