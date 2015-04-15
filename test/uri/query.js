@@ -252,5 +252,11 @@ describe('Uri', function() {
         assert.equal(q.toString(), '?multi word key=2')
       })
     })
+
+    describe('testing for the existence of query params', function() {
+      q = new Uri('?this=that')
+      assert(q.hasQueryParam('this'))
+      assert(!q.hasQueryParam('theother'))
+    })
   })
 })
