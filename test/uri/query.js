@@ -71,6 +71,11 @@ describe('Uri', function() {
         assert.equal(q.toString(), '?q=books')
       })
 
+      it('can add a query param with a value of zero', function() {
+        q = new Uri('').addQueryParam('pg', 0)
+        assert.equal(q.toString(), '?pg=0')
+      })
+
       it('should be able to delete a query param', function() {
         q = new Uri('?a=1&b=2&c=3&a=eh').deleteQueryParam('b')
         assert.equal(q.toString(), '?a=1&c=3&a=eh')
