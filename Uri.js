@@ -276,10 +276,8 @@
 
   /**
    * test for the existence of a query parameter
-   * @param  {string}  key        add values for key
-   * @param  {string}  val        value to add
-   * @param  {integer} [index]    specific index to add the value at
-   * @return {Uri}                returns self for fluent chaining
+   * @param  {string}  key        check values for key
+   * @return {Boolean}            true if key exists, otherwise false
    */
   Uri.prototype.hasQueryParam = function (key) {
     var i, len = this.queryPairs.length;
