@@ -240,4 +240,19 @@ describe('Uri', function() {
      var test = new Uri('http://example.com?test=a+b').getQueryParamValue('test')
      assert.equal(test, 'a b')
   })
+
+  it('Should be able to use @ as normal character in a url', function () {
+      u = new Uri('http://example.com/username@email.com/page')
+      assert.equal(u.path(), '/username@email.com/page')
+  })
+
+  it('Should be able to use @ as normal character in a url has port', function () {
+      u = new Uri('http://example.com:8080/personal/username@email.com/page')
+      assert.equal(u.port(), '8080')
+  })
+
+  it('Should be able to use @ as normal character in a url has username, password and port ', function () {
+    u = new Uri('http://username:password@example.com:8080/username@email.com/page')
+    assert.equal(u.port(), '8080')
+  })
 })
