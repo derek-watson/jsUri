@@ -253,10 +253,34 @@ describe('Uri', function() {
       })
     })
 
-    describe('testing for the existence of query params', function() {
-      q = new Uri('?this=that')
-      assert(q.hasQueryParam('this'))
-      assert(!q.hasQueryParam('theother'))
+    describe('comparing existing or partial query params and values', function() {
+      it('is able to find (or not find) query params', function() {
+        q = new Uri('?this=that')
+        assert(q.hasQueryParam('this'))
+        assert(!q.hasQueryParam('theother'))
+      })
+
+      it('is able to test for existence of params with missing values', function() {
+        q = new Uri('?aa&bb=')
+        assert(q.hasQueryParam('aa'))
+        assert(q.hasQueryParam('bb'))
+        assert(!q.hasQueryParam('cc'))
+      })
+
+      it('should get null value for a param with no value (without "=")', function() {
+        q = new Uri('?aa')
+        assert.strictEqual(q.getQueryParamValue('aa'), null)
+      })
+
+      it('should get empty string value for a missing param value (with a dangling "=")', function() {
+        q = new Uri('?aa=')
+        assert.strictEqual(q.getQueryParamValue('aa'), '')
+      })
+
+      it('should get undefined value for a nonexistant param', function() {
+        q = new Uri('?aa=')
+        assert.strictEqual(q.getQueryParamValue('bb'), undefined)
+      })
     })
   })
 })
