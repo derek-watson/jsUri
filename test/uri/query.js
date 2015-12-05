@@ -86,9 +86,24 @@ describe('Uri', function() {
         assert.equal(q.toString(), '?a=1&b=2&c=3')
       })
 
-      it('should be able to add a null param', function() {
+      it('should be able to add a null valued param', function() {
+        q = new Uri('?a=1&b=2&c=3').addQueryParam('f', null)
+        assert.equal(q.toString(), '?a=1&b=2&c=3&f')
+      })
+
+      it('should be able to add an empty string valued param', function() {
+        q = new Uri('?a=1&b=2&c=3').addQueryParam('e', '')
+        assert.equal(q.toString(), '?a=1&b=2&c=3&e=')
+      })
+
+      it('should be able to add a undefined valued param as if an empty string', function() {
         q = new Uri('?a=1&b=2&c=3').addQueryParam('d')
         assert.equal(q.toString(), '?a=1&b=2&c=3&d=')
+      })
+
+      it('should be a noop to add an undefined-key param', function() {
+        q = new Uri('?a=1&b=2&c=3').addQueryParam()
+        assert.equal(q.toString(), '?a=1&b=2&c=3')
       })
 
       it('should be able to add a key and a value', function() {
