@@ -86,9 +86,24 @@ describe('Uri', function() {
         assert.equal(q.toString(), '?a=1&b=2&c=3')
       })
 
-      it('should be able to add a null param', function() {
+      it('should be able to add a null valued param', function() {
+        q = new Uri('?a=1&b=2&c=3').addQueryParam('f', null)
+        assert.equal(q.toString(), '?a=1&b=2&c=3&f')
+      })
+
+      it('should be able to add an empty string valued param', function() {
+        q = new Uri('?a=1&b=2&c=3').addQueryParam('e', '')
+        assert.equal(q.toString(), '?a=1&b=2&c=3&e=')
+      })
+
+      it('should be able to add a undefined valued param as if an empty string', function() {
         q = new Uri('?a=1&b=2&c=3').addQueryParam('d')
         assert.equal(q.toString(), '?a=1&b=2&c=3&d=')
+      })
+
+      it('should be a noop to add an undefined-key param', function() {
+        q = new Uri('?a=1&b=2&c=3').addQueryParam()
+        assert.equal(q.toString(), '?a=1&b=2&c=3')
       })
 
       it('should be able to add a key and a value', function() {
@@ -253,10 +268,34 @@ describe('Uri', function() {
       })
     })
 
-    describe('testing for the existence of query params', function() {
-      q = new Uri('?this=that')
-      assert(q.hasQueryParam('this'))
-      assert(!q.hasQueryParam('theother'))
+    describe('comparing existing or partial query params and values', function() {
+      it('is able to find (or not find) query params', function() {
+        q = new Uri('?this=that')
+        assert(q.hasQueryParam('this'))
+        assert(!q.hasQueryParam('theother'))
+      })
+
+      it('is able to test for existence of params with missing values', function() {
+        q = new Uri('?aa&bb=')
+        assert(q.hasQueryParam('aa'))
+        assert(q.hasQueryParam('bb'))
+        assert(!q.hasQueryParam('cc'))
+      })
+
+      it('should get null value for a param with no value (without "=")', function() {
+        q = new Uri('?aa')
+        assert.strictEqual(q.getQueryParamValue('aa'), null)
+      })
+
+      it('should get empty string value for a missing param value (with a dangling "=")', function() {
+        q = new Uri('?aa=')
+        assert.strictEqual(q.getQueryParamValue('aa'), '')
+      })
+
+      it('should get undefined value for a nonexistant param', function() {
+        q = new Uri('?aa=')
+        assert.strictEqual(q.getQueryParamValue('bb'), undefined)
+      })
     })
   })
 })
