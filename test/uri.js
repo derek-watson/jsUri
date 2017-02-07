@@ -255,4 +255,17 @@ describe('Uri', function() {
     u = new Uri('http://username:password@example.com:8080/username@email.com/page')
     assert.equal(u.port(), '8080')
   })
+
+  it('Should be able to match query param keys as case insensitive', function () {
+    u = new Uri('http://example.com/search?qI=a&qi=a').caseSensitive(false)
+    assert.equal(u.getQueryParamValue('qi'), 'a')
+    assert.equal(u.getQueryParamValue('QI'), 'a')
+    assert.deepEqual(u.getQueryParamValues('QI'), ['a', 'a'])
+  })
+
+  // it('should be able delete query params when case insensitive', function() {
+  //   u = new Uri('http://example.com/search?q=a&stupid=yes').caseSensitive(false)
+  //   u.deleteQueryParam('stupId')
+  //   assert.equal(u.toString(), 'http://example.com/search?q=a')
+  // })
 })

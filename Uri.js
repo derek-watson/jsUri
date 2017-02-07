@@ -132,6 +132,7 @@
     this.uriParts = parseUri(str);
     this.queryPairs = parseQuery(this.uriParts.query);
     this.hasAuthorityPrefixUserPref = null;
+    this.isCaseSensitive = true;
   }
 
   /**
@@ -161,6 +162,16 @@
     } else {
       return this.hasAuthorityPrefixUserPref;
     }
+  };
+
+  /**
+   * Sets case sensitivity for matching query params keys.
+   * @param  {Boolean}  val
+   * @return {Uri}
+   */
+  Uri.prototype.caseSensitive = function(val) {
+    this.isCaseSensitive = val;
+    return this;
   };
 
   Uri.prototype.isColonUri = function (val) {
@@ -210,7 +221,11 @@
     var param, i, l;
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
-      if (key === param[0]) {
+      if (this.isCaseSensitive) {
+        if (key === param[0]) {
+          return param[1];
+        }
+      } else if (key.toLowerCase() === param[0].toLowerCase()) {
         return param[1];
       }
     }
@@ -225,8 +240,12 @@
     var arr = [], i, param, l;
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
-      if (key === param[0]) {
-        arr.push(param[1]);
+      if (this.isCaseSensitive) {
+        if (key === param[0]) {
+          arr.push(param[1]);
+        }
+      } else if (key.toLowerCase() === param[0].toLowerCase()) {
+          arr.push(param[1]);
       }
     }
     return arr;
