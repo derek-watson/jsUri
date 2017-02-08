@@ -24,42 +24,6 @@
   };
 
   /**
-   * Define forEach for older js environments
-   * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach#Compatibility
-   */
-  if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function(callback, thisArg) {
-      var T, k;
-
-      if (this == null) {
-        throw new TypeError(' this is null or not defined');
-      }
-
-      var O = Object(this);
-      var len = O.length >>> 0;
-
-      if (typeof callback !== "function") {
-        throw new TypeError(callback + ' is not a function');
-      }
-
-      if (arguments.length > 1) {
-        T = thisArg;
-      }
-
-      k = 0;
-
-      while (k < len) {
-        var kValue;
-        if (k in O) {
-          kValue = O[k];
-          callback.call(T, kValue, k, O);
-        }
-        k++;
-      }
-    };
-  }
-
-  /**
    * unescape a query param value
    * @param  {string} s encoded value
    * @return {string}   decoded value
@@ -210,10 +174,11 @@
     var param, i, l;
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
-      if (key === param[0]) {
+      if (key.toLowerCase() === param[0].toLowerCase()) {
         return param[1];
       }
     }
+    return undefined;
   };
 
   /**
@@ -282,8 +247,9 @@
   Uri.prototype.hasQueryParam = function (key) {
     var i, len = this.queryPairs.length;
     for (i = 0; i < len; i++) {
-      if (this.queryPairs[i][0] == key)
-        return true;
+	    if (this.queryPairs[i][0].toLowerCase() === key.toLowerCase()) {
+		    return true;
+	    }
     }
     return false;
   };

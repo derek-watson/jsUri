@@ -18,6 +18,16 @@ describe('Uri', function() {
         assert.equal(q.getQueryParamValue('email'), 'user@example.com')
       })
 
+      it('should ignore case when parsing', function(){
+        q = new Uri('?isValid=true')
+        assert.equal(q.getQueryParamValue('isvalid'), 'true')
+      })
+
+	    it('should ignore case when retrieving', function(){
+        q = new Uri('?isvalid=true')
+        assert.equal(q.getQueryParamValue('isValid'), 'true')
+      })
+
       it('should include an equal sign if there was one present without a query value', function() {
         q = new Uri('?11=')
         assert.equal(q.toString(), '?11=')
@@ -274,6 +284,12 @@ describe('Uri', function() {
         assert(q.hasQueryParam('this'))
         assert(!q.hasQueryParam('theother'))
       })
+
+	    it('is able to find (or not find) query params - case insensitive', function() {
+          q = new Uri('?This=that')
+          assert(q.hasQueryParam('this'))
+          assert(!q.hasQueryParam('theother'))
+        })
 
       it('is able to test for existence of params with missing values', function() {
         q = new Uri('?aa&bb=')
