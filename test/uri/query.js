@@ -173,11 +173,6 @@ describe('Uri', function() {
          assert.equal(q.toString(), '?a=eh&b=2&c=3')
        })
 
-	    it('should be able to directly replace a query param - case insensitive and replace case for replaced param', function() {
-          q = new Uri('?a=1&b=2&c=3').replaceQueryParam('A', 'eh')
-          assert.equal(q.toString(), '?A=eh&b=2&c=3')
-        })
-
       it('should remove an extra question mark', function() {
         q = new Uri('??a=1&b=2&c=3').replaceQueryParam('a', 4)
         assert.equal(q.toString(), '?a=4&b=2&c=3')

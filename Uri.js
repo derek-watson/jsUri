@@ -80,7 +80,7 @@
       if (n !== 0) {
         k = decode(p.substring(0, n));
         v = decode(p.substring(n + 1));
-        pairs.push(n === -1 ? [p, null] : [k, v]);
+        pairs.push(n === -1 ? [p.toLowerCase(), null] : [k.toLowerCase(), v]);
       }
 
     }
@@ -190,7 +190,7 @@
     var arr = [], i, param, l;
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
-      if (key.toLowerCase() === param[0].toLowerCase()) {
+      if (key === param[0]) {
         arr.push(param[1]);
       }
     }
@@ -247,7 +247,7 @@
   Uri.prototype.hasQueryParam = function (key) {
     var i, len = this.queryPairs.length;
     for (i = 0; i < len; i++) {
-	    if (this.queryPairs[i][0].toLowerCase() === key.toLowerCase()) {
+	    if (this.queryPairs[i][0] === key) {
 		    return true;
 	    }
     }
@@ -267,7 +267,7 @@
     if (arguments.length === 3) {
       for (i = 0; i < len; i++) {
         param = this.queryPairs[i];
-        if (decode(param[0]).toLowerCase() === decode(key).toLowerCase() && decodeURIComponent(param[1]).toLowerCase() === decode(oldVal).toLowerCase()) {
+        if (decode(param[0]) === decode(key) && decodeURIComponent(param[1]) === decode(oldVal)) {
           index = i;
           break;
         }
@@ -278,7 +278,7 @@
     } else {
       for (i = 0; i < len; i++) {
         param = this.queryPairs[i];
-        if (decode(param[0]).toLowerCase() === decode(key).toLowerCase()) {
+        if (decode(param[0]) === decode(key)) {
           index = i;
           break;
         }
