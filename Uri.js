@@ -190,7 +190,7 @@
     var arr = [], i, param, l;
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
       param = this.queryPairs[i];
-      if (key === param[0]) {
+      if (key.toLowerCase() === param[0].toLowerCase()) {
         arr.push(param[1]);
       }
     }
@@ -209,7 +209,7 @@
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
 
       param = this.queryPairs[i];
-      keyMatchesFilter = decode(param[0]) === decode(key);
+      keyMatchesFilter = decode(param[0]).toLowerCase() === decode(key).toLowerCase();
       valMatchesFilter = param[1] === val;
 
       if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && (!keyMatchesFilter || !valMatchesFilter))) {
@@ -226,7 +226,7 @@
    * adds a query parameter
    * @param  {string}  key        add values for key
    * @param  {string}  val        value to add
-   * @param  {integer} [index]    specific index to add the value at
+   * @param  {int} [index]        specific index to add the value at
    * @return {Uri}                returns self for fluent chaining
    */
   Uri.prototype.addQueryParam = function (key, val, index) {
@@ -267,7 +267,7 @@
     if (arguments.length === 3) {
       for (i = 0; i < len; i++) {
         param = this.queryPairs[i];
-        if (decode(param[0]) === decode(key) && decodeURIComponent(param[1]) === decode(oldVal)) {
+        if (decode(param[0]).toLowerCase() === decode(key).toLowerCase() && decodeURIComponent(param[1]).toLowerCase() === decode(oldVal).toLowerCase()) {
           index = i;
           break;
         }
@@ -278,7 +278,7 @@
     } else {
       for (i = 0; i < len; i++) {
         param = this.queryPairs[i];
-        if (decode(param[0]) === decode(key)) {
+        if (decode(param[0]).toLowerCase() === decode(key).toLowerCase()) {
           index = i;
           break;
         }
