@@ -18,6 +18,16 @@ describe('Uri', function() {
         assert.equal(q.getQueryParamValue('email'), 'user@example.com')
       })
 
+      it('should ignore case when parsing', function(){
+        q = new Uri('?isValid=true')
+        assert.equal(q.getQueryParamValue('isvalid'), 'true')
+      })
+
+	    it('should ignore case when retrieving', function(){
+        q = new Uri('?isvalid=true')
+        assert.equal(q.getQueryParamValue('isValid'), 'true')
+      })
+
       it('should include an equal sign if there was one present without a query value', function() {
         q = new Uri('?11=')
         assert.equal(q.toString(), '?11=')
@@ -57,6 +67,13 @@ describe('Uri', function() {
         assert.equal(q.getQueryParamValue('c'), '567')
       })
 
+	    it('should return the first value for each query param - case insensitive', function() {
+        q = new Uri('?a=1&a=2&b=3&b=4&c=567')
+        assert.equal(q.getQueryParamValue('A'), '1')
+        assert.equal(q.getQueryParamValue('B'), '3')
+        assert.equal(q.getQueryParamValue('C'), '567')
+      })
+
       it('should return arrays for multi-valued query params', function() {
         q = new Uri('?a=1&a=2&b=3&b=4&c=567')
         assert.equal(q.getQueryParamValues('a')[0], '1')
@@ -80,6 +97,11 @@ describe('Uri', function() {
         q = new Uri('?a=1&b=2&c=3&a=eh').deleteQueryParam('b')
         assert.equal(q.toString(), '?a=1&c=3&a=eh')
       })
+
+	    it('should be able to delete a query param', function() {
+         q = new Uri('?a=1&B=2&c=3&a=eh').deleteQueryParam('b')
+         assert.equal(q.toString(), '?a=1&c=3&a=eh')
+       })
 
       it('should be able to delete a query param by value', function() {
         q = new Uri('?a=1&b=2&c=3&a=eh').deleteQueryParam('a', 'eh')
@@ -131,6 +153,11 @@ describe('Uri', function() {
         assert.equal(q.toString(), '?b=2&c=3&a=eh')
       })
 
+	    it('should be able to delete a key - case insensitive', function() {
+        q = new Uri('?a=1&b=2').deleteQueryParam('A')
+        assert.equal(q.toString(), '?b=2')
+      })
+
       it('should not do anything if passed no params', function() {
         q = new Uri('?a=1&b=2&c=3').addQueryParam()
         assert.equal(q.toString(), '?a=1&b=2&c=3')
@@ -140,6 +167,11 @@ describe('Uri', function() {
         q = new Uri('?a=1&b=2&c=3').replaceQueryParam('a', 'eh')
         assert.equal(q.toString(), '?a=eh&b=2&c=3')
       })
+
+	    it('should be able to directly replace a query param - case insensitive', function() {
+         q = new Uri('?A=1&b=2&c=3').replaceQueryParam('a', 'eh')
+         assert.equal(q.toString(), '?a=eh&b=2&c=3')
+       })
 
       it('should remove an extra question mark', function() {
         q = new Uri('??a=1&b=2&c=3').replaceQueryParam('a', 4)
@@ -274,6 +306,12 @@ describe('Uri', function() {
         assert(q.hasQueryParam('this'))
         assert(!q.hasQueryParam('theother'))
       })
+
+	    it('is able to find (or not find) query params - case insensitive', function() {
+          q = new Uri('?This=that')
+          assert(q.hasQueryParam('this'))
+          assert(!q.hasQueryParam('theother'))
+        })
 
       it('is able to test for existence of params with missing values', function() {
         q = new Uri('?aa&bb=')
