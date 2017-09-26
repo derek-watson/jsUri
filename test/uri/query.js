@@ -86,6 +86,16 @@ describe('Uri', function() {
         assert.equal(q.toString(), '?a=1&b=2&c=3')
       })
 
+      it('should be able to delete a query param of array type', function() {
+        q = new Uri('?a=1&b[]=2&c=3&a=eh').deleteQueryParam('b')
+        assert.equal(q.toString(), '?a=1&c=3&a=eh')
+      })
+
+      it('should be able to delete a query param of nested array type', function() {
+        q = new Uri('?a=1&b[bb][bbb]=2&c=3&a=eh').deleteQueryParam('b')
+        assert.equal(q.toString(), '?a=1&c=3&a=eh')
+      })
+
       it('should be able to add a null valued param', function() {
         q = new Uri('?a=1&b=2&c=3').addQueryParam('f', null)
         assert.equal(q.toString(), '?a=1&b=2&c=3&f')

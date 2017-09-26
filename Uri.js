@@ -244,7 +244,7 @@
     for (i = 0, l = this.queryPairs.length; i < l; i++) {
 
       param = this.queryPairs[i];
-      keyMatchesFilter = decode(param[0]) === decode(key);
+      keyMatchesFilter = decode(param[0]).match(new RegExp('^'+decode(key)+'?(\\[[^\\[\\]]*?\\])*$'));
       valMatchesFilter = param[1] === val;
 
       if ((arguments.length === 1 && !keyMatchesFilter) || (arguments.length === 2 && (!keyMatchesFilter || !valMatchesFilter))) {
