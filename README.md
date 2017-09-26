@@ -118,6 +118,25 @@ new Uri('?a=1&b=2&c=3')
 
 new Uri('?a=1&b=2&c=3')
     .hasQueryParam('d')                    // false
+
+```
+
+Enable testing of array items by passing `true` flag
+
+```js
+
+new Uri('?a=1&b=2&c=3')
+    .hasQueryParam('a', true)              // true
+
+new Uri('?a[]=1&a[]=2&c=3')
+    .hasQueryParam('a', true)              // true
+
+new Uri('?a[1]=1&a[2]=2&b=3')
+    .hasQueryParam('a', true)              // true
+
+new Uri('?a[=1&a]=2&a[][=3')
+    .hasQueryParam('a', true)              // false
+
 ```
 
 Create an identical URI object with no shared state:

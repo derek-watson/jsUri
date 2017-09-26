@@ -277,12 +277,13 @@
   /**
    * test for the existence of a query parameter
    * @param  {string}  key        check values for key
+   * @param  {Boolean} arr        enable regex check of array parameters ( param[] )
    * @return {Boolean}            true if key exists, otherwise false
    */
-  Uri.prototype.hasQueryParam = function (key) {
+  Uri.prototype.hasQueryParam = function (key, arr) {
     var i, len = this.queryPairs.length;
     for (i = 0; i < len; i++) {
-      if (this.queryPairs[i][0] == key)
+      if (this.queryPairs[i][0] == key || arr && this.queryPairs[i][0].match(new RegExp(key+'?(\\[[^\\[\\]]*?\\])*$')))
         return true;
     }
     return false;

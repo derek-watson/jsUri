@@ -282,6 +282,29 @@ describe('Uri', function() {
         assert(!q.hasQueryParam('cc'))
       })
 
+      it('is able to test for array parameters', function() {
+        var list = {
+          'aa': true,
+          'aa[': false,
+          'aa]': false,
+          'aa[]': true,
+          'aa[true]': true,
+          'aa[bb]': true,
+          'aa[bb][': false,
+          'aa[bb]]': false,
+          'aa[bb][cc]': true,
+          'aa[bb+cc][]': true,
+          'aa[&': false
+        }
+
+        // Check all parameters
+        for (key in list) {
+          q = new Uri('?'+key)
+          assert(list[key] == q.hasQueryParam('aa', true))
+        }
+
+      })
+
       it('should get null value for a param with no value (without "=")', function() {
         q = new Uri('?aa')
         assert.strictEqual(q.getQueryParamValue('aa'), null)
