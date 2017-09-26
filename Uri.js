@@ -283,7 +283,7 @@
   Uri.prototype.hasQueryParam = function (key, arr) {
     var i, len = this.queryPairs.length;
     for (i = 0; i < len; i++) {
-      if (this.queryPairs[i][0] == key || arr && this.queryPairs[i][0].match(new RegExp(key+'?(\\[[^\\[\\]]*?\\])*$')))
+      if (this.queryPairs[i][0] == key || arr && this.queryPairs[i][0].match(new RegExp('^'+key+'?(\\[[^\\[\\]]*?\\])*$')))
         return true;
     }
     return false;
