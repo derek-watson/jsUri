@@ -106,6 +106,9 @@ Removes instances of query parameters named `key`:
 new Uri('?a=1&b=2&c=3')
     .deleteQueryParam('a')                 // ?b=2&c=3
 
+new Uri('?a=1&b[]=2&c=3')
+    .deleteQueryParam('b')                 // ?a=1&c=3
+
 new Uri('test.com?a=1&b=2&c=3&a=eh')
     .deleteQueryParam('a', 'eh')           // test.com/?a=1&b=2&c=3
 ```
