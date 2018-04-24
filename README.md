@@ -142,6 +142,22 @@ new Uri('?a[=1&a]=2&a[][=3')
 
 ```
 
+Remove duplicate query arameters
+
+```js
+new Uri('?p[]=1&p[]=2&foo[]=bar&p[]=1')
+    .deleteDuplicateQueryParam()           // '?p[]=1&p[]=2&foo[]=bar'
+
+```
+
+Sort query parameters by name
+
+```js
+new Uri('?p[]=1&p[]=2&foo[]=bar&p[]=3')
+    .sortQueryParam()                      // ?foo[]=bar&p[]=1&p[]=2&p[]=3
+
+```
+
 Create an identical URI object with no shared state:
 
 ```js
