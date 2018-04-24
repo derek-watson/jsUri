@@ -147,6 +147,7 @@
   function Uri(str) {
     this.uriParts = parseUri(str);
     this.queryPairs = parseQuery(this.uriParts.query);
+    this.deleteDuplicateQueryParam();
     this.hasAuthorityPrefixUserPref = null;
   }
 
@@ -246,6 +247,33 @@
       }
     }
     return arr;
+  };
+
+  /**
+   * Removes duplicate query parameters
+   * @return {Uri} returns self for fluent chaining
+   */
+  Uri.prototype.deleteDuplicateQueryParam = function () {
+    var arr = [], i, l;
+
+    function isDuplicate(array, object) {
+      for (var j = array.length - 1; j >= 0; j--) {
+        if (array[j][0] == object[0] && array[j][1] == object[1]) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    for (i = 0, l = this.queryPairs.length; i < l; i++) {
+      if (!isDuplicate(arr, this.queryPairs[i])) {
+        arr.push(this.queryPairs[i]);
+      }
+    }
+
+    this.queryPairs = arr;
+
+    return this;
   };
 
   /**

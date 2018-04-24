@@ -93,7 +93,7 @@ describe('Uri', function() {
     })
 
     it('can construct a url with multiple synonymous query values', function() {
-      assert.equal(new Uri('http://www.test.com/index.html?arr=1&arr=2&arr=3&arr=3&b=2').toString(), 'http://www.test.com/index.html?arr=1&arr=2&arr=3&arr=3&b=2')
+      assert.equal(new Uri('http://www.test.com/index.html?arr=1&arr=2&arr=3&arr=3&b=2').toString(), 'http://www.test.com/index.html?arr=1&arr=2&arr=3&b=2')
     })
 
     it('can construct a url with blank query value', function() {

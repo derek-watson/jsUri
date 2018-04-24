@@ -101,6 +101,16 @@ describe('Uri', function() {
         assert.equal(q.toString(), '?a=1&c=3&a=eh')
       })
 
+      it('should remove duplicate parameters', function() {
+        q = new Uri('?a=1&b=2&b=3&b=4&b=2').deleteDuplicateQueryParam()
+        assert.equal(q.toString(), '?a=1&b=2&b=3&b=4')
+      })
+
+      it('should remove duplicate parameters (arrays)', function() {
+        q = new Uri('?a=1&b[]=2&b[]=3&b[]=4&b[]=2').deleteDuplicateQueryParam()
+        assert.equal(q.toString(), '?a=1&b[]=2&b[]=3&b[]=4')
+      })
+
       it('should be able to add a null valued param', function() {
         q = new Uri('?a=1&b=2&c=3').addQueryParam('f', null)
         assert.equal(q.toString(), '?a=1&b=2&c=3&f')
