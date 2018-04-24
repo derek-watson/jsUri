@@ -11,7 +11,7 @@
  * Released under the MIT license.
  */
 
- /*globals define, module */
+ /* globals define, module */
 
 (function(global) {
 
@@ -31,7 +31,7 @@
     Array.prototype.forEach = function(callback, thisArg) {
       var T, k;
 
-      if (this == null) {
+      if (this === null) {
         throw new TypeError(' this is null or not defined');
       }
 
@@ -60,22 +60,22 @@
   }
 
   /**
-   * unescape a query param value
-   * @param  {string} s encoded value
-   * @return {string}   decoded value
+   * Unescape a query param value
+   * @param  {string} s    encoded value
+   * @return {string}      decoded value
    */
   function decode(s) {
     if (s) {
-        s = s.toString().replace(re.pluses, '%20');
-        s = decodeURIComponent(s);
+      s = s.toString().replace(re.pluses, '%20');
+      s = decodeURIComponent(s);
     }
     return s;
   }
 
   /**
    * Breaks a uri string down into its individual parts
-   * @param  {string} str uri
-   * @return {object}     parts
+   * @param  {string} str    uri
+   * @return {object}        parts
    */
   function parseUri(str) {
     var parser = re.uri_parser;
@@ -92,8 +92,8 @@
 
   /**
    * Breaks a query string down into an array of key/value pairs
-   * @param  {string} str query
-   * @return {array}      array of arrays (key/value pairs)
+   * @param  {string} str    query
+   * @return {array}         array of arrays (key/value pairs)
    */
   function parseQuery(str) {
     var i, ps, p, n, k, v, l;
@@ -147,8 +147,8 @@
   });
 
   /**
-   * if there is no protocol, the leading // can be enabled or disabled
-   * @param  {Boolean}  val
+   * If there is no protocol, the leading // can be enabled or disabled
+   * @param  {Boolean} val
    * @return {Boolean}
    */
   Uri.prototype.hasAuthorityPrefix = function(val) {
@@ -173,8 +173,8 @@
 
   /**
    * Serializes the internal state of the query pairs
-   * @param  {string} [val]   set a new query string
-   * @return {string}         query string
+   * @param  {string} val    set a new query string
+   * @return {string}        query string
    */
   Uri.prototype.query = function(val) {
     var s = '', i, param, l;
@@ -202,9 +202,9 @@
   };
 
   /**
-   * returns the first query param value found for the key
-   * @param  {string} key query key
-   * @return {string}     first value found for key
+   * Returns the first query param value found for the key
+   * @param  {string} key    query key
+   * @return {string}        first value found for key
    */
   Uri.prototype.getQueryParamValue = function (key) {
     var param, i, l;
@@ -217,9 +217,9 @@
   };
 
   /**
-   * returns an array of query param values for the key
-   * @param  {string} key query key
-   * @return {array}      array of values
+   * Returns an array of query param values for the key
+   * @param  {string} key    query key
+   * @return {array}         array of values
    */
   Uri.prototype.getQueryParamValues = function (key) {
     var arr = [], i, param, l;
@@ -233,10 +233,10 @@
   };
 
   /**
-   * removes query parameters
-   * @param  {string} key     remove values for key
-   * @param  {val}    [val]   remove a specific value, otherwise removes all
-   * @return {Uri}            returns self for fluent chaining
+   * Removes query parameters
+   * @param  {string} key    remove values for key
+   * @param  {val}    val    remove a specific value, otherwise removes all
+   * @return {Uri}           returns self for fluent chaining
    */
   Uri.prototype.deleteQueryParam = function (key, val) {
     var arr = [], i, param, keyMatchesFilter, valMatchesFilter, l;
@@ -258,11 +258,11 @@
   };
 
   /**
-   * adds a query parameter
-   * @param  {string}  key        add values for key
-   * @param  {string}  val        value to add
-   * @param  {integer} [index]    specific index to add the value at
-   * @return {Uri}                returns self for fluent chaining
+   * Adds a query parameter
+   * @param  {string}  key      add values for key
+   * @param  {string}  val      value to add
+   * @param  {integer} index    specific index to add the value at
+   * @return {Uri}              returns self for fluent chaining
    */
   Uri.prototype.addQueryParam = function (key, val, index) {
     if (arguments.length === 3 && index !== -1) {
@@ -275,10 +275,10 @@
   };
 
   /**
-   * test for the existence of a query parameter
-   * @param  {string}  key        check values for key
-   * @param  {Boolean} arr        enable regex check of array parameters ( param[] )
-   * @return {Boolean}            true if key exists, otherwise false
+   * Test for the existence of a query parameter
+   * @param  {string}  key    check values for key
+   * @param  {Boolean} arr    enable regex check of array parameters ( param[] )
+   * @return {Boolean}        true if key exists, otherwise false
    */
   Uri.prototype.hasQueryParam = function (key, arr) {
     var i, len = this.queryPairs.length;
@@ -290,11 +290,11 @@
   };
 
   /**
-   * replaces query param values
-   * @param  {string} key         key to replace value for
-   * @param  {string} newVal      new value
-   * @param  {string} [oldVal]    replace only one specific value (otherwise replaces all)
-   * @return {Uri}                returns self for fluent chaining
+   * Replaces query param values
+   * @param  {string} key       key to replace value for
+   * @param  {string} newVal    new value
+   * @param  {string} oldVal    replace only one specific value (otherwise replaces all)
+   * @return {Uri}              returns self for fluent chaining
    */
   Uri.prototype.replaceQueryParam = function (key, newVal, oldVal) {
     var index = -1, len = this.queryPairs.length, i, param;
@@ -445,7 +445,7 @@
   };
 
   /**
-   * export via AMD or CommonJS, otherwise leak a global
+   * Export via AMD or CommonJS, otherwise leak a global
    */
   if (typeof define === 'function' && define.amd) {
     define(function() {
@@ -456,4 +456,5 @@
   } else {
     global.Uri = Uri;
   }
+
 }(this));
