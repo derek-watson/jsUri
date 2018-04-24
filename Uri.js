@@ -124,6 +124,22 @@
   }
 
   /**
+   * Sort an array of objects
+   * @param  {array} array            Array of objects
+   * @param  {string, Boolean} key    Sorting key
+   * @return {array}                  Sorted array
+   *
+   * @see https://stackoverflow.com/questions/8175093/simple-function-to-sort-an-array-of-objects/8175221#8175221
+   */
+  function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+      var x = a[key];
+      var y = b[key];
+      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+  }
+
+  /**
    * Creates a new Uri object
    * @constructor
    * @param {string} str
@@ -391,6 +407,16 @@
     if (path.substr(-1) !== '/') {
       this.path(path + '/');
     }
+
+    return this;
+  };
+
+  /**
+   * Sort query parameters by name
+   * @return {Uri} returns self for fluent chaining
+   */
+  Uri.prototype.sortQueryParam = function() {
+    this.queryPairs = sortByKey(this.queryPairs, 0);
 
     return this;
   };

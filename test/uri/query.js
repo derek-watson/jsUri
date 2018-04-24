@@ -223,6 +223,17 @@ describe('Uri', function() {
         q = new Uri().addTrailingSlash();
         assert.equal(q.toString(), '/')
       })
+
+      it('should sort the queries by name', function() {
+        q = new Uri('?a=1&b[]=2&c[]=3&b[]=4&b[]=5').sortQueryParam()
+        assert.equal(q.toString(), '?a=1&b[]=2&b[]=4&b[]=5&c[]=3')
+      })
+
+      it('should sort the queries by name', function() {
+        q = new Uri('?a=1&b[]=2&c[]=6&b[]=4&c[]=3&b[]=5').sortQueryParam()
+        assert.equal(q.toString(), '?a=1&b[]=2&b[]=4&b[]=5&c[]=6&c[]=3')
+      })
+
     })
 
     describe('semicolon as query param separator', function() {
