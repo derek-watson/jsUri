@@ -13,7 +13,7 @@
 
  /* globals define, module */
 
-(function(global) {
+(function (global) {
 
   var re = {
     starts_with_slashes: /^\/+/,
@@ -28,7 +28,7 @@
    * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach#Compatibility
    */
   if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function(callback, thisArg) {
+    Array.prototype.forEach = function (callback, thisArg) {
       var T, k;
 
       if (this === null) {
@@ -83,7 +83,7 @@
     var m = parser.exec(str || '');
     var parts = {};
 
-    parserKeys.forEach(function(key, i) {
+    parserKeys.forEach(function (key, i) {
       parts[key] = m[i] || '';
     });
 
@@ -132,7 +132,7 @@
    * @see https://stackoverflow.com/questions/8175093/simple-function-to-sort-an-array-of-objects/8175221#8175221
    */
   function sortByKey(array, key) {
-    return array.sort(function(a, b) {
+    return array.sort(function (a, b) {
       var x = a[key];
       var y = b[key];
       return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -154,8 +154,8 @@
   /**
    * Define getter/setter methods
    */
-  ['protocol', 'userInfo', 'host', 'port', 'path', 'anchor'].forEach(function(key) {
-    Uri.prototype[key] = function(val) {
+  ['protocol', 'userInfo', 'host', 'port', 'path', 'anchor'].forEach(function (key) {
+    Uri.prototype[key] = function (val) {
       if (typeof val !== 'undefined') {
         this.uriParts[key] = val;
       }
@@ -168,7 +168,7 @@
    * @param  {Boolean} val
    * @return {Boolean}
    */
-  Uri.prototype.hasAuthorityPrefix = function(val) {
+  Uri.prototype.hasAuthorityPrefix = function (val) {
     if (typeof val !== 'undefined') {
       this.hasAuthorityPrefixUserPref = val;
     }
@@ -193,7 +193,7 @@
    * @param  {string} val    set a new query string
    * @return {string}        query string
    */
-  Uri.prototype.query = function(val) {
+  Uri.prototype.query = function (val) {
     var s = '', i, param, l;
 
     if (typeof val !== 'undefined') {
@@ -371,9 +371,9 @@
   /**
    * Define fluent setter methods (setProtocol, setHasAuthorityPrefix, etc)
    */
-  ['protocol', 'hasAuthorityPrefix', 'isColonUri', 'userInfo', 'host', 'port', 'path', 'query', 'anchor'].forEach(function(key) {
+  ['protocol', 'hasAuthorityPrefix', 'isColonUri', 'userInfo', 'host', 'port', 'path', 'query', 'anchor'].forEach(function (key) {
     var method = 'set' + key.charAt(0).toUpperCase() + key.slice(1);
-    Uri.prototype[method] = function(val) {
+    Uri.prototype[method] = function (val) {
       this[key](val);
       return this;
     };
@@ -383,7 +383,7 @@
    * Scheme name, colon and doubleslash, as required
    * @return {string} http:// or possibly just //
    */
-  Uri.prototype.scheme = function() {
+  Uri.prototype.scheme = function () {
     var s = '';
 
     if (this.protocol()) {
@@ -406,7 +406,7 @@
    * @return {string} scheme://user:password@host:port
    * @see  https://developer.mozilla.org/en/nsIURI
    */
-  Uri.prototype.origin = function() {
+  Uri.prototype.origin = function () {
     var s = this.scheme();
 
     if (this.userInfo() && this.host()) {
@@ -429,7 +429,7 @@
   /**
    * Adds a trailing slash to the path
    */
-  Uri.prototype.addTrailingSlash = function() {
+  Uri.prototype.addTrailingSlash = function () {
     var path = this.path() || '';
 
     if (path.substr(-1) !== '/') {
@@ -443,7 +443,7 @@
    * Sort query parameters by name
    * @return {Uri} returns self for fluent chaining
    */
-  Uri.prototype.sortQueryParam = function() {
+  Uri.prototype.sortQueryParam = function () {
     this.queryPairs = sortByKey(this.queryPairs, 0);
 
     return this;
@@ -453,7 +453,7 @@
    * Serializes the internal state of the Uri object
    * @return {string}
    */
-  Uri.prototype.toString = function() {
+  Uri.prototype.toString = function () {
     var path, s = this.origin();
 
     if (this.isColonUri()) {
@@ -494,7 +494,7 @@
    * Clone a Uri object
    * @return {Uri} duplicate copy of the Uri
    */
-  Uri.prototype.clone = function() {
+  Uri.prototype.clone = function () {
     return new Uri(this.toString());
   };
 
@@ -502,7 +502,7 @@
    * Export via AMD or CommonJS, otherwise leak a global
    */
   if (typeof define === 'function' && define.amd) {
-    define(function() {
+    define(function () {
       return Uri;
     });
   } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
