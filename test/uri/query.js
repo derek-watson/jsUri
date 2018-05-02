@@ -256,20 +256,6 @@ describe('Uri', function() {
 
     })
 
-    describe('semicolon as query param separator', function() {
-      var q
-
-      it('should replace semicolons with ampersands', function() {
-        q = new Uri('?one=1;two=2;three=3')
-        assert.equal(q.toString(), '?one=1&two=2&three=3')
-      })
-
-      it('should replace semicolons with ampersands, delete the first param and add another', function() {
-        q = new Uri('?one=1;two=2;three=3&four=4').deleteQueryParam('one').addQueryParam('test', 'val', 1)
-        assert.equal(q.toString(), '?two=2&test=val&three=3&four=4')
-      })
-    })
-
     describe('comparing encoded vs. non or partially encoded query param keys and values', function() {
       var q
 
